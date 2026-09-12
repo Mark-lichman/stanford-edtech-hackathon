@@ -19,7 +19,10 @@ class _LanternStoryState extends State<LanternStory> {
   bool _noteGone = false;
   bool _talking = false;
   bool _mobile = false;
+  /// Grumble's page runs in three steps: the lantern lights in the middle,
+  /// rises to the top, then the page appears under it.
   bool _lanternDone = false;
+  bool _lanternUp = false;
 
   static const _beats = [
     'Cover',
@@ -41,6 +44,7 @@ class _LanternStoryState extends State<LanternStory> {
   void _go(int step) => setState(() {
         _step = step;
         _lanternDone = false;
+        _lanternUp = false;
       });
 
   void _next() => _go(math.min(_step + 1, 7));
@@ -51,6 +55,7 @@ class _LanternStoryState extends State<LanternStory> {
         _noteGone = false;
         _talking = false;
         _lanternDone = false;
+        _lanternUp = false;
       });
 
   @override
@@ -129,9 +134,9 @@ class _LanternStoryState extends State<LanternStory> {
         Text('You can change your mind at any time.', style: _small()),
       ]));
 
-  /// Held back, and untappable, until the lantern on this page is lit.
+  /// Held back, and untappable, until the lantern has lit and reached the top.
   Widget _afterLantern(Widget child) {
-    final lit = _lanternDone || MediaQuery.of(context).disableAnimations;
+    final lit = _lanternUp || MediaQuery.of(context).disableAnimations;
     return IgnorePointer(
       ignoring: !lit,
       child: AnimatedOpacity(opacity: lit ? 1 : 0, duration: const Duration(milliseconds: 600), curve: Curves.easeOut, child: child),
@@ -140,13 +145,20 @@ class _LanternStoryState extends State<LanternStory> {
 
   Widget _marginNote() => _PageScaffold(eyebrow: 'A note in the margin', child: Stack(clipBehavior: Clip.none, children: [
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Center(child: Lantern(phase: LanternPhase.lit, height: 66, onEnd: () => setState(() => _lanternDone = true))), const SizedBox(height: 18),
+          const SizedBox(height: 66 + 18),
           _afterLantern(Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text('Psst...', style: _display(48)), const SizedBox(height: 14), Text('Someone has scribbled on your page.', style: _body(21)),
             const SizedBox(height: 150), Text('Rub it away to see what comes next.', style: _small()), const SizedBox(height: 42),
             _WarmButton(label: 'Keep the note', icon: Icons.arrow_forward_rounded, onTap: _next),
           ])),
         ]),
+        Positioned.fill(child: AnimatedAlign(
+          alignment: _lanternDone || MediaQuery.of(context).disableAnimations ? Alignment.topCenter : Alignment.center,
+          duration: const Duration(milliseconds: 700),
+          curve: Curves.easeInOutCubic,
+          onEnd: () => setState(() => _lanternUp = true),
+          child: Lantern(phase: LanternPhase.lit, height: 66, onEnd: () => setState(() => _lanternDone = true)),
+        )),
         if (!_noteGone) Positioned(right: -10, top: 212, child: _afterLantern(GestureDetector(
           onPanUpdate: (_) => setState(() => _noteGone = true), onTap: () => setState(() => _noteGone = true),
           child: Transform.rotate(angle: -0.045, child: CustomPaint(painter: _PencilNotePainter(), child: const SizedBox(width: 245, height: 125, child: Padding(
