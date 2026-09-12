@@ -15,103 +15,42 @@ https://claude.ai/code/artifact/f1fd0a26-a0f7-4f50-a141-15d64ccbe839
 
 ---
 
-## ⚠ Corrections from research — read before building §5 or §6
+## What changed after we pulled the story apart
 
-Five research strands came back and falsified parts of this plan. The sections
-below are **not yet rewritten**; a synthesis pass is coming. Until then, these
-corrections override what §5 and §6 say.
+Six things we got wrong, kept short. These override §5 and §6 below, which are
+pre-pivot and not yet rewritten.
 
-**§5 — stop citing Positive Intelligence.** The published basis for the PQ score
-(Chamine &amp; Katayama 2012) could not be located in any peer-reviewed record. The
-only peer-reviewed evaluation of the program is n=64, uncontrolled, and its gains
-did not survive five-month follow-up. There is no research on PI in children, and
-PI LLC has explicit IP rules on "Saboteur" branding. **Keep the Judge as a
-character; drop it as a citation.** Cite instead: White &amp; Epston on externalizing,
-the child-CBT tradition, and the documented emergence of self-criticism in middle
-childhood — there is a known self-esteem dip at ages 9–10 attributed to exactly
-this capacity arriving. That is a stronger warrant than the one we had.
+**The celebration never calls her a reader.** "That is who you are now" was the
+original line. It's wrong — hand a kid an identity and you've handed Grumble
+something to take away on a bad night. The noun goes on the object instead:
+*"You read this in the dark, when it was hard. It belongs in the book now."*
 
-**§5 — delete the "saboteurs aren't hardened yet" claim** from every doc and from
-the pitch. It asserts a developmental trajectory for a construct with no
-developmental research. It is the sentence a knowledgeable judge will pull on.
+**No collection grid.** No empty slots, no counter, no "3 of 12." The moment
+there's a set to complete, the set becomes the goal. Artifacts appear only in
+use — changing what her character can do — never in a case.
 
-**§6 — the celebration is wrong as written.** "That is who you are now" is person
-praise. Foster-Hanson et al. (2020) found identity framing **backfires after
-setbacks**, and this product manufactures setbacks. Brummelman's work makes every
-superlative in a success screen the exact stimulus that drove low-self-esteem
-children to avoid challenge. **Move the noun off the child and onto the artifact:**
-not "you are a reader now" but "you read this out loud, in the dark, when it was
-hard — this belongs in the book now."
+**The artifact isn't promised in advance.** A guaranteed payout for finishing is
+the shape that kills the wanting. It should arrive unannounced, as something the
+story hands her, and on some nights not at all.
 
-**§6 — no collection grid, ever.** No empty slots, no counter, no "3 of 12."
-Marinak &amp; Gambrell found token rewards were the only condition that performed
-*worse than no reward at all*. Show artifacts only in use, changing what her
-character can do.
+**One ability a week, not one a night.** Eight in total. Granted by a companion
+in dialogue, never a level-up banner — and an ability is only real if it changes
+what tomorrow's three doors can ask of her. The Primer never celebrates; it
+*continues*.
 
-**§7 — the artifact must stop being pre-announced every session.** Expectation is
-the active ingredient in the overjustification effect (Lepper 1973). A guaranteed,
-announced, completion-contingent reward is the worst-shaped contingency in the
-literature, and the age moderator runs against us.
+**The read-aloud is the line she'll need, after the page has scrolled away.**
+That turns ten seconds from a toll booth into part of the story. Model the line
+in the narrator's voice first, and cue for meaning — "read it like you mean it,"
+never "read it fast."
 
-**New, and treat it as a ship-blocker: the "no adult sees anything" rule is the
-mechanism of harm for the child this app most attracts.** Trace it: a nine-year-old
-with undiagnosed dyslexia reads aloud haltingly — we already have the signal — taps
-"I couldn't do it," selects "you're a slow reader," and we reply "You heard it.
-That's the hard part," then silently narrow her topics and push less. Average
-identification age in special ed is ~10; remediation costs roughly four times as
-much in fourth grade as in late kindergarten. Keep her thoughts private forever,
-but **add a content-free, non-diagnostic signal to a parent**: "reading aloud has
-been effortful for a while; that's common and very fixable."
+**The ending has to hand over a real book.** Not a link, not a suggestion. A
+physical book she chose, arriving. That's the single most proven thing in the
+whole design, and it's the difference between an invitation and abandonment.
 
-**§10 — Epic already ships our reward mechanic.** 25 million badges issued in 2025,
-and Reading Buddies hatch from eggs after 20 minutes of reading. Anything legible
-as "read more → unlock thing" competes with the sponsor's own feature and loses.
-Our defensible ground is the three things Epic structurally cannot ship: the
-off-screen quest, reading-aloud-as-story-mechanic, and the deliberate ending.
+**Three things not to say on stage:** don't call ten seconds a fluency
+measurement (it's proof of work); don't say "less screen time" (say displacement
+— four screen minutes buying twenty off-screen); and never say "2 sigma."
 
-**§10 — Epic's owner changed.** Sold out of BYJU'S bankruptcy to TAL Education for
-~$95M in June 2025, with DOJ interest in foreign-investment review. "We store zero
-audio" is now a slide, not a footnote. There is no public Epic API; deep links
-(`getepic.com/book/{id}`) are the plausible integration, and the week-8 handoff
-should point into Epic rather than dead-end.
-**Three claims we must restate before anyone pitches them.**
-
-- *"Ten seconds of reading aloud is a real fluency signal."* **Drop it.** A full
-  one-minute, three-passage oral reading fluency administration carries a median
-  standard error of 10 words-correct-per-minute. Ten seconds is about 19 words,
-  one passage, one trial — the measurement error swamps the signal before
-  child-ASR error is even added. Say instead: "it's proof of work, not a
-  measurement; we produce no score and show no number to anyone." The upside is
-  free: reading aloud has its own memory benefit (the production effect,
-  replicated in 7–10 year olds), so the ten seconds does real work without
-  measuring anything.
-- *"Reading that ends in a real-world action beats reading alone."* Supported as
-  a **mechanism** — generative activity, learner-generated drawing, and drama all
-  have real evidence — but at doses far larger than one quest, and the closest
-  study to our actual design is a feasibility study with 65 children. Say: "this
-  is our bet, and it's the first thing we'd want to test."
-- *"Less screen time is the goal."* Outdated. The AAP retired hourly limits, and
-  its February 2026 *Digital Ecosystems* statement replaces numbers with the 5 Cs
-  while naming engagement-maximizing design as the problem. Say **displacement,
-  not duration**: four screen minutes that buy twenty off-screen minutes.
-- **Never say "2 sigma."** Bloom's 1984 tutoring claim did not replicate
-  (VanLehn d≈0.79, Nickow et al. d≈0.37, none of ~96 programs reached it), and we
-  are not a tutor, so the effect size is a category error regardless.
-
-**The strongest evidence we have is the ending, and it only counts if books
-actually arrive.** Allington & McGill-Franzen's summer books RCT (n=1,713) found
-10–12 self-selected free books produced +0.14 SD overall and +0.21 SD for the
-poorest children. That is the only field-sized effect anywhere near this design —
-but it comes from books *arriving*, not from a child being told to go find one.
-Week eight must hand over a real book (or an Epic deep link plus a library hold),
-not an instruction.
-
-**Three free wins from the repeated-reading literature** (Therrien 2004,
-ES ≈ .75 fluency / .73 comprehension): model the line in the narrator's voice
-before she reads it; cue for meaning, never speed ("read it like you mean it",
-never "read it fast"); and reuse the same passage across sessions.
-
----
 ## 1. The spine
 
 In *The Diamond Age*, Nell is given the Young Lady's Illustrated Primer: a book
