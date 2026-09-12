@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../theme.dart';
+import 'illustrations.dart';
 
 /// One book choice. The screen owns the book model and navigation.
 class Door extends StatelessWidget {
@@ -10,11 +11,13 @@ class Door extends StatelessWidget {
     required this.onTap,
     this.subtitle,
     this.cover,
+    this.coverPart,
   });
 
   final String title;
   final String? subtitle;
   final Widget? cover;
+  final LanternArtworkPart? coverPart;
   final VoidCallback onTap;
 
   @override
@@ -33,7 +36,10 @@ class Door extends StatelessWidget {
                   SizedBox(
                     width: 52,
                     height: 60,
-                    child: cover ?? const _DoorCover(),
+                    child: cover ??
+                        (coverPart == null
+                            ? const _DoorCover()
+                            : LanternArtwork(part: coverPart!, width: 52, height: 60)),
                   ),
                   const SizedBox(width: PrimerTheme.space4),
                   Expanded(

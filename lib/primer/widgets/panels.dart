@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../theme.dart';
+import 'illustrations.dart';
 
 /// The deliberate stopping place. It has no controls by design.
 class DarkPanel extends StatelessWidget {
@@ -24,9 +25,10 @@ class DarkPanel extends StatelessWidget {
 
 /// A short, warm full-bleed transition before the new story page.
 class CelebrationPanel extends StatelessWidget {
-  const CelebrationPanel({super.key, required this.child, this.onDone});
+  const CelebrationPanel({super.key, required this.child, this.onDone, this.illustration});
   final Widget child;
   final VoidCallback? onDone;
+  final Widget? illustration;
 
   @override
   Widget build(BuildContext context) => ColoredBox(
@@ -37,6 +39,11 @@ class CelebrationPanel extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                if (illustration != null) ...[
+                  illustration!,
+                  const SizedBox(height: PrimerTheme.space4),
+                ] else
+                  const LanternArtwork(part: LanternArtworkPart.moth, width: 112, height: 82),
                 Expanded(child: Center(child: child)),
                 if (onDone != null)
                   SizedBox(

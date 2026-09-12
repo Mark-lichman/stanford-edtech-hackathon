@@ -1,3 +1,5 @@
+import 'dart:ui' show ImageFilter;
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -35,10 +37,19 @@ class MarginNote extends StatelessWidget {
             alignment: Alignment.centerLeft,
             children: [
               if (underText != null)
-                AnimatedOpacity(
-                  opacity: revealed ? 0 : 1,
-                  duration: const Duration(milliseconds: 360),
+                TweenAnimationBuilder<double>(
+                  tween: Tween(begin: 0, end: revealed ? 4.5 : 0),
+                  duration: const Duration(milliseconds: 420),
                   curve: Curves.easeOut,
+                  builder: (context, blur, child) => ImageFiltered(
+                    imageFilter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
+                    child: AnimatedOpacity(
+                      opacity: revealed ? .3 : 1,
+                      duration: const Duration(milliseconds: 360),
+                      curve: Curves.easeOut,
+                      child: child,
+                    ),
+                  ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
                     child: Text(
