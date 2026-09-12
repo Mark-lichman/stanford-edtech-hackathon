@@ -1,8 +1,17 @@
-# Work plan — Stanford EdTech Hackathon, 2026-09-12
+# Lantern — work plan, Stanford EdTech Hackathon, 2026-09-12
 
 Sponsor: Epic for Kids (digital reading platform, ages ~12 and under).
 Base: HabitCrafts habit engine, adapted. Inspiration: *The Diamond Age*.
 Frame: Positive Intelligence, the Judge only. Theme: subversion.
+
+**Decided (§10):** name is **Lantern**; the Judge's default name is **Grumble**
+(the child renames it on the Cover). Proof of work is **ten seconds of the child
+reading aloud**. The Judge ships as **marginalia plus the intercept**. We have a
+**full day and three or more people**, so nothing in §8 gets cut — including
+read-aloud.
+
+Concept user journey (the pitch document, shareable):
+https://claude.ai/code/artifact/f1fd0a26-a0f7-4f50-a141-15d64ccbe839
 
 ---
 
@@ -170,7 +179,9 @@ changes is the design around it:
 
 Real:
 - One child profile, seeded. Three books seeded with a hand-authored quest bank.
-- The full loop: page → quest → proof → celebration → artifact → next page.
+- The full loop: page → quest → read-aloud proof → celebration → artifact →
+  next page. Audio is scored on-device and discarded: nothing stored, nothing
+  sent, no transcript. Say that on stage.
 - Field Guide with two artifacts already earned, so it looks lived-in.
 - The Dark, triggerable on demand for the pitch.
 - Read-aloud on the story and quest copy.
@@ -189,33 +200,48 @@ Staged / faked, and we say so out loud:
 
 ## 8. Build order
 
-Assumes roughly a full working day left, one or two people. Cut from the bottom.
+A full day, three or more people. That means the whole plan ships, and the shape
+changes from a queue into three tracks that must not block each other. Split by
+track, not by screen — two people editing the same widget file is how hackathon
+days get lost.
 
-- **0:00–0:30** Lock the decisions in §10. Name the thing.
-- **0:30–1:45** One content block, all the writing at once: rename the engine
-  into `lib/primer/quest.dart`, the quest bank for three books, the Judge's
-  marginalia lines, the celebration scripts. This is the demo's soul; do not
-  rush it and do not split it across the day.
-- **1:45–3:00** Visual system: paper theme, type scale, border motif, margin
-  treatment. Build it as a real theme file, not per-screen styling.
-- **3:00–3:30** Cover + the Judge naming beat.
-- **3:30–4:45** Tonight's Page, including marginalia render and finger-wipe.
-- **4:45–5:45** The Return — proof capture, celebration, artifact award.
-- **5:45–6:15** The intercept on the "I couldn't do it" path.
-- **6:15–7:00** Field Guide.
-- **7:00–7:30** The Dark.
-- **7:30–8:00** Read-aloud pass (`flutter_tts`) over all copy.
-- **8:00–9:00** Seed a believable state, then rehearse the three-minute run
-  twice. Rehearsal is not optional and is the first thing people cut.
+**Track A — content and engine** (one person, starts immediately)
+- Rename the engine into `lib/primer/quest.dart`, keeping the HabitCrafts field
+  names. Extend it with artifacts and chapter progression.
+- The quest bank for three books. Every quest indoors, alone, no tools, no
+  strangers, no going outside — review the whole bank against that before demo.
+- Grumble's marginalia lines, the intercept options in a child's register, the
+  celebration scripts.
+- This is the demo's soul. It is also the only track with no dependencies, so it
+  should start at 0:00 and stay one step ahead of Track C.
 
-Adding §5 pushed this past a single day — it is now about nine hours of work,
-so something below will get cut and it is better to choose now than at hour
-seven. Cut in this order: read-aloud, then Field Guide polish, then the
+**Track B — visual system and voice** (one person, 0:00–2:30, then joins C)
+- Paper theme, type scale, margin treatment, the grey-pencil marginalia
+  treatment, the artifact illustration style.
+- Read-aloud (`flutter_tts`) wired as a theme-level concern from the start, not
+  a pass at the end. With three people this stops being the thing we cut.
+- Ship it as a real theme file before anyone builds a screen against it.
+
+**Track C — screens** (one or more people, gated on B's theme file ~2:30)
+- Cover + the Judge naming beat.
+- Tonight's Page, with marginalia render and finger-wipe.
+- The Return: hold-to-talk capture, ten-second timer, celebration, artifact
+  award. The read-aloud proof is the highest-risk piece on demo day — build it
+  early in this track, not last, and test it on the actual demo device.
+- The intercept on the "I couldn't do it" path.
+- Field Guide, then The Dark.
+
+**All hands, last 90 minutes**
+- Seed a believable state: a child two weeks in, fourteen artifacts, Chapter 6.
+- Rehearse the three-minute run twice, on the demo device, on the venue wifi.
+  Rehearsal is not optional and is the first thing people cut.
+
+If a track falls behind, cut in this order: Field Guide polish, then the
 finger-wipe gesture (ship static marginalia), then the Cover naming beat
-(pre-name the Judge in the seed data).
+(pre-name Grumble in the seed data).
 
-Never cut: **The Dark**, the **intercept**, and the two rehearsals. Those three
-are the argument.
+Never cut: **The Dark**, the **intercept**, the **read-aloud proof**, and the two
+rehearsals. Those are the argument.
 
 ## 9. Risks
 
@@ -223,10 +249,17 @@ are the argument.
   Frame it as Epic-complementary throughout: we are the layer that turns Epic
   reading minutes into off-screen action and sends the child *back* for the next
   chapter. We increase the value of a reading minute; we do not compete for it.
-- **Self-reported proof is gameable.** A kid can tap "done" and lie. State this
-  as a deliberate choice — surveilling a child contradicts the premise that the
-  Primer belongs to *them*, not to their parents — rather than letting a judge
-  discover it. Voice proof (§9) is the strong middle ground.
+- **Read-aloud is the demo's single point of failure.** A hackathon room is
+  loud, mic permission on the web build is a prompt nobody rehearsed, and a shy
+  child freezing is the realistic failure in the field. Mitigations: build it
+  early in Track C, test on the actual demo device, and ship a visible
+  "I'd rather not talk tonight" fallback that awards the artifact anyway. That
+  fallback is not a compromise — a book that punishes a child for not
+  performing is the wrong book.
+- **We are recording children's voices.** Even scored-and-discarded, this is the
+  line a judge should hear us draw before they ask: on-device only, nothing
+  stored, nothing transmitted, no transcript, no parent playback, and skippable
+  every single night.
 - **Content safety.** Quests send children into the physical world. Every quest
   in the bank must be doable indoors, alone, with no tools, no strangers, and no
   going outside. Review the whole bank against that before demo.
@@ -240,20 +273,25 @@ are the argument.
   budget by design — see the cut list in §8. The Field Guide is the one that
   will balloon.
 
-## 10. Decisions needed before the 0:30 mark
+## 10. Decisions — settled
 
-1. **Proof mechanic.** Self-report tap (zero friction) / photo of the thing they
-   made / **10 seconds of the child reading aloud** / parent co-sign. Read-aloud
-   is my pick: it demos beautifully, it is a real reading-fluency signal Epic
-   would want, and it is the Miranda thread from the novel — a voice on the other
-   end. Parent co-sign is the one I would avoid; it hands the Primer to the
-   adults and kills the subversion.
-2. **Hours actually left, and team size.** The §7 timeline assumes ~8 and 1–2
-   people; it changes shape at 4 hours or at 5 people.
-3. **Name.** "Primer" is legible to anyone who has read the book and meaningless
-   to everyone else. Kid-facing alternatives welcome. The Judge needs a default
-   name too, for the seed data and for the case where we cut the naming beat.
-4. **How far the Judge goes in the demo.** Marginalia only (cheap, atmospheric,
-   reads as flavour) or marginalia plus the intercept (the actual intervention,
-   ~30 extra minutes, and the thing that makes §5 a feature rather than a
-   mood). I would build the intercept and cut Field Guide polish for it.
+1. **Name: Lantern.** A thing you carry away from the screen into the dark. The
+   Judge's default name is **Grumble**; the child renames it on the Cover, and
+   the app uses her name for it everywhere after.
+2. **Proof of work: ten seconds of the child reading aloud.** One mechanic doing
+   three jobs — completion signal, genuine reading-fluency measure Epic cannot
+   get from page-turn telemetry, and the warm voice at the other end that is the
+   Miranda thread. Parent co-sign was rejected: it hands the book to the adults.
+3. **Time: a full day, three or more people.** Nothing gets cut, read-aloud
+   included. Run the three tracks in §8 rather than a single queue.
+4. **The Judge: marginalia plus the intercept.** The intervention ships, not
+   just the atmosphere.
+
+### Still open, none of them blocking
+
+- The three seeded books. Track A needs them inside the first hour, and they
+  should be books a third grader actually reads on Epic.
+- Whether the artifacts are hand-drawn assets or generated ink shapes. Track B's
+  call; hand-drawn wins on charm if anyone on the team draws.
+- Who presents, and which of the three of us is on the demo device. Decide
+  before the last 90 minutes, not during them.
