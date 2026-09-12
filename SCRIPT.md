@@ -99,6 +99,28 @@ is on screen and it is not an apology — see the fallback line below.
 > badges. And the noun goes on the page, never on the child — hand a nine-year-old
 > an identity and you have handed the Judge something to take away.
 
+**Optional — the page that isn't hers.** PLAN.md §11, and the last thing in the
+pitch that is allowed to be cut without discussion. Short form, 12 words, use
+this one by default:
+
+> And one page in her guide isn't hers. Somebody got there first.
+
+Long form, 27 words, only if both rehearsals came in under 1:52 with air to
+spare — it makes Celebration the longest beat in the run:
+
+> One page in her guide isn't hers — somebody got there first. Other children are
+> out there, and none of them is a score she can lose to.
+
+Either form, the driver holds on the guide while it lands and does not point at
+the page. The moment it becomes a thing being demonstrated it reads as a
+feature, and it is not a feature — it is a content swap we seeded.
+
+The reason it is in the pitch at all: it tells a child who thinks she is the
+slow one that other people are out there doing this too, without ever putting
+someone in front of her to measure herself against. That is the argument. It
+does not survive being explained on stage, so do not explain it — say the line
+and move to the intercept.
+
 ## 1:28 The intercept  ·  26 words
 
 > Night four. She could not do it. The book does not console her — it asks what
@@ -151,6 +173,15 @@ Three more that only exist because the frameworks are now named out loud:
 - Never **"habit-forming"** about our own app. Fogg's recipe is pointed at
   reading a book, not at opening Lantern. Say "the habit is the book."
 
+And one from the page that isn't hers:
+
+- Never **"social"**, **"community"**, **"feed"**, or **"other kids"** about it.
+  Those words promise a system we did not build and invite the moderation
+  question before we have said the seeded part. It is a page somebody left
+  behind — that is the whole vocabulary.
+- Never a **name**, an **age**, or a **school** attached to that page, on stage
+  or on screen. The one we seeded has none, and saying one out loud invents it.
+
 And one from the new open:
 
 - Never frame the system as the villain. Not school, not reading levels, not
@@ -181,7 +212,17 @@ And one from the new open:
 > the handoff is the product. We write eighty words; their library writes the
 > rest.
 
-All three are short on purpose. The long version is the one that sounds
+**"Whose page is that? Is there a social layer — who moderates it?"**
+
+> There are two or three artifacts in that pool and we drew them. Nothing a
+> child wrote reaches another child: no accounts, no names, no chat, no
+> profiles, no free text. The stories touch; the children don't. Anything that
+> needed a moderation answer is out of scope by design, not by deadline.
+
+Answer it in that order — seeded first, then the rule. Leading with the rule
+sounds like a policy we wrote after somebody got hurt.
+
+All four are short on purpose. The long version is the one that sounds
 defensive.
 
 ---
@@ -193,6 +234,10 @@ defensive.
   0:38 names it out loud, so it has to be visibly a separate thing on the page.
   Labelling the three parts is the wrong answer — that is a diagram, and PLAN.md
   §4 says this looks like a book.
+- **Track B, `celebration.dart`** — render `Run.leftBehind` under her own
+  artifact, quieter and no name on it. `BookPage` plus a `MarginNote` off the
+  existing barrel does it, so this waits on nobody's new widget. Her artifact
+  has to read first and larger or the 1:18 line lands on the wrong page.
 - **Track D** — a mock reader page for *Hilda and the Troll*, not a
   `url_launcher` tap. Epic has no public API. The door still opens; it opens
   ours, and we say so at 0:55.

@@ -27,6 +27,24 @@ class Run {
   Book? picked;
   bool artifactEarned = false;
 
+  /// PLAN.md §11 — the small social element, the whole of it. One page in the
+  /// guide is not hers: something an earlier explorer left behind, shown under
+  /// her own artifact at Celebration.
+  ///
+  /// Hand-made and seeded for the showcase, and we say so on stage. A content
+  /// swap, not a system — no accounts, no matching, no realtime, no moderation
+  /// queue.
+  ///
+  /// The rule that keeps it safe in one move: the stories touch, the children
+  /// don't. No names, no profiles, nothing a child wrote reaching another
+  /// child. Anything that needs a moderation answer is out of scope by
+  /// definition.
+  // ponytail: one seeded page, not the pool of two or three §11 allows. Make it
+  // a list and pick by fieldGuide.length if a second night ever gets demoed.
+  static const leftBehind =
+      'A map of the airing cupboard, drawn by someone who got there first. '
+      'They put the shelves the wrong way round.';
+
   /// Celebration calls this. Named rather than mutated in place so there is one
   /// spot to look when the guide is wrong on stage.
   void earn(String artifactPage) {

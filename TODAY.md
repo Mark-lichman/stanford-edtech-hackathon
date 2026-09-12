@@ -82,6 +82,17 @@ story text 20pt+, no counters or progress bars, no loss-framed copy. No Field
 Guide screen today; the artifact appears inside `celebration.dart` going into
 the guide.
 
+`celebration.dart` also renders `Run.leftBehind` — the one page in the guide
+that isn't hers (PLAN.md §11). Her artifact reads first and larger; that page
+sits under it, quieter, with no name on it. It is seeded and hand-made and we
+say so on stage. If this screen has to lose something, it loses this first.
+
+**Not in grey pencil.** Grey pencil is Grumble — PLAN.md §5 — so a grey page in
+her guide reads as the Judge talking, which is the opposite of what this beat
+is for. Same paper, same ink, a different hand: one `Transform.rotate` of a
+degree or two is enough and it needs no new widget. If Aditya's real widgets
+land with a marginalia style, it still must not be the Judge's grey.
+
 `way_in.dart` renders the anchor (`prompt`) as its own line above the quest —
 plain, no label. The script names it out loud at 0:38, so it has to be visibly
 a separate thing on the page.
