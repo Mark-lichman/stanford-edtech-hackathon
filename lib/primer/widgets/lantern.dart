@@ -18,11 +18,17 @@ class Lantern extends StatelessWidget {
     super.key,
     required this.phase,
     this.height = 76,
+    this.onDark = false,
     this.onEnd,
   });
 
   final LanternPhase phase;
   final double height;
+
+  /// On a night panel the ink frame — handle, lid, outline, base — is the same
+  /// dark brown as the background and vanishes. This draws it in a pale warm
+  /// line instead, so the whole lantern still reads.
+  final bool onDark;
 
   /// Called once the animation has finished, so a screen can hold its content
   /// back until the lantern is lit.
@@ -42,11 +48,11 @@ class Lantern extends StatelessWidget {
         tween: Tween(begin: 0, end: 1),
         duration: still
             ? Duration.zero
-            : Duration(milliseconds: lit ? 4200 : 520),
+            : Duration(milliseconds: lit ? 4200 : 820),
         curve: lit ? const Cubic(.33, .8, .4, 1) : Curves.easeIn,
         onEnd: still ? null : onEnd,
         builder: (context, t, child) => CustomPaint(
-          painter: _LanternPainter(lit: lit, t: t),
+          painter: _LanternPainter(lit: lit, t: t, onDark: onDark),
           size: Size(height * 66 / 82, height),
         ),
       ),
@@ -55,15 +61,17 @@ class Lantern extends StatelessWidget {
 }
 
 class _LanternPainter extends CustomPainter {
-  _LanternPainter({required this.lit, required this.t});
+  _LanternPainter({required this.lit, required this.t, required this.onDark});
 
   final bool lit;
   final double t;
+  final bool onDark;
 
   static const _ink = Color(0xFF3A2E1F);
   static const _inkSoft = Color(0xFF7A6748);
   static const _parch = Color(0xFFF5E9CF);
   static const _marigold = Color(0xFFE09612);
+  static const _nightLine = Color(0xFFD9C295);
 
   /// A three-stop keyframe: a → b by [split], then b → c. The CSS uses one of
   /// these for every animated property, so one helper covers all of them.
@@ -77,15 +85,17 @@ class _LanternPainter extends CustomPainter {
     canvas.save();
     canvas.scale(size.width / 66, size.height / 82); // the SVG viewBox
 
+    final frame = onDark ? _nightLine : _ink;
+
     final stroke = Paint()
-      ..color = _ink
+      ..color = frame
       ..style = PaintingStyle.stroke
       ..strokeWidth = 3
       ..strokeCap = StrokeCap.round;
     canvas.drawLine(const Offset(26, 8), const Offset(40, 8), stroke);
     canvas.drawLine(const Offset(33, 8), const Offset(33, 17), stroke);
 
-    final solid = Paint()..color = _ink;
+    final solid = Paint()..color = frame;
     canvas.drawRRect(
       RRect.fromLTRBR(14, 17, 52, 26, const Radius.circular(3)),
       solid,
@@ -165,5 +175,6 @@ class _LanternPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_LanternPainter old) => old.t != t || old.lit != lit;
+  bool shouldRepaint(_LanternPainter old) =>
+      old.t != t || old.lit != lit || old.onDark != onDark;
 }

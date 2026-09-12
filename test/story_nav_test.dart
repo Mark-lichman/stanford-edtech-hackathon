@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stanford_edtech/lantern_story.dart';
+import 'package:stanford_edtech/primer/widgets/widgets.dart';
 
 void main() {
   GoogleFonts.config.allowRuntimeFetching = false;
@@ -33,7 +34,7 @@ void main() {
 
   // The Grumble page waits for its lantern. If this ever regresses, the button
   // is on screen and tappable before the lantern has finished lighting.
-  testWidgets('Grumble holds its controls back until the lantern is lit',
+  testWidgets('Grumble lights the lantern centred, raises it, then shows the page',
       (tester) async {
     await tester.pumpWidget(const MaterialApp(home: LanternStory()));
     await tester.tap(find.text("Open tonight's book"));
@@ -45,9 +46,37 @@ void main() {
             .first)
         .opacity;
 
+    Alignment lanternAt() => tester
+        .widget<AnimatedAlign>(find.ancestor(of: find.byType(Lantern), matching: find.byType(AnimatedAlign)))
+        .alignment as Alignment;
+
+    expect(lanternAt(), Alignment.center);
+    expect(opacityOf('Keep the note'), 0);
+
+    // Lit, but not yet at the top: the page still waits.
+    await tester.pump(const Duration(milliseconds: 4200));
+    await tester.pump(const Duration(milliseconds: 100));
+    expect(lanternAt(), Alignment.topCenter);
     expect(opacityOf('Keep the note'), 0);
 
     await tester.pumpAndSettle();
     expect(opacityOf('Keep the note'), 1);
+  });
+
+  testWidgets('The Dark puts the lantern out centred, raises it, then speaks',
+      (tester) async {
+    await tester.pumpWidget(const MaterialApp(home: LanternStory()));
+    await tester.tap(find.bySemanticsLabel(RegExp('^Beat 8,')));
+    await tester.pump(const Duration(milliseconds: 600));
+
+    final lantern = find.ancestor(of: find.byType(Lantern), matching: find.byType(AnimatedAlign));
+    final heading = find.ancestor(of: find.text('The lantern is dimming.'), matching: find.byType(AnimatedOpacity));
+
+    expect(tester.widget<AnimatedAlign>(lantern).alignment, Alignment.center);
+    expect(tester.widget<AnimatedOpacity>(heading.first).opacity, 0);
+
+    await tester.pumpAndSettle();
+    expect(tester.widget<AnimatedAlign>(lantern).alignment, Alignment.topCenter);
+    expect(tester.widget<AnimatedOpacity>(heading.first).opacity, 1);
   });
 }
