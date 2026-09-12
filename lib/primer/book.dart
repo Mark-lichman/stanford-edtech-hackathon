@@ -11,6 +11,7 @@ class Book {
     required this.title,
     required this.stepsOut,
     required this.deepLink,
+    this.linkConfirmed = false,
     this.coverUrl,
   });
 
@@ -26,7 +27,15 @@ class Book {
 
   final String? coverUrl;
 
+  /// True only when somebody has opened [deepLink] and seen the book.
+  /// Deliberately explicit rather than derived from the URL shape: pasting
+  /// a plausible getepic.com link must never be enough to make a door
+  /// claimable on stage. Amlan flagged the unconfirmed ones (a4f7416); the
+  /// ids they replaced are in git history if they turn out to be good.
+  final bool linkConfirmed;
+
   bool get isHomeGround => stepsOut == 0;
+
 }
 
 abstract interface class BookSource {
@@ -50,8 +59,11 @@ class SeededBookSource implements BookSource {
   // list it under "available on Amazon", not on Epic. Don't put it back without
   // a working getepic.com/book link.
   static const _shelf = <String, List<Book>>{
-    // VERIFIED, and the shelf the demo runs on. Whole series is in Epic, so the
-    // reach widening is a real journey through real books rather than a trick.
+    // The shelf the demo runs on. Only Hilda and the Troll is confirmed
+    // open — Amlan checked the rest and could not stand them up (a4f7416),
+    // so they carry linkConfirmed: false and the ids stay for re-checking.
+    // The whole series being on Epic is what makes the eight-week walk a
+    // real journey, so the titles stay on the shelf either way.
     //
     // Hilda and the Troll reads in 15-30 minutes, which is the only book we
     // found that matches PLAN.md's "~20 minutes reading the actual chapter"
@@ -63,6 +75,7 @@ class SeededBookSource implements BookSource {
         title: 'Hilda and the Troll',
         stepsOut: 0,
         deepLink: 'https://www.getepic.com/book/62843717/hilda-and-the-troll',
+        linkConfirmed: true,
       ),
       Book(
         id: 'hilda-giant',
@@ -101,7 +114,8 @@ class SeededBookSource implements BookSource {
       ),
     ],
 
-    // VERIFIED. The fallback shelf, authored and working.
+    // The fallback shelf, authored. Ids were checked once but not since
+    // Amlan's pass, so nothing here claims to open until somebody looks.
     'funny': [
       Book(
         id: 'dog-man-1',

@@ -263,14 +263,17 @@ companies, ignore both.
 
 So the real job is to find out what we *can* legitimately do, in this order:
 
-1. **Deep links.** `getepic.com/book/{id}/{slug}` and
-   `getepic.com/collection/{id}` are real, stable, public URL shapes. The six
-   Hilda ids are already in `lib/primer/book.dart` and they resolve on the web.
-   Your job is the part we can't check from a search engine: **does tapping one
-   on a phone with the Epic app installed open the book, and what happens when
-   the app isn't installed, and what happens when you're signed out?** That
-   last one is the stage risk — if it bounces to a paywall in front of the
-   sponsor, we need to know before we find out live.
+1. **Deep links — settled, and smaller than we thought.** There is no public
+   Epic API, so the demo does not tap out to Epic at all: the reader is ours and
+   we say so before the tap ([SCRIPT.md](SCRIPT.md), 0:55). That retires the
+   three questions that used to live here — app installed, app missing, signed
+   out — and takes venue wifi out of the critical path, which is worth more than
+   a real tap was. `getepic.com/book/{id}/{slug}` is still a real, stable public
+   URL shape and the ids stay in `lib/primer/book.dart` as documentation. Only
+   `62843717` is confirmed to open; the rest carry `linkConfirmed: false` until
+   somebody looks. **If you have five spare minutes, re-check the other Hilda
+   ids** — not because the demo needs them, but because the eight-week walk is a
+   better story when every door is real.
 2. **Book metadata.** Title, cover image and reading level are hand-entered
    already. If there's a feed, good; if not, we're fine — do not build a
    scraper today.
@@ -430,3 +433,27 @@ moderation answer, it is out of scope for today by definition.
 Why it is worth the half hour if we get there: it is the one beat that tells a
 kid who thinks she is the slow one that other people are out there doing this
 too — without ever showing her someone to measure herself against.
+
+---
+
+## Seeded content, as of the latest journey
+
+The journey now runs on a real series, not placeholders:
+
+- **Maya's interest is creatures** — she draws monsters in the back of her maths
+  book.
+- **The books are the Hilda series by Luke Pearson**, which are on Epic.
+  Tonight's door is [Hilda and the
+  Troll](https://www.getepic.com/book/62843717/hilda-and-the-troll) —
+  **that id is confirmed live.** The other three doors currently fall back to an
+  Epic search URL and are flagged `needsId` in
+  [lib/primer/book.dart](lib/primer/book.dart). Amlan's first job is turning
+  those into real ids; until he does, **do not claim on stage that every door
+  opens a book.** One does.
+- **The quest is drawn from what Hilda actually does**: she goes out with a
+  sketchbook and draws the creatures nobody else will admit are there. So Maya
+  finds one thing in the house nobody ever looks at, draws it, names it like a
+  creature, and writes one true thing underneath. Paper and a pencil, indoors,
+  alone.
+- **The artifact is a page in her own field guide** — which is why it can't be a
+  grid of badges. It's a real object that gets thicker for eight weeks.

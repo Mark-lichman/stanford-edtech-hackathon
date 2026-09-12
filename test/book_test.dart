@@ -22,7 +22,7 @@ void main() {
 
   test('unknown interest fails loudly rather than showing an empty shelf', () {
     expect(
-      () => source.doorsFor(interest: 'dinosaurs', reach: 1),
+      () => source.doorsFor(interest: 'aeroplanes', reach: 1),
       throwsArgumentError,
     );
   });
