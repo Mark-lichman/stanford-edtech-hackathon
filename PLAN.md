@@ -74,6 +74,42 @@ off-screen quest, reading-aloud-as-story-mechanic, and the deliberate ending.
 audio" is now a slide, not a footnote. There is no public Epic API; deep links
 (`getepic.com/book/{id}`) are the plausible integration, and the week-8 handoff
 should point into Epic rather than dead-end.
+**Three claims we must restate before anyone pitches them.**
+
+- *"Ten seconds of reading aloud is a real fluency signal."* **Drop it.** A full
+  one-minute, three-passage oral reading fluency administration carries a median
+  standard error of 10 words-correct-per-minute. Ten seconds is about 19 words,
+  one passage, one trial — the measurement error swamps the signal before
+  child-ASR error is even added. Say instead: "it's proof of work, not a
+  measurement; we produce no score and show no number to anyone." The upside is
+  free: reading aloud has its own memory benefit (the production effect,
+  replicated in 7–10 year olds), so the ten seconds does real work without
+  measuring anything.
+- *"Reading that ends in a real-world action beats reading alone."* Supported as
+  a **mechanism** — generative activity, learner-generated drawing, and drama all
+  have real evidence — but at doses far larger than one quest, and the closest
+  study to our actual design is a feasibility study with 65 children. Say: "this
+  is our bet, and it's the first thing we'd want to test."
+- *"Less screen time is the goal."* Outdated. The AAP retired hourly limits, and
+  its February 2026 *Digital Ecosystems* statement replaces numbers with the 5 Cs
+  while naming engagement-maximizing design as the problem. Say **displacement,
+  not duration**: four screen minutes that buy twenty off-screen minutes.
+- **Never say "2 sigma."** Bloom's 1984 tutoring claim did not replicate
+  (VanLehn d≈0.79, Nickow et al. d≈0.37, none of ~96 programs reached it), and we
+  are not a tutor, so the effect size is a category error regardless.
+
+**The strongest evidence we have is the ending, and it only counts if books
+actually arrive.** Allington & McGill-Franzen's summer books RCT (n=1,713) found
+10–12 self-selected free books produced +0.14 SD overall and +0.21 SD for the
+poorest children. That is the only field-sized effect anywhere near this design —
+but it comes from books *arriving*, not from a child being told to go find one.
+Week eight must hand over a real book (or an Epic deep link plus a library hold),
+not an instruction.
+
+**Three free wins from the repeated-reading literature** (Therrien 2004,
+ES ≈ .75 fluency / .73 comprehension): model the line in the narrator's voice
+before she reads it; cue for meaning, never speed ("read it like you mean it",
+never "read it fast"); and reuse the same passage across sessions.
 
 ---
 ## 1. The spine
