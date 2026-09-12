@@ -138,12 +138,12 @@ class _LanternStoryState extends State<LanternStory> {
   /// The lantern, centred over whatever it sits in a Stack with, until it has
   /// finished [phase]; then it rises to the top. The screen leaves a gap of its
   /// height at the top for it to land in, so nothing jumps.
-  Widget _risingLantern(LanternPhase phase, double height) => Positioned.fill(child: AnimatedAlign(
+  Widget _risingLantern(LanternPhase phase, double height, {bool onDark = false}) => Positioned.fill(child: AnimatedAlign(
         alignment: _lanternDone || MediaQuery.of(context).disableAnimations ? Alignment.topCenter : Alignment.center,
         duration: const Duration(milliseconds: 700),
         curve: Curves.easeInOutCubic,
         onEnd: () => setState(() => _lanternUp = true),
-        child: Lantern(phase: phase, height: height, onEnd: () => setState(() => _lanternDone = true)),
+        child: Lantern(phase: phase, height: height, onDark: onDark, onEnd: () => setState(() => _lanternDone = true)),
       ));
 
   /// Held back, and untappable, until the lantern has played and reached the top.
@@ -231,7 +231,7 @@ class _LanternStoryState extends State<LanternStory> {
           Text('The lantern is dimming.', style: _display(38, color: const Color(0xFFF7F0E2)), textAlign: TextAlign.center), const SizedBox(height: 18), Text('Tomorrow, the door will remember you.', style: _body(20, color: const Color(0xFFD9CDBD)), textAlign: TextAlign.center), const SizedBox(height: 54),
           Text('closing in 09', style: GoogleFonts.spaceMono(fontSize: 14, color: const Color(0xFFECCB87), letterSpacing: 1.5)),
         ])),
-        _risingLantern(LanternPhase.out, 72),
+        _risingLantern(LanternPhase.out, 72, onDark: true),
       ])));
 }
 
