@@ -178,20 +178,63 @@ SEL benefit. It's a character in a story.
 ## 7. Demo-day scope
 
 Real:
-- One child profile, seeded. **Three real book titles** with a hand-authored
-  doorway page and quest for each.
-- The full loop: three doors → the way in → read the chapter → do the quest →
-  read a line aloud → celebration → artifact → next page. Audio is scored
+- One child profile, seeded. **Three real book titles**, and **one of them
+  authored end to end** — the doorway page, the quest, the line she reads back,
+  the artifact. The other two are real doors with nothing behind them yet, and
+  we don't tap them on stage.
+- The full loop: three doors → the way in → read the book → do the quest →
+  read a line aloud → celebration → artifact → next page. Audio is checked
   on-device and discarded: nothing stored, nothing sent, no transcript.
-- **The handoff to Epic.** On stage we tap a door and it opens the book — via a
-  `getepic.com/book/{id}` deep link, or a mocked reader if the link is
-  unreliable on venue wifi. Either way we say plainly which one it is.
+- **The handoff to Epic.** On stage we tap a door and it opens the real book:
+  https://www.getepic.com/book/62843717/hilda-and-the-troll — or a mocked
+  reader if the link is unreliable on venue wifi. Either way we say plainly
+  which one it is.
 - Field Guide with two artifacts already earned, so it looks lived-in.
 - The Dark, triggerable on demand for the pitch.
 - Read-aloud on the story and quest copy.
 - The Judge: named in onboarding, two or three scripted marginalia, and the
   one-tap intercept on the "I couldn't do it" path. Hand-authored lines, not
   generated.
+
+### The book, and why this one
+
+**Hilda and the Troll**, Luke Pearson —
+https://www.getepic.com/book/62843717/hilda-and-the-troll
+
+Two numbers decided it, and neither is taste.
+
+**Fifteen to thirty minutes**, per Epic's own listing. It is the only book we
+found that matches §2's "~20 minutes reading the actual chapter" *whole*.
+Everything else we looked at ran two to four hours, which means slicing a
+chapter out and hoping the quest still makes sense without the rest. Here she
+finishes a book on a school night, which is a better thing to say on stage than
+anything we could have written.
+
+**GN530L, AR 3.3.** The other candidates ran 720L to 1090L. Our child reads a
+year and a half below grade and has to read a line *out loud*; 530L is the
+difference between the Return beat working and it being the moment the demo
+dies.
+
+Then the rest of it lines up. The whole six-book series is on Epic, so reach
+widening is a real walk through real books — Midnight Giant, Bird Parade, Black
+Hound, Stone Forest, Mountain King. Hilda is a girl, which our Maya is. And the
+real-world project is the character's own practice: she looks at something for
+longer than anybody would, draws it, names it. **That is the Field Guide
+screen.** The keepsake in §4 isn't a feature we bolted on; it's what the
+protagonist already does, and night one's artifact is page one of it.
+
+One deliberate divergence: Hilda goes outside and we do not send children
+outside. The quest keeps the looking and drops the going. A shelf nobody has
+ever looked behind is as unexplored as a wilderness when you're nine.
+
+Ruled out, with reasons, so nobody re-proposes them: **Magic Tree House** and
+**Hamster Princess** — Epic's own pages send people to Amazon for Magic Tree
+House, and no `getepic.com/book` id was findable for Hamster Princess. A door
+that opens nothing kills the pitch in ten seconds. **Captain Underpants** and
+**Dog Man** are both really on Epic and Dog Man stays in the repo as the
+verified fallback, with its quest authored. **The Franklin books** were a
+nonfiction activity bank at 970–1090L: too hard, and §1 says the lessons are
+never exercises.
 
 Staged / faked, and we say so out loud:
 - No Epic integration. Assume no public API; book + chapter data is seeded, and
@@ -219,13 +262,17 @@ companies, ignore both.
 
 So the real job is to find out what we *can* legitimately do, in this order:
 
-1. **Deep links.** `getepic.com/book/{id}` and `getepic.com/collection/{id}`
-   are real, stable, public URL shapes. Confirm they open the book on a phone
-   with the Epic app installed, and what happens when it isn't. **This is the
-   integration if nothing better exists, and it's enough.**
-2. **Book metadata.** We need title, cover image, and a reading level for three
-   seeded titles. If there's no feed, hand-enter three and move on — do not
-   build a scraper today.
+1. **Deep links.** `getepic.com/book/{id}/{slug}` and
+   `getepic.com/collection/{id}` are real, stable, public URL shapes. The six
+   Hilda ids are already in `lib/primer/book.dart` and they resolve on the web.
+   Your job is the part we can't check from a search engine: **does tapping one
+   on a phone with the Epic app installed open the book, and what happens when
+   the app isn't installed, and what happens when you're signed out?** That
+   last one is the stage risk — if it bounces to a paywall in front of the
+   sponsor, we need to know before we find out live.
+2. **Book metadata.** Title, cover image and reading level are hand-entered
+   already. If there's a feed, good; if not, we're fine — do not build a
+   scraper today.
 3. **Anything official** — a partner page, a developer contact, an Ambassador
    route. If you find one, that's a slide, not a build.
 
@@ -344,11 +391,14 @@ rehearsals.
    included. Run the three tracks in §8 rather than a single queue.
 4. **The Judge: marginalia plus the intercept.** The intervention ships, not
    just the atmosphere.
+5. **The book is *Hilda and the Troll*.** Reasoning in §7. The one authored
+   door, the whole series on Epic behind it, and the quest is Hilda's own
+   practice, which is also our Field Guide screen.
 
 ### Still open, none of them blocking
 
-- The three seeded books. Track A needs them inside the first hour, and they
-  should be books a third grader actually reads on Epic.
+- Whether the deep link survives a phone with no Epic app and a signed-out
+  account. Track A, first thing.
 - Whether the artifacts are hand-drawn assets or generated ink shapes. Track B's
   call; hand-drawn wins on charm if anyone on the team draws.
 - Who presents, and which of the three of us is on the demo device. Decide
