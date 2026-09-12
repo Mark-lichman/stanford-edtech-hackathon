@@ -110,7 +110,7 @@ The Judge gets no screen of its own — grey pencil marginalia on the pages that
 already exist, wipeable with a finger. One typeface weight, one colour, always
 in the margin. If it ever becomes a modal we have lost the idea.
 
-Screens (five):
+Screens (six):
 1. **Cover** — the book greets the child by name, asks what she already likes,
    and this is where Grumble first writes and gets named (§5).
 2. **Three doors** — tonight's three real books. She picks. One screen, three
@@ -121,7 +121,7 @@ Screens (five):
    story advances. Also the "I couldn't do it" path, where the intercept lives.
 5. **Field Guide** — earned artifacts, shown **in use** and never as a grid with
    empty slots. A keepsake, not a scoreboard, and no counter anywhere.
-5. **The Dark** — the deliberate lockout. Ink on black, one line of text, a
+6. **The Dark** — the deliberate lockout. Ink on black, one line of text, a
    countdown, no way in. This screen is the pitch.
 
 ## 5. Grumble — the voice that says she can't
