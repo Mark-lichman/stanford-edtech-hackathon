@@ -12,6 +12,7 @@ read-aloud.
 
 Concept user journey (the pitch document, shareable):
 https://claude.ai/code/artifact/f1fd0a26-a0f7-4f50-a141-15d64ccbe839
+Source is [pitch.html](pitch.html) — republish that file to the same URL.
 
 ---
 

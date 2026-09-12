@@ -1,0 +1,1119 @@
+<title>Lantern</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Literata:ital,opsz,wght@0,7..72,400..600;1,7..72,400&family=Caveat:wght@400..600&display=swap">
+
+<style>
+  :root {
+    --parch:      #F5E9CF;
+    --parch-deep: #EDDCB8;
+    --parch-edge: #D9C295;
+    --ink:        #3A2E1F;
+    --ink-soft:   #7A6748;
+    --marigold:   #E09612;
+    --berry:      #B4436C;
+    --leaf:       #3F8257;
+    --night:      #232B3A;
+    --slate:      #8A94A0;
+    --display: "Young Serif", Georgia, serif;
+    --book:    "Literata", Georgia, "Times New Roman", serif;
+    --pencil:  "Caveat", "Segoe Script", cursive;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background-color: var(--parch);
+    background-image:
+      radial-gradient(rgba(58,46,31,0.045) 1px, transparent 1.2px),
+      radial-gradient(rgba(58,46,31,0.03) 1px, transparent 1.2px);
+    background-size: 34px 34px, 53px 53px;
+    background-position: 0 0, 17px 26px;
+    color: var(--ink);
+    font-family: var(--book);
+    font-size: 18px;
+    line-height: 1.7;
+  }
+
+  .wrap { max-width: 680px; margin: 0 auto; padding: 0 24px 110px; }
+
+  :focus-visible { outline: 3px solid var(--marigold); outline-offset: 3px; }
+
+  header { padding: 88px 0 40px; text-align: center; }
+
+  h1 {
+    margin: 16px 0 0;
+    font-family: var(--display);
+    font-size: clamp(3.4rem, 14vw, 5.6rem);
+    font-weight: 400;
+    line-height: 0.95;
+  }
+
+  header p {
+    max-width: 30ch;
+    margin: 22px auto 0;
+    font-size: 1.24rem;
+    line-height: 1.5;
+    text-wrap: balance;
+  }
+
+  header em { font-style: normal; color: var(--berry); }
+
+  h2 {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: 1.9rem;
+    line-height: 1.15;
+    margin: 0 0 4px;
+    text-wrap: balance;
+  }
+
+  .wrap { counter-reset: act; }
+
+  .act { margin: 84px 0 36px; counter-increment: act; }
+
+  /* numbered so the team can point at a beat by number */
+  .act h2::before {
+    content: counter(act, decimal-leading-zero);
+    display: block;
+    font-family: var(--book);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    color: var(--berry);
+    margin-bottom: 8px;
+  }
+
+  .act .when {
+    font-family: var(--pencil);
+    font-size: 1.3rem;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+
+  .tell { margin: 0 0 20px; }
+  .tell.after { margin: 20px 0 0; }
+  .tell em { color: var(--berry); font-style: italic; }
+
+  .page {
+    background: #FBF4E4;
+    border: 2px solid var(--ink);
+    border-radius: 4px;
+    padding: 22px 26px;
+    margin: 26px 0;
+    box-shadow: 5px 6px 0 var(--parch-edge);
+    transform: rotate(-0.3deg);
+  }
+
+  .page:nth-of-type(even) { transform: rotate(0.25deg); }
+
+  .page p { margin: 0 0 12px; }
+  .page p:last-child { margin-bottom: 0; }
+
+  .said {
+    font-family: var(--display);
+    font-size: 1.3rem;
+    line-height: 1.32;
+  }
+
+  .aside { font-size: 0.85rem; color: var(--ink-soft); }
+
+  .typed { font-family: var(--pencil); font-size: 1.4rem; color: var(--berry); }
+
+  .field {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+    padding: 8px 14px;
+    border: 2px dashed var(--parch-edge);
+    border-radius: 10px;
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+  }
+
+  .doors { display: grid; gap: 8px; margin-top: 14px; }
+
+  .doors div {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 14px;
+    padding: 10px 16px;
+    border: 2px solid var(--parch-edge);
+    border-radius: 12px;
+    font-family: var(--display);
+    font-size: 1.02rem;
+  }
+
+  .doors div span {
+    font-family: var(--book);
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    white-space: nowrap;
+  }
+
+  .doors .home { border-color: var(--leaf); }
+
+  .doors .picked {
+    border-color: var(--ink);
+    background: var(--marigold);
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+
+  .doors .picked span { color: var(--ink); }
+
+  .margin-note {
+    font-family: var(--pencil);
+    font-size: 1.5rem;
+    line-height: 1.2;
+    color: var(--slate);
+    transform: rotate(-1.8deg);
+    margin: 10px 0 0;
+    padding-left: 8px;
+    border-left: 3px solid rgba(138,148,160,0.5);
+  }
+
+  .dark, .out {
+    border: 2px solid var(--ink);
+    border-radius: 16px;
+    padding: 30px 30px 26px;
+    margin: 26px 0;
+  }
+
+  .dark { background: var(--night); color: #DCD3C0; }
+  .out  { background: var(--leaf);  color: #E7EFE6; }
+  .dark .said { color: var(--marigold); margin: 0 0 14px; }
+  .out  .said { color: #FBF4E4;        margin: 0 0 14px; }
+  .dark p:last-child, .out p:last-child { margin-bottom: 0; }
+
+  .parts { margin: 48px 0 0; }
+
+  .parts > div {
+    border-top: 3px solid var(--parch-edge);
+    padding: 18px 0 22px;
+  }
+
+  .parts h3 {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: 1.24rem;
+    margin: 0 0 8px;
+  }
+
+  .parts p { margin: 0 0 10px; }
+
+  .parts .where {
+    margin: 0;
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+  }
+
+  .parts .where a {
+    color: var(--berry);
+    font-weight: 600;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+  }
+
+  .act:target h2::before { background: var(--marigold); }
+
+  .beat {
+    font-family: var(--pencil);
+    font-size: 1.25rem;
+    color: var(--ink-soft);
+    text-align: center;
+    margin: 34px 0;
+  }
+
+  .close {
+    margin-top: 92px;
+    border-top: 3px dashed var(--parch-edge);
+    padding-top: 34px;
+  }
+
+  .close strong { color: var(--berry); }
+
+
+  /* Links in running copy and on the panels. The berry already carries the
+     accent elsewhere; the green panel needs its own so it stays legible. */
+  .tell a,
+  .page a {
+    color: var(--berry);
+    font-weight: 600;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+  }
+
+  .out a {
+    color: #FBF4E4;
+    font-weight: 600;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+  }
+
+  /* Tabs. Built from the door vocabulary already on the page — same 2px ink
+     border, same marigold-and-offset-shadow for the chosen one — because on
+     this page a choice between two things already looks like a door. Radio
+     inputs do the switching, so there is no script and arrow keys work. */
+
+  .tab-radio {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 0 0 8px;
+  }
+
+  .tabs label {
+    padding: 9px 20px;
+    border: 2px solid var(--parch-edge);
+    border-radius: 12px;
+    font-family: var(--display);
+    font-size: 1.02rem;
+    color: var(--ink-soft);
+    cursor: pointer;
+  }
+
+  .tabs label:hover { border-color: var(--ink-soft); color: var(--ink); }
+
+  #t-night:checked  ~ .tabs label[for="t-night"],
+  #t-script:checked ~ .tabs label[for="t-script"] {
+    border-color: var(--ink);
+    background: var(--marigold);
+    box-shadow: 3px 3px 0 var(--ink);
+    color: var(--ink);
+  }
+
+  .tab-radio:focus-visible ~ .tabs label[for="t-night"],
+  .tab-radio:focus-visible ~ .tabs label[for="t-script"] {
+    outline: 3px solid var(--marigold);
+    outline-offset: 3px;
+  }
+
+  #t-night:focus-visible  ~ .tabs label[for="t-script"],
+  #t-script:focus-visible ~ .tabs label[for="t-night"] { outline: none; }
+
+  .panel { display: none; }
+  #t-night:checked  ~ #p-night  { display: block; }
+  #t-script:checked ~ #p-script { display: block; }
+
+  /* The script side. A presenter reads two things off this page and must never
+     confuse them: the words out loud, and the note about how to say them. So
+     they get opposite weights — spoken copy in the display face against a
+     marigold rule, direction small and quiet underneath. */
+
+  .cue {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin: 68px 0 0;
+    padding-bottom: 6px;
+    border-bottom: 3px solid var(--parch-edge);
+  }
+
+  .cue h2 { margin: 0; }
+
+  .cue .count {
+    font-family: var(--book);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .cue .at {
+    font-family: var(--pencil);
+    font-size: 1.3rem;
+    color: var(--berry);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .line {
+    font-family: var(--display);
+    font-size: 1.3rem;
+    line-height: 1.34;
+    margin: 20px 0;
+    padding-left: 22px;
+    border-left: 5px solid var(--marigold);
+  }
+
+  .line p { margin: 0 0 14px; }
+  .line p:last-child { margin-bottom: 0; }
+  .line em { font-style: italic; color: var(--berry); }
+
+  .direction {
+    margin: 18px 0 0;
+    font-size: 0.94rem;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+
+  .direction strong { color: var(--ink); }
+
+  .optional {
+    margin: 24px 0 0;
+    padding: 18px 22px;
+    border: 2px dashed var(--parch-edge);
+    border-radius: 10px;
+  }
+
+  .optional .line { margin: 14px 0 0; }
+
+  .silence {
+    font-family: var(--pencil);
+    font-size: 1.5rem;
+    color: var(--slate);
+    text-align: center;
+    margin: 26px 0 0;
+  }
+
+  .never { margin: 14px 0 0; padding-left: 22px; }
+  .never li { margin: 0 0 10px; }
+  .never li:last-child { margin-bottom: 0; }
+  .dark .never li::marker { color: var(--marigold); }
+
+  .script-intro { margin: 30px 0 0; }
+
+
+  @media (max-width: 640px) {
+    .page, .page:nth-of-type(even) { transform: none; }
+    .act { margin: 64px 0 30px; }
+  }
+</style>
+
+
+<div class="wrap">
+
+<header>
+  <svg width="60" height="76" viewBox="0 0 66 82" role="img" aria-label="A small lantern, lit.">
+    <path d="M26 8 h14" stroke="#3A2E1F" stroke-width="3" stroke-linecap="round"></path>
+    <path d="M33 8 v9" stroke="#3A2E1F" stroke-width="3" stroke-linecap="round"></path>
+    <rect x="14" y="17" width="38" height="9" rx="3" fill="#3A2E1F"></rect>
+    <path d="M17 26 h32 l4 40 a4 4 0 0 1 -4 4 h-32 a4 4 0 0 1 -4 -4 z" fill="#F5E9CF" stroke="#3A2E1F" stroke-width="3"></path>
+    <path d="M33 36 c7 8 9 12 9 17 a9 9 0 0 1 -18 0 c0 -5 2 -9 9 -17 z" fill="#E09612"></path>
+    <rect x="9" y="70" width="48" height="8" rx="4" fill="#3A2E1F"></rect>
+  </svg>
+  <h1>Lantern</h1>
+  <p>A book that starts where a kid already loves something, sends her away from
+    the screen, and <em>ends on purpose</em>.</p>
+</header>
+
+<input type="radio" name="tab" id="t-night" class="tab-radio" checked>
+<input type="radio" name="tab" id="t-script" class="tab-radio">
+
+<nav class="tabs">
+  <label for="t-night">Her first night</label>
+  <label for="t-script">Three minutes on stage</label>
+</nav>
+
+<section class="panel" id="p-night">
+
+<p class="tell">Maya is nine. She reads about a year and a half below her grade,
+  and she knows it, because somebody told her once and it stuck. She will talk
+  about monsters until you leave the room, and she draws them in the back of her
+  maths book. She has a shared tablet and about forty minutes after dinner.</p>
+
+<p class="tell">Her first night is below, told in fourteen numbered beats. But
+  first — what the thing is actually made of, because it's five ideas welded
+  together and it helps to know which one you're looking at. Each one lists the
+  beats where it does its work, and the numbers are links.</p>
+
+<div class="parts">
+  <div>
+    <h3>A book that raises a kid, then gets out of the way</h3>
+    <p>Stolen from a novel — <em>The Diamond Age</em>, where a girl gets a book
+      that knows her name, tells her a story she's a character inside, and sends
+      her on errands in the real world. It teaches her everything, and the whole
+      point is that she outgrows it.</p>
+    <p>So: no exercises, no quizzes, no lessons. The book only ever tells the
+      story, and the story is the teaching. And it has an ending, announced on
+      night one, because a book that plans to leave has to say so early or the
+      leaving feels like being dropped.</p>
+    <p class="where">Watch for it at beats <a href="#b01">01</a>,
+      <a href="#b04">04</a> and <a href="#b14">14</a>.</p>
+  </div>
+
+  <div>
+    <h3>The voice that tells her she can't</h3>
+    <p>Around nine, most kids start hearing a running commentary on themselves,
+      and for a kid who's behind in reading it says something specific and
+      cruel. We are not trying to fix that. We're trying to make it
+      <em>visible</em> — a character, with a name she gives it, writing in grey
+      pencil in the margin where she can rub it out with a finger.</p>
+    <p>That's the whole intervention: she notices it spoke. The book asks once,
+      she taps once, and then it lets it go. It never tells her what to think,
+      never scores it, never stores it, and never shows it to a grown-up.</p>
+    <p class="where">Watch for it at beats <a href="#b02">02</a> and
+      <a href="#b12">12</a> — and fading out across <a href="#b13">13</a>.</p>
+  </div>
+
+  <div>
+    <h3>Make it so small she can't fail</h3>
+    <p>The habit end of it. Hook the thing to something she already does —
+      closing the book — and make the action so small it survives her worst day.
+      One drawing. One thing on one page. Then celebrate in the first second,
+      out loud, in her own voice, because the feeling is what makes it stick and
+      the feeling has about a second to arrive.</p>
+    <p>Scaled for a nine-year-old that means a <em>smaller</em> action than
+      you'd write for an adult and a <em>louder</em> celebration. And never a
+      list of what she owes us.</p>
+    <p class="where">Watch for it at beats <a href="#b05">05</a> and
+      <a href="#b10">10</a>.</p>
+  </div>
+
+  <div>
+    <h3>The thing she makes with her hands</h3>
+    <p>Every night ends with a real object, made off the screen, and it is not
+      an activity we invented and bolted onto a book. <strong>Hilda's own
+      practice is the project.</strong> She goes out, she looks at something for
+      longer than anybody else would, and she draws it and names it. That is
+      what the character does, for six books.</p>
+    <p>So Maya starts her own field guide. Find one thing in this house nobody
+      has ever really looked at — behind the radiator, the underside of a shelf,
+      the corner of a window. Sit in front of it. Draw it. Give it a name, like
+      it's a creature. Write one true thing about it underneath.</p>
+    <p>Paper and a pencil, indoors, alone, no tools and nobody else involved —
+      which is the rule every quest in the bank has to pass before it ships. And
+      the page she makes tonight isn't a souvenir of the app. It's page one of a
+      real object that gets thicker for eight weeks.</p>
+    <p class="where">Watch for it at beats <a href="#b05">05</a>,
+      <a href="#b08">08</a> and <a href="#b10">10</a>.</p>
+  </div>
+
+  <div>
+    <h3>Start where she already is, then widen</h3>
+    <p>She tells us one thing she likes. Everything for the first week is made
+      of that thing. Then one of tonight's three doors is a half-step outside it,
+      and she's the one who picks.</p>
+    <p>Two rules keep it honest. Home ground is on the board <em>every</em>
+      night, so a hard day has a soft landing. And when it's a bad week the
+      doors quietly move back toward where she started — she's never told,
+      nothing looks different, the book just stops pushing for a while. A
+      comfort zone that only ever widens isn't comfort, it's a ratchet.</p>
+    <p class="where">Watch for it at beat <a href="#b03">03</a>, and the
+      eight-week walk in <a href="#b13">13</a>.</p>
+  </div>
+
+  <div>
+    <h3>And the reading itself happens in Epic</h3>
+    <p>This is the part worth being blunt about. <strong>Lantern has no
+      library.</strong> It writes roughly eighty words a night — a doorway, a
+      hook, a question she now needs answered — and the actual book she reads is
+      a real book in Epic's catalogue.</p>
+    <p>Tonight that book is
+      <a href="https://www.getepic.com/book/62843717/hilda-and-the-troll">Hilda
+      and the Troll</a>, by Luke Pearson. It is on Epic right now, and so are
+      the five that follow it — which is what makes the eight-week walk in beat
+      13 a real journey through real books instead of a diagram.</p>
+    <p><strong>Lantern writes one page. Hilda writes the other forty.</strong>
+      And the quest is built out of that book, so she can't do tonight's quest
+      without having read tonight's book. No quiz required to prove it.</p>
+    <p>We are not competing for reading time. We're the reason a kid who tests a
+      year and a half behind opens a book on a Tuesday night — and comes back
+      tomorrow for the next one.</p>
+    <p class="where">Watch for it at beats <a href="#b03">03</a>,
+      <a href="#b07">07</a> and <a href="#b09">09</a>.</p>
+  </div>
+</div>
+
+<div class="act" id="b01">
+  <h2>The book opens</h2>
+  <p class="when">7:40pm</p>
+</div>
+
+<div class="page">
+  <p class="said">I have been waiting for someone. Is it you?</p>
+  <div class="field"><span>what should I call you?</span><span class="typed">Maya</span></div>
+  <p style="margin-top:16px">Tell me one thing you already like. I'll start
+    there.</p>
+  <div class="field"><span>anything at all</span><span class="typed">creatures</span></div>
+</div>
+
+<p class="tell after">No account, no tutorial, no grown-up. The first thing the
+  book ever does is ask her a question instead of telling her something. It never
+  asks what she can read, and it never will.</p>
+
+<div class="act" id="b02">
+  <h2>Something writes in the margin</h2>
+  <p class="when">a minute later</p>
+</div>
+
+<div class="page">
+  <p class="margin-note">she's a slow reader</p>
+  <p style="margin-top:18px">Someone wrote in my margin. Do you hear that voice
+    too?</p>
+  <p class="aside">— she drags a finger across it, and it smudges away —</p>
+  <p>It writes in everybody's book. What should we call it?</p>
+  <div class="field"><span>give it a name</span><span class="typed">Grumble</span></div>
+</div>
+
+<p class="tell after">Grumble is a character, not a lesson. He only ever writes
+  in the margin, in grey pencil, and she can always rub him out. Nine is about
+  when that voice actually shows up — and right now she is alone with it. Naming
+  a thing is how you stop being afraid of it.</p>
+
+<div class="act" id="b03">
+  <h2>Three doors</h2>
+  <p class="when">she chooses, every single night</p>
+</div>
+
+<div class="page">
+  <p class="said">I can't write tonight's page until you tell me where we're
+    going.</p>
+  <div class="doors">
+    <div class="home picked">Hilda and the Troll <span>home · tonight</span></div>
+    <div>Hilda and the Midnight Giant <span>one step out</span></div>
+    <div>Hilda and the Bird Parade <span>two steps out</span></div>
+  </div>
+</div>
+
+<p class="tell after"><strong>These are real books, and every one of them is in
+  Epic tonight.</strong> Not a mock-up and not a stand-in — tapping this door
+  opens
+  <a href="https://www.getepic.com/book/62843717/hilda-and-the-troll">Hilda and
+  the Troll</a> in Epic. Lantern doesn't write these books and couldn't. Its
+  entire job is to make her want to open one she'd have walked past.</p>
+
+<p class="tell">Every door is still made of creatures. The book decides what
+  gets offered; <em>she</em> decides where it goes. A door she picks twice
+  becomes home ground next week, which is how a kid walks from monsters to a
+  mountain king in eight weeks without one night that felt like a stretch.</p>
+
+<div class="act" id="b04">
+  <h2>The way in</h2>
+  <p class="when">the only page Lantern writes tonight</p>
+</div>
+
+<div class="page">
+  <p class="said">Here's what you need before you go in.</p>
+  <p>Hilda lives in a house at the edge of the wilderness, and she cannot sit
+    still. She goes out with a sketchbook and draws the things she finds. Most
+    people in her world pretend the creatures are not there. Hilda draws them
+    anyway, which is why she is the one who knows what they are.</p>
+  <p class="said">Read it tonight — it's short. Then find one thing in your
+    house that nobody has ever really looked at, and draw it.</p>
+</div>
+
+<p class="tell after"><strong>Eighty words. That is the whole page.</strong> A
+  setup, a hook, and a job she now has a reason to do. Then it gets out of the
+  way.</p>
+
+<p class="tell">There is no quiz at the end, ever. The thing we asked her to
+  make is the only thing she has to bring back.</p>
+
+<div class="act" id="b05">
+  <h2>One quest. Never a list.</h2>
+  <p class="when">7:52pm</p>
+</div>
+
+<div class="page">
+  <p class="said">Find one thing in your house that nobody looks at. Under the
+    sofa, the back of a shelf, the corner of a window.</p>
+  <p style="margin-top:14px">Sit in front of it and draw it. Give it a name,
+    like it's a creature. Write one true thing about it underneath.</p>
+  <p class="aside" style="margin-top:14px">— paper, a pencil, and nothing
+    else —</p>
+</div>
+
+<p class="tell after">One thing on the screen. Never a list of what she owes the
+  book — a backlog is a guilt machine for a kid. And it is small enough that she
+  can do it on her worst day, which is the only kind of task that survives.</p>
+
+<p class="tell">Note what we did <em>not</em> do. Hilda goes outside; we don't
+  send children outside, so the quest keeps the looking and drops the going.
+  Every quest in the bank has to be doable indoors, alone, with no tools and no
+  strangers — and a shelf nobody has ever looked behind is as unexplored as a
+  wilderness when you're nine.</p>
+
+<div class="act" id="b06">
+  <h2>The lantern goes out</h2>
+  <p class="when">7:56pm</p>
+</div>
+
+<div class="dark">
+  <p class="said">I'll be here when you get back. Don't hurry.</p>
+  <p>Then the app closes itself. No countdown. No notification. Nothing to break.</p>
+</div>
+
+<p class="tell after">This is the beat that inverts every other product in the
+  building. Screen time ends <em>on purpose</em>, at the app's own initiative, at
+  the exact moment an engagement metric would tell you to serve one more thing.</p>
+
+<div class="act" id="b07">
+  <h2>She reads</h2>
+  <p class="when">twenty minutes, in Epic</p>
+</div>
+
+<div class="out">
+  <p class="said">A whole book. Not a chapter of one.</p>
+  <p>She opens
+    <a href="https://www.getepic.com/book/62843717/hilda-and-the-troll">Hilda
+    and the Troll</a> in Epic and reads it end to end. Epic clocks it at fifteen
+    to thirty minutes, which is the rarest thing we found: a real book a
+    nine-year-old finishes in one sitting, on a Tuesday, before bed.</p>
+</div>
+
+<p class="tell after"><strong>This is the reading, and it is deliberately not
+  ours.</strong> It happens in Epic's app, in Epic's catalogue, with Epic's
+  40,000 books — Lantern has no library and never will. Every minute here is a
+  minute Epic keeps.</p>
+
+<p class="tell">It's also the only number in this whole design that matters: a
+  book finished, by a kid who doesn't finish books. She has never done that
+  before, and she did it on a school night.</p>
+
+<div class="act" id="b08">
+  <h2>And then she does something about it</h2>
+  <p class="when">fifteen minutes, no screen at all</p>
+</div>
+
+<div class="out">
+  <p class="said">No screen at all.</p>
+  <p>Maya lies on the floor and draws the thing behind the radiator — a knot of
+    grey fluff and one bottle cap that has been there longer than she has. She
+    calls it a Dustkeeper. Underneath she writes: <em>it has been here since
+    before we moved in.</em> She takes far longer over it than she needs to. Her
+    mum notices the tablet is face-down and doesn't say anything about it.</p>
+</div>
+
+<p class="tell after">The quest is cut from the book, not bolted onto it. She
+  was sent to look at one thing for longer than anybody would and then name it,
+  which is precisely what Hilda does for six books — and the only reason Maya
+  knows that is that she read it. That's the join that holds the whole thing
+  together, and it needed no quiz to make it.</p>
+
+<div class="act" id="b09">
+  <h2>The return</h2>
+  <p class="when">8:15pm</p>
+</div>
+
+<div class="page">
+  <p class="said">Go back to the first page. Find the very first thing anybody
+    says out loud, and read it to me.</p>
+  <div class="field"><span>hold to talk</span><span style="color:var(--berry)">● ── 0:09</span></div>
+  <p style="margin-top:16px">I heard you. That was you, reading out loud, from a
+    book I didn't write.</p>
+</div>
+
+<p class="tell after">Ten seconds of her own voice, <em>out of the real book</em>
+  — which means she had to go back into it and hunt for the line, and that
+  hunting is the part that actually builds a reader. It's proof she went, and
+  it's a listener that cannot sigh, correct her, or be disappointed.</p>
+
+<p class="tell">It also has to be a line she can get through. Hilda is a graphic
+  novel pitched at 530L — short lines, big type, real dialogue — and that is not
+  a coincidence. It is why this book and not the four others we tried.</p>
+
+<p class="tell">Nothing is recorded, nothing is scored, and there is always an
+  <em>I'd rather not talk tonight</em> door that costs her nothing.</p>
+
+<div class="act" id="b10">
+  <h2>One second later</h2>
+  <p class="when">the part that makes it stick</p>
+</div>
+
+<div class="page">
+  <p class="said">Hold it up and say it out loud: “I found that.”</p>
+  <p style="margin-top:16px">Hilda isn't braver than everybody else. She just
+    looks at things for longer. You did that tonight, on the floor, behind a
+    radiator.</p>
+  <div class="field"><span>page one of your field guide</span><span class="typed">the Dustkeeper</span></div>
+</div>
+
+<p class="tell after">Notice what the book does <em>not</em> say. It never tells
+  her she is a reader, or an artist. The moment you hand a kid an identity you
+  have handed Grumble something to take away on a bad night — so the praise goes
+  on the work, and the noun goes on the object.</p>
+
+<p class="tell">And the field guide is not a collection screen with empty slots.
+  It's the paper one, in her room, getting thicker. Ours only ever shows what is
+  already in it.</p>
+
+<div class="act" id="b11">
+  <h2>The book closes</h2>
+  <p class="when">8:16pm</p>
+</div>
+
+<div class="page">
+  <p class="said">That's one page. The next one isn't written yet.</p>
+  <p class="aside" style="margin-top:14px">— the book closes —</p>
+</div>
+
+<p class="tell after">Four minutes of screen. Twenty-two minutes off it.</p>
+
+<div class="act" id="b12">
+  <h2>Night four, when she doesn't do it</h2>
+  <p class="when">the path that matters more than the good one</p>
+</div>
+
+<div class="page">
+  <p class="margin-note">you're just making it up</p>
+  <p style="margin-top:18px">The book doesn't tell her it's okay, and it doesn't
+    offer her something easier.</p>
+  <p class="said">What did it just say to you?</p>
+  <div class="field"><span>she picks one</span><span class="typed">it said I was making it up</span></div>
+  <p style="margin-top:14px">You heard it. That's the hard part.</p>
+</div>
+
+<p class="tell after">Then the quest moves to tomorrow. No penalty, no broken
+  streak, no red anything. Noticing is the whole skill — at nine, catching that
+  the voice spoke is enough — so the book asks once, and then lets it go.</p>
+
+<p class="tell">Grumble's line on this book is the one the grown-ups in Hilda's
+  own town use about the creatures. We never argue with him. The book does that
+  for us.</p>
+
+<div class="act" id="b13">
+  <h2>Eight weeks</h2>
+  <p class="when">the shape of the whole thing</p>
+</div>
+
+<p class="tell">Week two, something comes up out of the story and gives her
+  something. Not a badge — a <em>verb</em>. <strong>Noticing.</strong> From then
+  on every page carries one detail only she can see, and one of those details
+  turns out, three weeks later, to be the key to a door. One ability a week,
+  eight in all, and each one changes what tomorrow's three doors are allowed to
+  ask of her.</p>
+
+<p class="tell">The doors walk outward through books that exist:
+  <em>Midnight Giant</em>, then <em>Bird Parade</em>, then <em>Black Hound</em>,
+  then <em>Stone Forest</em>, and in week eight <em>The Mountain King</em> —
+  longer, darker and further from home each time, and not one night of it felt
+  like a stretch. Grumble's handwriting has been getting fainter for a month,
+  and the book has been taking longer and longer to come back — two nights dark,
+  then five — because the story needs more time to happen out there than in
+  here.</p>
+
+<p class="tell">By then the field guide has forty-odd pages in it. Not one of
+  them is ours.</p>
+
+<div class="act" id="b14">
+  <h2>And then it stops</h2>
+  <p class="when">week eight</p>
+</div>
+
+<div class="page">
+  <p class="said">I'm running out of pages.</p>
+  <p style="margin-top:14px">Here is the part I should tell you. I never gave you
+    anything. You found the Dustkeeper. You drew it. You read out loud in the
+    dark. I only wrote down what you did.</p>
+  <p class="said">There's one page left, and it's yours.</p>
+</div>
+
+<p class="tell after">And then a real book arrives. A physical one, that she
+  chose. Not a link, not a suggestion — a book, in her hands. Getting a chosen
+  book to a kid is the most proven thing in this entire design, and it is the
+  last thing Lantern does before it closes for good.</p>
+
+<div class="close">
+  <p class="tell">Every other team today will stand up and show you a graph going
+    up.</p>
+  <p class="tell"><strong>This one goes down on purpose.</strong> The number that
+    goes up instead is twenty-two minutes a night of a nine-year-old lying on
+    the floor with a pencil — and at the end of it, one girl with a book she
+    finished, a field guide she made, and the habit of looking at something for
+    longer than anybody else would.</p>
+  <p class="tell">The screen was the doorway. It was never the room.</p>
+</div>
+
+</section>
+
+<section class="panel" id="p-script">
+
+<p class="tell script-intro">The run on the device is 1:52. The slot is three
+  minutes. That is about <strong>365 spoken words</strong>, not the 450 the clock
+  would allow, and the gap is the point — The Dark plays in silence and the
+  silence is the argument.</p>
+
+<p class="tell">Two people. One presents, one drives. The driver holds each beat
+  until the line for it lands, so the timecodes below are a floor and never a
+  metronome. Word counts are per beat: if a beat runs long in rehearsal, cut
+  words, never add time.</p>
+
+<div class="cue">
+  <h2>The problem</h2>
+  <span class="at">before the first tap</span>
+  <span class="count">88 words · ~35s</span>
+</div>
+
+<div class="line">
+  <p>A nine-year-old who is behind in reading learns two things at once. That
+    she is bad at this. And that the system she is in has already decided it.
+    One of those is a voice in her head and the other is a reading level on a
+    file, and by nine she cannot tell them apart.</p>
+  <p>We wanted to hand her back her own story without pulling her out of the
+    system she still has to live inside. Same shelf. Same books. She just stops
+    reading them as somebody's assignment.</p>
+</div>
+
+<p class="direction">Beat. Then:</p>
+
+<div class="line">
+  <p>In <em>The Diamond Age</em>, Nell is given a book that knows her name, tells
+    her a story she is inside of, and teaches her to read — and in doing so makes
+    her dangerous to the world that produced her.</p>
+  <p>We built that book. It runs four minutes a night, and everything that
+    matters happens after it closes.</p>
+</div>
+
+<p class="direction">Hold on the Cover through all of it. Do not tap until "after
+  it closes." <strong>Nell is the answer to the problem, never the opening
+  image</strong> — if you find yourself opening with <em>The Diamond Age</em>,
+  you have started with our reference instead of her situation.</p>
+
+<div class="cue">
+  <h2>Grumble</h2>
+  <span class="at">0:12</span>
+  <span class="count">46 words</span>
+</div>
+
+<div class="line">
+  <p>At around nine, most children start hearing a running commentary on
+    themselves. Positive Intelligence calls that voice the Judge. We took one
+    idea from it and only to the depth of awareness: we draw him in the margin,
+    in grey pencil, and she rubs him out and names him.</p>
+</div>
+
+<p class="direction">This is the only place Positive Intelligence gets named out
+  loud. If it comes back, it comes back in questions.</p>
+
+<div class="optional">
+  <p class="direction" style="margin-top:0"><strong>Optional clause</strong> —
+    drop it in only if the judges look like the kind who ask, or if you have been
+    told there is no Q&amp;A. It costs you the Doors line below.</p>
+  <div class="line">
+    <p>No diagnosis, no score, no profile, nothing about her leaving the device,
+      and she can skip all of it.</p>
+  </div>
+</div>
+
+<div class="cue">
+  <h2>Three doors</h2>
+  <span class="at">0:28</span>
+  <span class="count">18 words</span>
+</div>
+
+<div class="line">
+  <p>Three real books. One is something she already loves. She picks — we only
+    decide what gets offered.</p>
+</div>
+
+<p class="direction">This is the line to cut if you used the optional clause
+  above.</p>
+
+<div class="cue">
+  <h2>The way in</h2>
+  <span class="at">0:38</span>
+  <span class="count">44 words</span>
+</div>
+
+<div class="line">
+  <p>Eighty words, a hook, and a question she now needs answered. Then the
+    quest: <em>after you close the book tonight.</em> That is an anchor and a
+    tiny behaviour — BJ Fogg's recipe, from the Behavior Design Lab here. The
+    book writes the other four thousand words.</p>
+</div>
+
+<p class="direction">The anchor is on screen as its own line when you say it.
+  The four fields behind every doorway — anchor, tiny behaviour, celebration,
+  why — <strong>are</strong> the recipe, sitting in the content file. That is the
+  slide; there is no slide.</p>
+
+<div class="cue">
+  <h2>The handoff</h2>
+  <span class="at">0:55</span>
+  <span class="count">30 words</span>
+</div>
+
+<div class="line">
+  <p>Epic has no public API, so this reader is ours, standing in for theirs. The
+    intent is a handoff: we write eighty words a night, and the real book writes
+    the other four thousand.</p>
+</div>
+
+<p class="direction">Say it <strong>before</strong> the tap, not after, and in
+  the same tone as everything else. A limitation you announce is a design
+  decision; the same limitation discovered by a judge is a gap. There is no
+  version of this where we let a room assume the mock is Epic.</p>
+
+<div class="cue">
+  <h2>The Return</h2>
+  <span class="at">1:02</span>
+  <span class="count">28 words</span>
+</div>
+
+<div class="line">
+  <p>Twenty minutes reading, fifteen doing the quest, all of it off our screen.
+    She comes back and reads one line out of the book, aloud, for ten seconds.</p>
+</div>
+
+<p class="direction">Then <strong>stop talking</strong> while the hold happens.
+  If the mic is denied, the fallback is already on screen and it is not an
+  apology.</p>
+
+<div class="cue">
+  <h2>Celebration</h2>
+  <span class="at">1:18</span>
+  <span class="count">33 words</span>
+</div>
+
+<div class="line">
+  <p>She says it out loud, and that is the whole reinforcement. No points, no
+    badges. And the noun goes on the page, never on the child — hand a
+    nine-year-old an identity and you have handed the Judge something to take
+    away.</p>
+</div>
+
+<p class="direction">Fogg pays off here and is not named again.</p>
+
+<div class="cue">
+  <h2>The intercept</h2>
+  <span class="at">1:28</span>
+  <span class="count">26 words</span>
+</div>
+
+<div class="line">
+  <p>Night four. She could not do it. The book does not console her — it asks
+    what it just said to her, and one option is about the night, not about
+    her.</p>
+</div>
+
+<div class="cue">
+  <h2>The Dark</h2>
+  <span class="at">1:40</span>
+  <span class="count">no words</span>
+</div>
+
+<p class="silence">— say nothing, let it sit —</p>
+
+<p class="direction">The countdown is the pitch.</p>
+
+<div class="cue">
+  <h2>Close</h2>
+  <span class="at">after the run</span>
+  <span class="count">52 words · ~20s</span>
+</div>
+
+<div class="line">
+  <p>Every other app here optimises for retention. This one optimises for its
+    own obsolescence — longer missions, longer dark, until it tells her it is
+    not needed.</p>
+  <p>She is still on the same shelf, reading the same books, inside the same
+    system. It is just her story now.</p>
+  <p>That is Lantern. Thank you.</p>
+</div>
+
+<div class="cue">
+  <h2>When it goes wrong</h2>
+  <span class="count">rehearse as hard as the script</span>
+</div>
+
+<p class="direction">Mic denied, or the room is too loud:</p>
+
+<div class="line">
+  <p>She can always say <em>I'd rather not talk tonight</em>, and the artifact
+    still comes. A book that punishes a child for not performing is the wrong
+    book.</p>
+</div>
+
+<p class="direction">Asked whether the Epic handoff is real:</p>
+
+<div class="line">
+  <p>The books are real and the catalogue is real — those are live Epic titles.
+    The reader is ours, because there is no public API to open theirs with.</p>
+</div>
+
+<p class="direction">Both are said in the same tone as the rest. A fallback
+  announced as a failure becomes one.</p>
+
+<div class="cue">
+  <h2>Never said out loud</h2>
+</div>
+
+<div class="dark">
+  <p class="said">Six sentences that lose the room.</p>
+  <ul class="never">
+    <li>Ten seconds is <strong>proof of work</strong>, never a fluency
+      measurement. No score, no number, shown to nobody.</li>
+    <li>Not <strong>"less screen time."</strong> Displacement: four screen
+      minutes buying twenty minutes of reading and fifteen off the screen
+      entirely.</li>
+    <li>Never <strong>"2 sigma."</strong> It didn't replicate, and we aren't a
+      tutor anyway.</li>
+    <li>Never <strong>"saboteur."</strong> It is clinical vocabulary, it invites
+      the diagnosis question, and the child-facing word is Grumble.</li>
+    <li>Never <strong>"we teach her Sage"</strong>, or reframing, or
+      affirmations. We stopped at noticing on purpose, and the stopping is the
+      strong part.</li>
+    <li>Never <strong>"habit-forming"</strong> about our own app. The recipe is
+      pointed at reading a book, not at opening Lantern. The habit is the
+      book.</li>
+  </ul>
+</div>
+
+<p class="direction">And one that only exists because the pitch now opens on the
+  problem: <strong>never frame the system as the villain.</strong> Not school,
+  not reading levels, not Epic — Epic is in the room. The tension is that she has
+  no authorship inside it, and we give her authorship without asking her to
+  leave.</p>
+
+<div class="cue">
+  <h2>The three questions this invites</h2>
+</div>
+
+<div class="page">
+  <p class="said">Is this Positive Intelligence for kids? Are you assessing
+    children?</p>
+  <p>No. We took one concept — the self-critical voice — and only to the depth of
+    awareness. What we deliberately did not build: no diagnosis, no score, no
+    profile, no emotional-state data leaving the device, nothing shown to a
+    parent, and she can skip every bit of it. He also appears <em>less</em> over
+    eight weeks, not more. A permanent resident would be a permanent fact about
+    herself.</p>
+</div>
+
+<div class="page">
+  <p class="said">Isn't Tiny Habits just a behaviour loop with a book on top?</p>
+  <p>The recipe is Fogg's and we use it straight: anchor, tiny behaviour,
+    celebration she says out loud. Two departures. The behaviour is off our
+    screen, so the reinforcement never points back at the app. And the
+    celebration's noun lands on the artifact, not on the child.</p>
+</div>
+
+<div class="page">
+  <p class="said">So is the Epic integration real?</p>
+  <p>The titles and the catalogue are. The reader is a mock, because Epic has no
+    public API — the integration we are showing the intent of is a handoff, and
+    the handoff is the product. We write eighty words; their library writes the
+    rest.</p>
+</div>
+
+<p class="direction">All three are short on purpose. The long version is the one
+  that sounds defensive.</p>
+
+<div class="close">
+  <p class="tell">Two clean run-throughs at or under 1:52, on the demo device, on
+    venue wifi. <strong>It is the first thing every team cuts and the only thing
+    here that cannot be fixed afterwards.</strong></p>
+</div>
+
+</section>
+</div>
+
