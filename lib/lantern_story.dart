@@ -193,13 +193,13 @@ class _LanternStoryState extends State<LanternStory> {
           ])),
         ]),
         _risingLantern(LanternPhase.lit, 66),
-        if (!_noteGone) Positioned(right: -10, top: 212, child: _afterLantern(GestureDetector(
-          onPanUpdate: (_) => setState(() => _noteGone = true), onTap: () => setState(() => _noteGone = true),
-          child: Transform.rotate(angle: -0.045, child: CustomPaint(painter: _PencilNotePainter(), child: SizedBox(width: 245, height: 125, child: Padding(
-            padding: const EdgeInsets.fromLTRB(28, 24, 20, 8), child: Text(_door.marginalia.first, style: const TextStyle(fontSize: 20, height: 1.18, color: Color(0xFF7D827F), fontStyle: FontStyle.italic)),
-          ))),
+        // Aditya's MarginNote: wiped, the paper slides off and what Grumble wrote
+        // stays behind as a soft smudge — rubbed out, not erased (PLAN.md §5).
+        // It stays mounted after the wipe so the smudge can animate in.
+        Positioned(right: -10, top: 212, child: _afterLantern(SizedBox(width: 245, child: MarginNote(
+          text: _door.marginalia.first, underText: _door.marginalia.first, revealed: _noteGone,
+          label: 'Grumble\'s note', onWiped: () => setState(() => _noteGone = true),
         )))),
-        if (_noteGone) Positioned(right: 4, top: 234, child: Text('smudge', style: _small().copyWith(fontStyle: FontStyle.italic))),
       ]));
 
   Widget _doors() {
@@ -351,20 +351,6 @@ class _PageBorderPainter extends CustomPainter {
     final p = Paint()..color = const Color(0xFFBCA991)..style = PaintingStyle.stroke..strokeWidth = 1.5;
     final path = Path()..moveTo(13, 2)..quadraticBezierTo(size.width * .28, 6, size.width * .52, 2)..quadraticBezierTo(size.width * .78, -1, size.width - 12, 4)..quadraticBezierTo(size.width - 6, size.height * .3, size.width - 11, size.height * .55)..quadraticBezierTo(size.width - 6, size.height * .8, size.width - 13, size.height - 3)..quadraticBezierTo(size.width * .7, size.height - 7, size.width * .46, size.height - 2)..quadraticBezierTo(size.width * .2, size.height + 2, 10, size.height - 4)..quadraticBezierTo(5, size.height * .7, 9, size.height * .48)..quadraticBezierTo(4, size.height * .22, 13, 2);
     canvas.drawPath(path, p);
-  }
-  @override bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-}
-
-class _PencilNotePainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final p = Paint()..color = const Color(0xFFE2DED3);
-    final path = Path()..moveTo(4, 10)..quadraticBezierTo(size.width * .5, 0, size.width - 4, 8)..quadraticBezierTo(size.width, size.height * .5, size.width - 7, size.height - 6)..quadraticBezierTo(size.width * .5, size.height, 8, size.height - 9)..quadraticBezierTo(0, size.height * .5, 4, 10);
-    canvas.drawPath(path, p);
-    final line = Paint()..color = const Color(0xFFB5B3AC)..strokeWidth = 1;
-    for (var y = 18.0; y < size.height - 10; y += 15) {
-      canvas.drawLine(Offset(16, y), Offset(size.width - 15, y + 2), line);
-    }
   }
   @override bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
