@@ -15,6 +15,70 @@ https://claude.ai/code/artifact/f1fd0a26-a0f7-4f50-a141-15d64ccbe839
 
 ---
 
+
+---
+
+## ⚠ Corrections from research — read before building §5 or §6
+
+Five research strands came back and falsified parts of this plan. The sections
+below are **not yet rewritten**; a synthesis pass is coming. Until then, these
+corrections override what §5 and §6 say.
+
+**§5 — stop citing Positive Intelligence.** The published basis for the PQ score
+(Chamine &amp; Katayama 2012) could not be located in any peer-reviewed record. The
+only peer-reviewed evaluation of the program is n=64, uncontrolled, and its gains
+did not survive five-month follow-up. There is no research on PI in children, and
+PI LLC has explicit IP rules on "Saboteur" branding. **Keep the Judge as a
+character; drop it as a citation.** Cite instead: White &amp; Epston on externalizing,
+the child-CBT tradition, and the documented emergence of self-criticism in middle
+childhood — there is a known self-esteem dip at ages 9–10 attributed to exactly
+this capacity arriving. That is a stronger warrant than the one we had.
+
+**§5 — delete the "saboteurs aren't hardened yet" claim** from every doc and from
+the pitch. It asserts a developmental trajectory for a construct with no
+developmental research. It is the sentence a knowledgeable judge will pull on.
+
+**§6 — the celebration is wrong as written.** "That is who you are now" is person
+praise. Foster-Hanson et al. (2020) found identity framing **backfires after
+setbacks**, and this product manufactures setbacks. Brummelman's work makes every
+superlative in a success screen the exact stimulus that drove low-self-esteem
+children to avoid challenge. **Move the noun off the child and onto the artifact:**
+not "you are a reader now" but "you read this out loud, in the dark, when it was
+hard — this belongs in the book now."
+
+**§6 — no collection grid, ever.** No empty slots, no counter, no "3 of 12."
+Marinak &amp; Gambrell found token rewards were the only condition that performed
+*worse than no reward at all*. Show artifacts only in use, changing what her
+character can do.
+
+**§7 — the artifact must stop being pre-announced every session.** Expectation is
+the active ingredient in the overjustification effect (Lepper 1973). A guaranteed,
+announced, completion-contingent reward is the worst-shaped contingency in the
+literature, and the age moderator runs against us.
+
+**New, and treat it as a ship-blocker: the "no adult sees anything" rule is the
+mechanism of harm for the child this app most attracts.** Trace it: a nine-year-old
+with undiagnosed dyslexia reads aloud haltingly — we already have the signal — taps
+"I couldn't do it," selects "you're a slow reader," and we reply "You heard it.
+That's the hard part," then silently narrow her topics and push less. Average
+identification age in special ed is ~10; remediation costs roughly four times as
+much in fourth grade as in late kindergarten. Keep her thoughts private forever,
+but **add a content-free, non-diagnostic signal to a parent**: "reading aloud has
+been effortful for a while; that's common and very fixable."
+
+**§10 — Epic already ships our reward mechanic.** 25 million badges issued in 2025,
+and Reading Buddies hatch from eggs after 20 minutes of reading. Anything legible
+as "read more → unlock thing" competes with the sponsor's own feature and loses.
+Our defensible ground is the three things Epic structurally cannot ship: the
+off-screen quest, reading-aloud-as-story-mechanic, and the deliberate ending.
+
+**§10 — Epic's owner changed.** Sold out of BYJU'S bankruptcy to TAL Education for
+~$95M in June 2025, with DOJ interest in foreign-investment review. "We store zero
+audio" is now a slide, not a footnote. There is no public Epic API; deep links
+(`getepic.com/book/{id}`) are the plausible integration, and the week-8 handoff
+should point into Epic rather than dead-end.
+
+---
 ## 1. The spine
 
 In *The Diamond Age*, Nell is given the Young Lady's Illustrated Primer: a book
