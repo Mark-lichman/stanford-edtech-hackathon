@@ -1,9 +1,8 @@
-/// The one import every screen uses:
-///
-///     import 'package:stanford_edtech/primer/widgets/widgets.dart';
-///
-/// When Aditya's real widgets land, change the export below to point at them.
-/// No screen changes.
+/// The one import every Primer screen uses.
 library;
 
-export 'stubs.dart';
+export 'door.dart';
+export 'hold_to_talk.dart';
+export 'margin_note.dart';
+export 'page.dart';
+export 'panels.dart';
