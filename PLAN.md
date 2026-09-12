@@ -202,50 +202,104 @@ Staged / faked, and we say so out loud:
   output kills the demo. Claude-generated quests with a human review queue is the
   roadmap slide, not the build.
 
-## 8. Build order
+## 8. Who owns what
 
-A full day, three or more people. That means the whole plan ships, and the shape
-changes from a queue into three tracks that must not block each other. Split by
-track, not by screen — two people editing the same widget file is how hackathon
-days get lost.
+Three people, three tracks. The tracks are drawn so **nobody waits on anybody**
+— each seam is a file one person owns and the others only read.
 
-**Track A — content and engine** (one person, starts immediately)
-- Rename the engine into `lib/primer/quest.dart`, keeping the HabitCrafts field
-  names. Extend it with artifacts and chapter progression.
-- The quest bank for three books. Every quest indoors, alone, no tools, no
-  strangers, no going outside — review the whole bank against that before demo.
-- Grumble's marginalia lines, the intercept options in a child's register, the
-  celebration scripts.
-- This is the demo's soul. It is also the only track with no dependencies, so it
-  should start at 0:00 and stay one step ahead of Track C.
+### Amlan — the book source (Epic)
 
-**Track B — visual system and voice** (one person, 0:00–2:30, then joins C)
-- Paper theme, type scale, margin treatment, the grey-pencil marginalia
-  treatment, the artifact illustration style.
-- Read-aloud (`flutter_tts`) wired as a theme-level concern from the start, not
-  a pass at the end. With three people this stops being the thing we cut.
-- Ship it as a real theme file before anyone builds a screen against it.
+**Owns:** `lib/primer/epic.dart`. Nothing else. No UI, no content.
 
-**Track C — screens** (one or more people, gated on B's theme file ~2:30)
-- Cover + the Judge naming beat.
-- Tonight's Page, with marginalia render and finger-wipe.
-- The Return: hold-to-talk capture, ten-second timer, celebration, artifact
-  award. The read-aloud proof is the highest-risk piece on demo day — build it
-  early in this track, not last, and test it on the actual demo device.
-- The intercept on the "I couldn't do it" path.
-- Field Guide, then The Dark.
+Start here, because it will save you an hour: **Epic has no public API, SDK, or
+developer program.** I checked. The only partner surfaces are content/publisher
+deals and the Educator Ambassador programme. Also, searching "Epic API" mostly
+returns **Epic Systems** (hospital software) and **Epic Games** — different
+companies, ignore both.
 
-**All hands, last 90 minutes**
-- Seed a believable state: a child two weeks in, fourteen artifacts, Chapter 6.
-- Rehearse the three-minute run twice, on the demo device, on the venue wifi.
-  Rehearsal is not optional and is the first thing people cut.
+So the real job is to find out what we *can* legitimately do, in this order:
 
-If a track falls behind, cut in this order: Field Guide polish, then the
-finger-wipe gesture (ship static marginalia), then the Cover naming beat
-(pre-name Grumble in the seed data).
+1. **Deep links.** `getepic.com/book/{id}` and `getepic.com/collection/{id}`
+   are real, stable, public URL shapes. Confirm they open the book on a phone
+   with the Epic app installed, and what happens when it isn't. **This is the
+   integration if nothing better exists, and it's enough.**
+2. **Book metadata.** We need title, cover image, and a reading level for three
+   seeded titles. If there's no feed, hand-enter three and move on — do not
+   build a scraper today.
+3. **Anything official** — a partner page, a developer contact, an Ambassador
+   route. If you find one, that's a slide, not a build.
 
-Never cut: **The Dark**, the **intercept**, the **read-aloud proof**, and the two
-rehearsals. Those are the argument.
+**Your deliverable is not an integration. It's a filled-in class.** I'm writing
+`BookSource` with a seeded implementation first thing, so the demo works whether
+or not you find anything. You either fill in a real one or we ship the stub and
+say so on stage. **Time-box the search to 90 minutes**, then tell me what you
+found and switch to helping with content.
+
+### Aditya — the base UI/UX
+
+**Owns:** `lib/primer/theme.dart` and `lib/primer/widgets/`. Not the screens.
+
+**Start immediately, you block Track C.** Ship the theme file before anyone
+builds a screen against it.
+
+1. **The theme** — palette, type scale, paper texture, spacing. The published
+   journey is the visual reference; steal directly from it. Parchment ground,
+   ink-brown text, one warm accent for the lamp/celebration and one berry accent
+   for the quest. Not Material, no cards, no elevation, no blue.
+2. **The shared widgets** — the paper `Page` card, the `MarginNote` (grey pencil,
+   rotated, finger-wipeable), the `Door` row, the `HoldToTalk` control, and the
+   full-bleed dark and green panels. These are what I compose the screens from,
+   so the API matters more than the pixels: keep them dumb, take content as
+   parameters, own no state.
+3. **Read-aloud** wired as a theme-level concern from the start, not bolted on
+   at hour seven.
+
+Constraints that aren't negotiable: one thing per screen, tap targets ≥56dp,
+20pt+ story text, no loss-framed copy, no counters or progress bars anywhere.
+
+### Mark — the journey, the content, the engine
+
+**Owns:** `lib/primer/quest.dart`, `lib/primer/content/`, `lib/primer/screens/`,
+and the wiring.
+
+1. **First 30 minutes, before anything else:** write the `BookSource` interface
+   and `Book` model, with a seeded implementation. Push it. That unblocks Amlan
+   (he has a shape to fill) and me (I can build the whole journey against fake
+   data).
+2. **Content** — the three doors, and for each: Lantern's eighty words, the
+   quest cut from that chapter, the line she reads back, the artifact. Plus
+   Grumble's marginalia, the two intercept options, the celebration lines. This
+   is the demo's soul and it is writing, not coding.
+3. **Screens**, composed from Aditya's widgets as they land.
+4. **Integration and the demo script.**
+
+### The seam that matters
+
+```
+Book        — id, title, coverUrl, deepLink, level      (Mark writes, Amlan fills)
+BookSource  — Future<List<Book>> doorsFor(interest, reach)
+              SeededBookSource  ← ships today, always works
+              EpicBookSource    ← Amlan, only if there's something to build
+```
+
+**The demo never depends on Amlan finding an API.** If he does, we swap the
+implementation and it's a better slide. If he doesn't, `SeededBookSource` ships
+and we say plainly on stage that the book data is hand-entered and the handoff
+is a deep link.
+
+### Last 90 minutes, all three
+
+Seed a believable state. Rehearse the three-minute run **twice**, on the actual
+demo device, on venue wifi. Decide who presents and who drives. Rehearsal is not
+optional and it is the first thing every team cuts.
+
+### If a track falls behind
+
+Cut in this order: Field Guide polish → the finger-wipe gesture (ship static
+marginalia) → the Cover naming beat (pre-name Grumble in the seed data).
+
+Never cut: **The Dark**, the **intercept**, the **read-aloud**, and the two
+rehearsals.
 
 ## 9. Risks
 
