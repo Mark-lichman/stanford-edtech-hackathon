@@ -2,7 +2,7 @@
 
 Sponsor: Epic for Kids (digital reading platform, ages ~12 and under).
 Base: HabitCrafts habit engine, adapted. Inspiration: *The Diamond Age*.
-Frame: Positive Intelligence, the Judge only. Theme: subversion.
+Frame: the self-critical voice, awareness only — see corrections below. Theme: subversion.
 
 **Decided (§10):** name is **Lantern**; the Judge's default name is **Grumble**
 (the child renames it on the Cover). Proof of work is **ten seconds of the child
@@ -12,9 +12,6 @@ read-aloud.
 
 Concept user journey (the pitch document, shareable):
 https://claude.ai/code/artifact/f1fd0a26-a0f7-4f50-a141-15d64ccbe839
-
----
-
 
 ---
 
