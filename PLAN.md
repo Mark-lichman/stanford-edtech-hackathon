@@ -220,7 +220,7 @@ companies, ignore both.
 So the real job is to find out what we *can* legitimately do, in this order:
 
 1. **Deep links.** `getepic.com/book/{id}` and `getepic.com/collection/{id}`
-   are real, stable, public URL shapes. Confirm they open the book on a phone
+   are real, stable, public URL shapes. **Start with the one we have: `getepic.com/book/62843717/hilda-and-the-troll`.** Confirm it opens the book on a phone
    with the Epic app installed, and what happens when it isn't. **This is the
    integration if nothing better exists, and it's enough.**
 2. **Book metadata.** We need title, cover image, and a reading level for three
@@ -379,3 +379,27 @@ moderation answer, it is out of scope for today by definition.
 Why it is worth the half hour if we get there: it is the one beat that tells a
 kid who thinks she is the slow one that other people are out there doing this
 too — without ever showing her someone to measure herself against.
+
+---
+
+## Seeded content, as of the latest journey
+
+The journey now runs on a real series, not placeholders:
+
+- **Maya's interest is creatures** — she draws monsters in the back of her maths
+  book.
+- **The books are the Hilda series by Luke Pearson**, which are on Epic.
+  Tonight's door is [Hilda and the
+  Troll](https://www.getepic.com/book/62843717/hilda-and-the-troll) —
+  **that id is confirmed live.** The other three doors currently fall back to an
+  Epic search URL and are flagged `needsId` in
+  [lib/primer/book.dart](lib/primer/book.dart). Amlan's first job is turning
+  those into real ids; until he does, **do not claim on stage that every door
+  opens a book.** One does.
+- **The quest is drawn from what Hilda actually does**: she goes out with a
+  sketchbook and draws the creatures nobody else will admit are there. So Maya
+  finds one thing in the house nobody ever looks at, draws it, names it like a
+  creature, and writes one true thing underneath. Paper and a pencil, indoors,
+  alone.
+- **The artifact is a page in her own field guide** — which is why it can't be a
+  grid of badges. It's a real object that gets thicker for eight weeks.

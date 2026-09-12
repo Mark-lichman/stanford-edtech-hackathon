@@ -27,7 +27,14 @@ class Book {
   final String? coverUrl;
 
   bool get isHomeGround => stepsOut == 0;
+
+  /// True while we only have a search fallback rather than a real Epic id.
+  /// Show it, but never claim on stage that the link opens the book.
+  bool get hasConfirmedLink => id != needsId;
 }
+
+/// Placeholder id for a book whose Epic id nobody has looked up yet.
+const needsId = 'needs-epic-id';
 
 abstract interface class BookSource {
   /// The three doors for tonight.
@@ -42,31 +49,36 @@ abstract interface class BookSource {
 class SeededBookSource implements BookSource {
   const SeededBookSource();
 
+  /// The Hilda books, by Luke Pearson. Real series, real order, on Epic.
+  ///
+  /// Only the first id is confirmed against a live Epic URL. The rest are
+  /// marked [needsId] so nobody demos a dead link by accident — Amlan fills
+  /// them in, or we open book one and talk over the rest.
   static const _shelf = <String, List<Book>>{
-    'sharks': [
+    'creatures': [
       Book(
-        id: 'seed-sharks',
-        title: 'Everything About Sharks',
+        id: '62843717',
+        title: 'Hilda and the Troll',
         stepsOut: 0,
-        deepLink: 'https://www.getepic.com/book/seed-sharks',
+        deepLink: 'https://www.getepic.com/book/62843717/hilda-and-the-troll',
       ),
       Book(
-        id: 'seed-whydah',
-        title: 'The Wreck of the Whydah',
+        id: needsId,
+        title: 'Hilda and the Midnight Giant',
         stepsOut: 1,
-        deepLink: 'https://www.getepic.com/book/seed-whydah',
+        deepLink: 'https://www.getepic.com/search?q=Hilda+and+the+Midnight+Giant',
       ),
       Book(
-        id: 'seed-deep',
-        title: 'Deep: How Far Down Can You Go?',
+        id: needsId,
+        title: 'Hilda and the Bird Parade',
         stepsOut: 2,
-        deepLink: 'https://www.getepic.com/book/seed-deep',
+        deepLink: 'https://www.getepic.com/search?q=Hilda+and+the+Bird+Parade',
       ),
       Book(
-        id: 'seed-stars',
-        title: 'Sailing by the Stars',
+        id: needsId,
+        title: 'Hilda and the Mountain King',
         stepsOut: 3,
-        deepLink: 'https://www.getepic.com/book/seed-stars',
+        deepLink: 'https://www.getepic.com/search?q=Hilda+and+the+Mountain+King',
       ),
     ],
   };
