@@ -392,3 +392,29 @@ rehearsals. Those are the argument.
   call; hand-drawn wins on charm if anyone on the team draws.
 - Who presents, and which of the three of us is on the demo device. Decide
   before the last 90 minutes, not during them.
+
+---
+
+## 11. Bonus — the small social element
+
+**Only if the demo is rehearsed twice and the solo journey is done.** This is the
+last thing on the list, and it is allowed to be cut without discussion.
+
+The smallest version that is still worth showing: **another kid's artifact turns
+up in your story.** Around week three, a map Maya didn't draw appears on her
+page, described as something an earlier explorer left behind. It is real — some
+other child hid something in a closet and drew it badly.
+
+What makes this cheap: it is a **content swap, not a system**. No accounts, no
+matching service, no realtime, no moderation queue. A pool of artifacts, one
+pulled in at a scripted story beat. For the showcase it can be seeded — two or
+three hand-made artifacts in the pool — and we say so.
+
+The rule that keeps it small and keeps it safe in one move: **the stories touch,
+the children don't.** No chat, no names, no profiles, no free text, nothing a
+child wrote reaching another child. If anyone proposes a feature that needs a
+moderation answer, it is out of scope for today by definition.
+
+Why it is worth the half hour if we get there: it is the one beat that tells a
+kid who thinks she is the slow one that other people are out there doing this
+too — without ever showing her someone to measure herself against.
