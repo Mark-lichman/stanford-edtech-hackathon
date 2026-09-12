@@ -2,7 +2,7 @@
 
 Sponsor: Epic for Kids (digital reading platform, ages ~12 and under).
 Base: HabitCrafts habit engine, adapted. Inspiration: *The Diamond Age*.
-Frame: the self-critical voice, awareness only — see corrections below. Theme: subversion.
+Frame: the self-critical voice, awareness only. Theme: subversion.
 
 **Decided (§10):** name is **Lantern**; the Judge's default name is **Grumble**
 (the child renames it on the Cover). Proof of work is **ten seconds of the child
@@ -15,41 +15,14 @@ https://claude.ai/code/artifact/f1fd0a26-a0f7-4f50-a141-15d64ccbe839
 
 ---
 
-## What changed after we pulled the story apart
+## Three things not to say on stage
 
-Six things we got wrong, kept short. These override §5 and §6 below, which are
-pre-pivot and not yet rewritten.
+- **Don't call ten seconds a fluency measurement.** It's proof of work. We
+  produce no score and show no number to anyone.
+- **Don't say "less screen time."** Say displacement: four screen minutes that
+  buy twenty minutes of reading and fifteen off the screen entirely.
+- **Never say "2 sigma."** It didn't replicate, and we aren't a tutor anyway.
 
-**The celebration never calls her a reader.** "That is who you are now" was the
-original line. It's wrong — hand a kid an identity and you've handed Grumble
-something to take away on a bad night. The noun goes on the object instead:
-*"You read this in the dark, when it was hard. It belongs in the book now."*
-
-**No collection grid.** No empty slots, no counter, no "3 of 12." The moment
-there's a set to complete, the set becomes the goal. Artifacts appear only in
-use — changing what her character can do — never in a case.
-
-**The artifact isn't promised in advance.** A guaranteed payout for finishing is
-the shape that kills the wanting. It should arrive unannounced, as something the
-story hands her, and on some nights not at all.
-
-**One ability a week, not one a night.** Eight in total. Granted by a companion
-in dialogue, never a level-up banner — and an ability is only real if it changes
-what tomorrow's three doors can ask of her. The Primer never celebrates; it
-*continues*.
-
-**The read-aloud is the line she'll need, after the page has scrolled away.**
-That turns ten seconds from a toll booth into part of the story. Model the line
-in the narrator's voice first, and cue for meaning — "read it like you mean it,"
-never "read it fast."
-
-**The ending has to hand over a real book.** Not a link, not a suggestion. A
-physical book she chose, arriving. That's the single most proven thing in the
-whole design, and it's the difference between an invitation and abandonment.
-
-**Three things not to say on stage:** don't call ten seconds a fluency
-measurement (it's proof of work); don't say "less screen time" (say displacement
-— four screen minutes buying twenty off-screen); and never say "2 sigma."
 
 ## 1. The spine
 
@@ -72,18 +45,27 @@ The screen is the doorway, not the room.
 
 ## 2. The loop
 
-One loop, three beats. Everything below serves it.
+One loop, four beats. Everything below serves it.
 
-1. **Read** — the child reads (on Epic, or a physical book — both count).
-2. **Quest** — finishing a chapter unlocks exactly one off-screen mission drawn
-   from what they just read. Not a comprehension quiz. A thing to *do*:
-   "Nell hid a key. Hide something in your house and draw a map to it."
-3. **Return** — they come back, show what they did, celebrate, and the story
-   they are inside of moves forward one page.
+1. **Choose** — three doors, and **each door is a real book**. One is home
+   ground (something she already loves), the others are one and two steps out.
+   She picks; we only decide what gets offered.
+2. **The way in** — Lantern writes roughly **eighty words**: a setup, a hook,
+   and a question she now needs answered. Then it hands her the book and the
+   quest, and closes itself.
+3. **Read and do** — off our screen entirely. ~20 minutes reading the actual
+   chapter, then ~15 minutes doing the quest, which is cut from that chapter so
+   it only makes sense once she's read it. No quiz needed to prove she did.
+4. **Return** — ten seconds reading a line **out of that book**, aloud. She has
+   to hunt for the line, which is the part that builds a reader. Then the
+   celebration, the artifact, and the story moves forward one page.
 
-Then the app closes itself.
+Then the app closes itself again.
 
-The Judge (§5) is not a fourth beat. It lives in the gaps — in the margin of the
+**The division of labour is the product.** Lantern writes ~80 words a night;
+the book writes the other ~4,000. We have no library and never will.
+
+The Judge (§5) is not a fifth beat. It lives in the gaps — in the margin of the
 page, and at the moment a child hesitates or comes back empty-handed.
 
 ## 3. What we keep from HabitCrafts, what we burn
@@ -129,95 +111,81 @@ already exist, wipeable with a finger. One typeface weight, one colour, always
 in the margin. If it ever becomes a modal we have lost the idea.
 
 Screens (five):
-1. **Cover** — the book greets the child by name. Asks one question. This is
-   also where the Judge first speaks and gets named (§5).
-2. **Tonight's Page** — the story beat, then the single quest. Primary screen.
-3. **The Return** — proof capture, celebration, artifact earned, story advances.
-   Also the "I couldn't do it" path, which is where the intercept lives.
-4. **Field Guide** — the collection of earned artifacts. Progress, but as a
-   keepsake rather than a scoreboard.
+1. **Cover** — the book greets the child by name, asks what she already likes,
+   and this is where Grumble first writes and gets named (§5).
+2. **Three doors** — tonight's three real books. She picks. One screen, three
+   options, nothing else on it.
+3. **The way in** — Lantern's eighty words, then the quest, then it closes.
+   Hands off to Epic for the actual chapter.
+4. **The Return** — read a line aloud from the book, celebration, artifact,
+   story advances. Also the "I couldn't do it" path, where the intercept lives.
+5. **Field Guide** — earned artifacts, shown **in use** and never as a grid with
+   empty slots. A keepsake, not a scoreboard, and no counter anywhere.
 5. **The Dark** — the deliberate lockout. Ink on black, one line of text, a
    countdown, no way in. This screen is the pitch.
 
-## 5. The Judge — Positive Intelligence, awareness only
+## 5. Grumble — the voice that says she can't
 
-From Positive Intelligence we take exactly one thing: the **Judge**, the master
-saboteur — the voice that says *you're not smart enough, you're a slow reader,
-that's baby stuff, you'll mess it up*. We deliberately leave the nine accomplice
-saboteurs out. A 9-year-old has not yet built a Hyper-Achiever or a Pleaser;
-those are adaptations that harden over years. What they *do* already have is the
-beginning of that voice, usually installed by a classroom.
+Around nine, most kids start hearing a running commentary on themselves, and for
+a kid who's behind in reading it says something specific and cruel. We are not
+trying to fix that. We make it **visible**.
 
-So the goal is not intercepting a saboteur. The goal is **awareness**: the child
-learns that the voice exists, that it is a voice and not the truth, and that it
-is not them. That is the entire intervention, and at this age it is enough.
+- **A character, not a lesson.** He writes in grey pencil in the *margin* of the
+  page, and she rubs him out with a finger. If he ever becomes a pop-up, we've
+  lost the idea.
+- **She names him.** One beat on the cover; the app uses her name for him after
+  that. Steer the naming toward creatures — offer a shortlist with "or make one
+  up" — so nobody ends up erasing a figure named after their dad.
+- **Drawn, never voiced.** No audio, no speech bubbles, no first person.
+- **The intercept is one tap, at real friction.** She taps "I couldn't do it";
+  the book doesn't console her, it asks *what did it just say to you?* Two
+  options, and at least one about the situation ("today was too full") rather
+  than about her. She taps one, the book says "You heard it. That's the hard
+  part," and lets it go.
+- **Noticing is the whole skill.** No reframing, no affirmations, no score, no
+  profile, nothing stored, nothing shown to an adult, and always skippable.
+- **He retires.** Grumble appears *less* over the eight weeks, not more. Design
+  his fade-out from day one — a permanent resident is a permanent fact about
+  herself.
 
-This is also where PI and the *Diamond Age* theme turn out to be the same idea.
-The Judge is the internalized voice of the system that decided what Nell was
-allowed to become. Learning to hear it and answer back *is* the subversion.
+Hard line: no diagnosis, no measurement, and we never claim a mental-health or
+SEL benefit. It's a character in a story.
 
-How it shows up, in order of importance:
+## 6. Reinforcement
 
-- **The Judge is a character, not a concept.** It appears in the story as a thin
-  grey figure. Children this age externalize far better than they introspect —
-  a nameable character outside them is developmentally the right handle, and
-  it's the same move as naming the Worry Monster.
-- **The child names it.** One onboarding beat: the Judge speaks, and the child
-  types a name for it. The app uses *their* name for it everywhere after that.
-  Naming the villain is a transfer of power, and it's canon for the genre.
-- **It writes in the margins.** The Judge never gets a panel, a modal, or a
-  lesson screen. It writes in grey pencil in the margin of the page, and the
-  child can **scribble over it or erase it** with a finger. Book-native,
-  physically satisfying, and defacing the authority's notes is the theme in one
-  gesture.
-- **The intercept is one tap, at the real moment of friction.** When a child
-  hesitates on a quest, or taps "I couldn't do it," the app does not console
-  them. It asks: *what did it just say to you?* Three or four options in the
-  child's own register, plus a blank. Picking one is the whole exercise —
-  noticing is the skill. Then one line back, chosen or spoken aloud.
-- **PQ reps become the book's ritual.** Chamine's ten-second sensory exercises
-  map cleanly onto opening a book: *press your fingertips together and feel the
-  ridges for ten seconds before you turn to your page.* Framed as the Primer's
-  ritual, never as an exercise — same rule as §1, the lesson is always story.
-
-Hard limits on this section, because it is psychological content aimed at
-children:
-- No diagnosis, no scoring, no "your PQ is 62," no profile of the child's
-  saboteurs. We never tell a child something is wrong with them.
-- The frame is always *everyone hears that voice sometimes; it isn't you.*
-- Self-judgment only. We do not scope judging-others or judging-circumstances;
-  the reading-confidence voice is the one that matters here.
-- The child can always skip it. A quest never blocks on doing Judge work.
-
-## 6. Reinforcement, age-appropriate
-
-The HabitCrafts `celebration` field is exactly right and stays required. What
-changes is the design around it:
-
-- **Immediate celebration script**, said out loud, within a second of finishing
-  — "Say 'I did that' out loud", "Throw both fists up". Fogg's mechanic; works
-  better on kids than adults.
-- **Artifacts, not points.** Each completed quest yields one hand-drawn item for
-  the Field Guide — a pressed leaf, a map fragment, a key. Collectible, finite,
-  ownable. No currency, no XP, no leaderboard, no comparison to other kids.
-- **Streaks as chapters.** Internally it's the same consecutive-day count; to
-  the child it reads "You have reached Chapter 4." Progress without a number to
-  lose.
-- **No notifications for the first version.** An app whose thesis is "get off
-  the screen" does not buzz.
-- **The celebration is the Judge's direct counter.** The Judge's claim is always
-  a claim about who the child *is* ("you're a slow reader"). So the celebration
-  script answers in the same grammar — "that is who I am now" — and the Field
-  Guide is the evidence pile. Reinforcement and §5 are one system, not two
-  features that happen to ship together.
+- **The celebration is hers, said out loud.** "Say it: *I did that.*" The app
+  confirms in under a second; the feeling comes from her own voice.
+- **The noun goes on the object, never on the child.** Not "you're a reader now"
+  — *"You read this in the dark, when it was hard. It belongs in the book now."*
+  Hand a kid an identity and you've handed Grumble something to take away on a
+  bad night.
+- **No superlatives.** No "Amazing!", no "Incredible!". Specific and true, or
+  nothing.
+- **Artifacts, not points.** No XP, no coins, no badges, no leaderboard. Epic
+  already issues 25 million badges a year; we lose that fight by entering it.
+- **No collection grid.** No empty slots, no counter, no "3 of 12." The moment
+  there's a set to complete, the set becomes the goal. Artifacts appear only in
+  use, changing what her character can do.
+- **Unannounced.** Never a "finish this and you'll earn X" screen. It arrives as
+  something the story hands her, and on some nights not at all.
+- **One ability a week, eight in total** — granted by a companion in dialogue,
+  never a level-up banner, and only real if it changes what tomorrow's three
+  doors can ask of her.
+- **Chapters, not streaks.** Same arithmetic underneath, nothing to lose. No
+  dates, no "last read" timestamps, and let some chapters span two sessions so
+  the number can't be converted into attendance.
 
 ## 7. Demo-day scope
 
 Real:
-- One child profile, seeded. Three books seeded with a hand-authored quest bank.
-- The full loop: page → quest → read-aloud proof → celebration → artifact →
-  next page. Audio is scored on-device and discarded: nothing stored, nothing
-  sent, no transcript. Say that on stage.
+- One child profile, seeded. **Three real book titles** with a hand-authored
+  doorway page and quest for each.
+- The full loop: three doors → the way in → read the chapter → do the quest →
+  read a line aloud → celebration → artifact → next page. Audio is scored
+  on-device and discarded: nothing stored, nothing sent, no transcript.
+- **The handoff to Epic.** On stage we tap a door and it opens the book — via a
+  `getepic.com/book/{id}` deep link, or a mocked reader if the link is
+  unreliable on venue wifi. Either way we say plainly which one it is.
 - Field Guide with two artifacts already earned, so it looks lived-in.
 - The Dark, triggerable on demand for the pitch.
 - Read-aloud on the story and quest copy.
