@@ -42,31 +42,45 @@ abstract interface class BookSource {
 class SeededBookSource implements BookSource {
   const SeededBookSource();
 
+  // One evening, one shelf. Every id and link below is a real Epic book — if a
+  // door opens nothing on stage the pitch dies in the first ten seconds.
+  //
+  // Magic Tree House is deliberately absent: Epic's own recommendation pages
+  // list it under "available on Amazon", not on Epic. Don't put it back without
+  // a working getepic.com/book link.
+  //
+  // Only `underpants-1` is authored end to end. The rest are real titles that
+  // make the three doors honest and give reach somewhere to widen to.
   static const _shelf = <String, List<Book>>{
-    'sharks': [
+    'funny': [
       Book(
-        id: 'seed-sharks',
-        title: 'Everything About Sharks',
+        id: 'underpants-1',
+        title: 'The Adventures of Captain Underpants',
         stepsOut: 0,
-        deepLink: 'https://www.getepic.com/book/seed-sharks',
+        deepLink:
+            'https://www.getepic.com/book/96443690/the-adventures-of-captain-underpants-color-edition-captain-underpants-1',
       ),
       Book(
-        id: 'seed-whydah',
-        title: 'The Wreck of the Whydah',
+        id: 'underpants-2',
+        title: 'Captain Underpants and the Attack of the Talking Toilets',
         stepsOut: 1,
-        deepLink: 'https://www.getepic.com/book/seed-whydah',
+        deepLink:
+            'https://www.getepic.com/book/96429247/captain-underpants-and-the-attack-of-the-talking-toilets-color-edition-captain-underpants-2',
       ),
       Book(
-        id: 'seed-deep',
-        title: 'Deep: How Far Down Can You Go?',
+        id: 'dog-man-1',
+        title: 'Dog Man',
         stepsOut: 2,
-        deepLink: 'https://www.getepic.com/book/seed-deep',
+        deepLink:
+            'https://www.getepic.com/book/96427025/dog-man-a-graphic-novel-dog-man-1-from-the-creator-of-captain-underpants',
       ),
+      // The furthest door, and the one that quietly makes the point: the man who
+      // wrote the others was the kid sent out of class for drawing comics.
       Book(
-        id: 'seed-stars',
-        title: 'Sailing by the Stars',
+        id: 'dav-pilkey',
+        title: 'Dav Pilkey',
         stepsOut: 3,
-        deepLink: 'https://www.getepic.com/book/seed-stars',
+        deepLink: 'https://www.getepic.com/book/56769880/dav-pilkey',
       ),
     ],
   };
