@@ -104,10 +104,16 @@ const dogMan = Doorway(
   interceptClose: "You heard it. That's the hard part.",
 );
 
-/// Two authored doors. The Dog Man one ships — its Epic link is verified. The
-/// Harriet one is ready to swap in the moment somebody confirms Hamster
-/// Princess is actually in Epic's catalogue.
+/// Three authored doors, all real books. Hilda is the one the demo runs on: it
+/// is the only title that reads in twenty minutes whole, the only one at a
+/// level she can read aloud, and its quest is the Field Guide screen. Dog Man
+/// is the verified fallback. Harriet waits on somebody confirming Hamster
+/// Princess is in Epic's catalogue at all.
+///
+/// Only one of these gets rehearsed. Authoring three was cheap; rehearsing
+/// three is how a demo dies.
 const doorways = <String, Doorway>{
+  'hilda-troll': hildaAndTheTroll,
   'dog-man-1': dogMan,
   'harriet-invincible': harrietTheInvincible,
 };
@@ -155,6 +161,53 @@ const harrietTheInvincible = Doorway(
   interceptOptions: [
     'Tonight was too full.',
     "It said I'd get it wrong.",
+  ],
+  interceptClose: "You heard it. That's the hard part.",
+);
+
+/// The creatures door, and the one the demo taps.
+///
+/// Hilda's own practice is the quest: she goes out, she looks at something for
+/// longer than anybody else would, and she draws it. That is also, exactly,
+/// screen 5 of this app — the Field Guide is the thing Hilda already does. The
+/// artifact she makes on night one is literally the first page of it.
+///
+/// One deliberate divergence from the book: Hilda goes outside and we do not
+/// send children outside. The looking is the transferable part, and a shelf
+/// nobody has looked behind is as unexplored as a wilderness when you are nine.
+///
+/// Verify before the rehearsal: that the opening pages actually show her
+/// drawing. The sketchbook is central to the character and the Netflix series
+/// makes it explicit, but it is worth two minutes with the real pages.
+const hildaAndTheTroll = Doorway(
+  bookId: 'hilda-troll',
+  wayIn: 'Hilda lives in a house at the edge of the wilderness, and she cannot '
+      'sit still. She goes out with a sketchbook and draws the things she '
+      'finds. Most people in her world pretend the creatures are not there. '
+      'Hilda draws them anyway, which is why she is the one who knows what '
+      'they are. Read it tonight — it is short. Then find one thing in your '
+      'house that nobody has ever really looked at, and draw it.',
+  prompt: 'After you close the book tonight',
+  behavior: 'Find one thing in your house that nobody looks at — under the '
+      'sofa, the back of a shelf, the corner of a window. Sit in front of it '
+      'and draw it. Give it a name, like it is a creature. Write one true '
+      'thing about it underneath.',
+  celebration: 'Hold up the page and say it out loud: I found that.',
+  why: 'Because Hilda is not braver than everybody else. She just looks at '
+      'things for longer.',
+  returnLine: 'Go back to the first page and find the very first thing anybody '
+      'says out loud. Read it.',
+  artifact: 'The first page of your field guide',
+  artifactInUse: 'It goes in the front of the Field Guide, and everything you '
+      'find after tonight goes in behind it.',
+  marginalia: [
+    'thats not a real creature',
+    'youre just making it up',
+    'nobody wants to see that',
+  ],
+  interceptOptions: [
+    'Tonight was too full.',
+    'It said I was making it up.',
   ],
   interceptClose: "You heard it. That's the hard part.",
 );

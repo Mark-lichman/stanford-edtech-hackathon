@@ -6,15 +6,15 @@ void main() {
 
   test('always three doors, always one of them home ground', () async {
     for (final reach in [0, 1, 2, 3, 9]) {
-      final doors = await source.doorsFor(interest: 'funny', reach: reach);
+      final doors = await source.doorsFor(interest: 'creatures', reach: reach);
       expect(doors.length, 3, reason: 'reach $reach gave ${doors.length} doors');
       expect(doors.where((b) => b.isHomeGround).length, 1);
     }
   });
 
   test('reach decides how far the other two doors go', () async {
-    final near = await source.doorsFor(interest: 'funny', reach: 1);
-    final far = await source.doorsFor(interest: 'funny', reach: 3);
+    final near = await source.doorsFor(interest: 'creatures', reach: 1);
+    final far = await source.doorsFor(interest: 'creatures', reach: 3);
     expect(near.map((b) => b.stepsOut), containsAll([0, 1]));
     expect(far.map((b) => b.stepsOut).reduce((a, b) => a > b ? a : b),
         greaterThan(near.map((b) => b.stepsOut).reduce((a, b) => a > b ? a : b)));

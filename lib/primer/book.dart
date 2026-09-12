@@ -50,7 +50,58 @@ class SeededBookSource implements BookSource {
   // list it under "available on Amazon", not on Epic. Don't put it back without
   // a working getepic.com/book link.
   static const _shelf = <String, List<Book>>{
-    // VERIFIED. This shelf ships. `dog-man-1` is authored end to end.
+    // VERIFIED, and the shelf the demo runs on. Whole series is in Epic, so the
+    // reach widening is a real journey through real books rather than a trick.
+    //
+    // Hilda and the Troll reads in 15-30 minutes, which is the only book we
+    // found that matches PLAN.md's "~20 minutes reading the actual chapter"
+    // without us having to slice a chapter out of a three-hour novel. At
+    // GN530L it is also the only one a struggling nine-year-old can read aloud.
+    'creatures': [
+      Book(
+        id: 'hilda-troll',
+        title: 'Hilda and the Troll',
+        stepsOut: 0,
+        deepLink: 'https://www.getepic.com/book/62843717/hilda-and-the-troll',
+      ),
+      Book(
+        id: 'hilda-giant',
+        title: 'Hilda and the Midnight Giant',
+        stepsOut: 1,
+        deepLink:
+            'https://www.getepic.com/book/62845939/hilda-and-the-midnight-giant',
+      ),
+      Book(
+        id: 'hilda-bird-parade',
+        title: 'Hilda and the Bird Parade',
+        stepsOut: 2,
+        deepLink:
+            'https://www.getepic.com/book/78842117/hilda-and-the-bird-parade',
+      ),
+      Book(
+        id: 'hilda-black-hound',
+        title: 'Hilda and the Black Hound',
+        stepsOut: 3,
+        deepLink:
+            'https://www.getepic.com/book/78856560/hilda-and-the-black-hound',
+      ),
+      Book(
+        id: 'hilda-stone-forest',
+        title: 'Hilda and the Stone Forest',
+        stepsOut: 4,
+        deepLink:
+            'https://www.getepic.com/book/78882113/hilda-and-the-stone-forest',
+      ),
+      Book(
+        id: 'hilda-mountain-king',
+        title: 'Hilda and the Mountain King',
+        stepsOut: 5,
+        deepLink:
+            'https://www.getepic.com/book/84660424/hilda-and-the-mountain-king',
+      ),
+    ],
+
+    // VERIFIED. The fallback shelf, authored and working.
     'funny': [
       Book(
         id: 'dog-man-1',
