@@ -19,8 +19,9 @@ class _LanternStoryState extends State<LanternStory> {
   bool _noteGone = false;
   bool _talking = false;
   bool _mobile = false;
-  /// Grumble's page runs in three steps: the lantern lights in the middle,
-  /// rises to the top, then the page appears under it.
+  /// Grumble's page and The Dark run the same three steps: the lantern plays
+  /// in the middle, rises to its place, then the page appears under it. Only
+  /// one of them is ever on screen, so they share the flags.
   bool _lanternDone = false;
   bool _lanternUp = false;
 
@@ -134,7 +135,18 @@ class _LanternStoryState extends State<LanternStory> {
         Text('You can change your mind at any time.', style: _small()),
       ]));
 
-  /// Held back, and untappable, until the lantern has lit and reached the top.
+  /// The lantern, centred over whatever it sits in a Stack with, until it has
+  /// finished [phase]; then it rises to the top. The screen leaves a gap of its
+  /// height at the top for it to land in, so nothing jumps.
+  Widget _risingLantern(LanternPhase phase, double height) => Positioned.fill(child: AnimatedAlign(
+        alignment: _lanternDone || MediaQuery.of(context).disableAnimations ? Alignment.topCenter : Alignment.center,
+        duration: const Duration(milliseconds: 700),
+        curve: Curves.easeInOutCubic,
+        onEnd: () => setState(() => _lanternUp = true),
+        child: Lantern(phase: phase, height: height, onEnd: () => setState(() => _lanternDone = true)),
+      ));
+
+  /// Held back, and untappable, until the lantern has played and reached the top.
   Widget _afterLantern(Widget child) {
     final lit = _lanternUp || MediaQuery.of(context).disableAnimations;
     return IgnorePointer(
@@ -152,13 +164,7 @@ class _LanternStoryState extends State<LanternStory> {
             _WarmButton(label: 'Keep the note', icon: Icons.arrow_forward_rounded, onTap: _next),
           ])),
         ]),
-        Positioned.fill(child: AnimatedAlign(
-          alignment: _lanternDone || MediaQuery.of(context).disableAnimations ? Alignment.topCenter : Alignment.center,
-          duration: const Duration(milliseconds: 700),
-          curve: Curves.easeInOutCubic,
-          onEnd: () => setState(() => _lanternUp = true),
-          child: Lantern(phase: LanternPhase.lit, height: 66, onEnd: () => setState(() => _lanternDone = true)),
-        )),
+        _risingLantern(LanternPhase.lit, 66),
         if (!_noteGone) Positioned(right: -10, top: 212, child: _afterLantern(GestureDetector(
           onPanUpdate: (_) => setState(() => _noteGone = true), onTap: () => setState(() => _noteGone = true),
           child: Transform.rotate(angle: -0.045, child: CustomPaint(painter: _PencilNotePainter(), child: const SizedBox(width: 245, height: 125, child: Padding(
@@ -219,11 +225,14 @@ class _LanternStoryState extends State<LanternStory> {
         _ArtifactSketch(), const SizedBox(height: 20), Text('There is still more to find tomorrow.', style: _story(21).copyWith(fontStyle: FontStyle.italic)), const SizedBox(height: 32), _WarmButton(label: 'Close the book', icon: Icons.nights_stay_rounded, onTap: _next),
       ]));
 
-  Widget _close() => _DarkInterlude(child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        const Lantern(phase: LanternPhase.out, height: 72), const SizedBox(height: 30),
-        Text('The lantern is dimming.', style: _display(38, color: const Color(0xFFF7F0E2)), textAlign: TextAlign.center), const SizedBox(height: 18), Text('Tomorrow, the door will remember you.', style: _body(20, color: const Color(0xFFD9CDBD)), textAlign: TextAlign.center), const SizedBox(height: 54),
-        Text('closing in 09', style: GoogleFonts.spaceMono(fontSize: 14, color: const Color(0xFFECCB87), letterSpacing: 1.5)),
-      ]));
+  Widget _close() => _DarkInterlude(child: Center(child: Stack(children: [
+        _afterLantern(Column(mainAxisSize: MainAxisSize.min, children: [
+          const SizedBox(height: 72 + 30),
+          Text('The lantern is dimming.', style: _display(38, color: const Color(0xFFF7F0E2)), textAlign: TextAlign.center), const SizedBox(height: 18), Text('Tomorrow, the door will remember you.', style: _body(20, color: const Color(0xFFD9CDBD)), textAlign: TextAlign.center), const SizedBox(height: 54),
+          Text('closing in 09', style: GoogleFonts.spaceMono(fontSize: 14, color: const Color(0xFFECCB87), letterSpacing: 1.5)),
+        ])),
+        _risingLantern(LanternPhase.out, 72),
+      ])));
 }
 
 TextStyle _display(double size, {Color? color}) => GoogleFonts.baloo2(fontSize: size, height: 1.05, fontWeight: FontWeight.w800, color: color ?? const Color(0xFF23363A));

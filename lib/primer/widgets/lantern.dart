@@ -42,7 +42,7 @@ class Lantern extends StatelessWidget {
         tween: Tween(begin: 0, end: 1),
         duration: still
             ? Duration.zero
-            : Duration(milliseconds: lit ? 4200 : 520),
+            : Duration(milliseconds: lit ? 4200 : 820),
         curve: lit ? const Cubic(.33, .8, .4, 1) : Curves.easeIn,
         onEnd: still ? null : onEnd,
         builder: (context, t, child) => CustomPaint(

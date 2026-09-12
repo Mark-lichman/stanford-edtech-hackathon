@@ -62,4 +62,21 @@ void main() {
     await tester.pumpAndSettle();
     expect(opacityOf('Keep the note'), 1);
   });
+
+  testWidgets('The Dark puts the lantern out centred, raises it, then speaks',
+      (tester) async {
+    await tester.pumpWidget(const MaterialApp(home: LanternStory()));
+    await tester.tap(find.bySemanticsLabel(RegExp('^Beat 8,')));
+    await tester.pump(const Duration(milliseconds: 600));
+
+    final lantern = find.ancestor(of: find.byType(Lantern), matching: find.byType(AnimatedAlign));
+    final heading = find.ancestor(of: find.text('The lantern is dimming.'), matching: find.byType(AnimatedOpacity));
+
+    expect(tester.widget<AnimatedAlign>(lantern).alignment, Alignment.center);
+    expect(tester.widget<AnimatedOpacity>(heading.first).opacity, 0);
+
+    await tester.pumpAndSettle();
+    expect(tester.widget<AnimatedAlign>(lantern).alignment, Alignment.topCenter);
+    expect(tester.widget<AnimatedOpacity>(heading.first).opacity, 1);
+  });
 }
