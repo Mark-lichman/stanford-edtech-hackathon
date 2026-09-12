@@ -1,3 +1,5 @@
+import 'dart:math' show pi;
+
 import 'package:flutter/material.dart';
 
 import '../theme.dart';
@@ -110,7 +112,7 @@ class _TalkMarkPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2
       ..strokeCap = StrokeCap.round;
-    canvas.drawArc(Rect.fromLTWH(size.width / 2 - 16, size.height / 2 - 34, 32, 54), 0, mathPi, false, p);
+    canvas.drawArc(Rect.fromLTWH(size.width / 2 - 16, size.height / 2 - 34, 32, 54), 0, pi, false, p);
     canvas.drawLine(Offset(size.width / 2 - 10, size.height / 2 - 7), Offset(size.width / 2 + 10, size.height / 2 - 7), p);
   }
 
@@ -118,4 +120,3 @@ class _TalkMarkPainter extends CustomPainter {
   bool shouldRepaint(covariant _TalkMarkPainter oldDelegate) => oldDelegate.active != active;
 }
 
-const mathPi = 3.141592653589793;

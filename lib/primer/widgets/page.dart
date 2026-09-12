@@ -1,3 +1,5 @@
+import 'dart:math' show pi;
+
 import 'package:flutter/material.dart';
 
 import '../theme.dart';
@@ -117,14 +119,13 @@ class _SoundMarkPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round;
     canvas.drawLine(const Offset(3, 10), const Offset(8, 10), ink);
     canvas.drawLine(const Offset(11, 6), const Offset(11, 14), ink);
-    canvas.drawArc(const Rect.fromLTWH(12, 5, 9, 12), -mathPi / 2, mathPi, false, ink);
+    canvas.drawArc(const Rect.fromLTWH(12, 5, 9, 12), -pi / 2, pi, false, ink);
   }
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
-const mathPi = 3.141592653589793;
 
 class _PageBorderPainter extends CustomPainter {
   @override
