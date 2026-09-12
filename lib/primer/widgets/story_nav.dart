@@ -6,8 +6,10 @@
 /// to the start between run-throughs. Nothing here is child-facing, which is
 /// why it is small and out of the way rather than 56dp and warm.
 ///
-/// It lays itself out from its own width, not the screen's, so inside the phone
-/// frame it is already the compact version with no second code path.
+/// It is labelled as prototype controls and always drawn outside the phone
+/// frame, on its own strip, so nobody in the room reads it as the app. It lays
+/// itself out from its own width: on a narrow screen the label, the pips, and
+/// the day, view toggle and reset each take their own row.
 library;
 
 import 'package:flutter/material.dart';
@@ -18,8 +20,10 @@ class StoryNav extends StatelessWidget {
     super.key,
     required this.beats,
     required this.step,
+    required this.day,
     required this.mobile,
     required this.onJump,
+    required this.onDay,
     required this.onReset,
     required this.onToggleMobile,
   });
@@ -27,6 +31,12 @@ class StoryNav extends StatelessWidget {
   /// Beat names, in the order they are tapped. Index is the step.
   final List<String> beats;
   final int step;
+
+  /// Which day of the eight weeks the run is showing. The stepper clamps it to
+  /// [maxDay]; the story decides what the day changes.
+  final int day;
+  final ValueChanged<int> onDay;
+  static const maxDay = 56;
 
   /// Whether the story is currently shown in the phone frame.
   final bool mobile;
@@ -43,71 +53,133 @@ class StoryNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) => LayoutBuilder(
         builder: (context, box) {
-          final compact = box.maxWidth < 560;
-          return Padding(
-            padding: EdgeInsets.fromLTRB(compact ? 6 : 18, 8, compact ? 2 : 10, 0),
-            child: Row(
-              children: [
-                if (!compact)
-                  Text(
-                    'LANTERN',
+          // Below this, label + day + nine pips + toggle + reset stop fitting on
+          // one line and the pips would wrap into a tower; stack rows instead.
+          final compact = box.maxWidth < 900;
+
+          final label = Text(
+            'PROTOTYPE CONTROLS',
+            style: GoogleFonts.baloo2(
+              fontSize: 11,
+              letterSpacing: 2,
+              fontWeight: FontWeight.w900,
+              color: _slate,
+            ),
+          );
+
+          final pips = Wrap(
+            alignment: WrapAlignment.center,
+            children: [
+              for (var i = 0; i < beats.length; i++)
+                _Pip(
+                  n: i + 1,
+                  label: beats[i],
+                  current: i == step,
+                  compact: compact,
+                  onTap: () => onJump(i),
+                ),
+            ],
+          );
+
+          final days = Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                onPressed: day > 1 ? () => onDay(day - 1) : null,
+                tooltip: 'Previous day',
+                color: _ink,
+                visualDensity: VisualDensity.compact,
+                icon: const Icon(Icons.remove_rounded, size: 18),
+              ),
+              Semantics(
+                label: 'Day $day of $maxDay',
+                excludeSemantics: true,
+                child: SizedBox(
+                  width: 58,
+                  child: Text(
+                    'Day $day',
+                    textAlign: TextAlign.center,
                     style: GoogleFonts.baloo2(
-                      fontSize: 12,
-                      letterSpacing: 2.2,
-                      fontWeight: FontWeight.w900,
-                      color: _slate,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w800,
+                      color: _ink,
+                      fontFeatures: const [FontFeature.tabularFigures()],
                     ),
                   ),
-                Expanded(
-                  child: Center(
-                    child: Wrap(
-                      alignment: WrapAlignment.center,
+                ),
+              ),
+              IconButton(
+                onPressed: day < maxDay ? () => onDay(day + 1) : null,
+                tooltip: 'Next day',
+                color: _ink,
+                visualDensity: VisualDensity.compact,
+                icon: const Icon(Icons.add_rounded, size: 18),
+              ),
+            ],
+          );
+
+          final toggle = IconButton(
+            onPressed: onToggleMobile,
+            tooltip: mobile ? 'Full width' : 'Phone view',
+            color: mobile ? _ink : _soft,
+            isSelected: mobile,
+            icon: const Icon(Icons.smartphone_rounded, size: 20),
+            selectedIcon: const Icon(Icons.desktop_windows_rounded, size: 20),
+          );
+
+          final reset = compact
+              ? IconButton(
+                  onPressed: onReset,
+                  tooltip: 'Reset',
+                  color: _ink,
+                  icon: const Icon(Icons.restart_alt_rounded, size: 20),
+                )
+              : TextButton.icon(
+                  onPressed: onReset,
+                  icon: const Icon(Icons.restart_alt_rounded, size: 17),
+                  label: const Text('Reset'),
+                  style: TextButton.styleFrom(
+                    foregroundColor: _ink,
+                    textStyle: GoogleFonts.baloo2(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                );
+
+          // Its own strip and rule, a different ground from any page.
+          return DecoratedBox(
+            decoration: const BoxDecoration(
+              color: _strip,
+              border: Border(bottom: BorderSide(color: _edge, width: 1.4)),
+            ),
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(compact ? 6 : 18, 6, compact ? 2 : 10, 6),
+              child: compact
+                  ? Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        for (var i = 0; i < beats.length; i++)
-                          _Pip(
-                            n: i + 1,
-                            label: beats[i],
-                            current: i == step,
-                            compact: compact,
-                            onTap: () => onJump(i),
-                          ),
+                        label,
+                        pips,
+                        Row(children: [days, const Spacer(), toggle, reset]),
+                      ],
+                    )
+                  : Row(
+                      children: [
+                        label,
+                        const SizedBox(width: 12),
+                        days,
+                        Expanded(child: Center(child: pips)),
+                        toggle,
+                        reset,
                       ],
                     ),
-                  ),
-                ),
-                IconButton(
-                  onPressed: onToggleMobile,
-                  tooltip: mobile ? 'Full width' : 'Phone view',
-                  color: mobile ? _ink : _soft,
-                  isSelected: mobile,
-                  icon: const Icon(Icons.smartphone_rounded, size: 20),
-                  selectedIcon: const Icon(Icons.desktop_windows_rounded, size: 20),
-                ),
-                if (compact)
-                  IconButton(
-                    onPressed: onReset,
-                    tooltip: 'Reset',
-                    color: _ink,
-                    icon: const Icon(Icons.restart_alt_rounded, size: 20),
-                  )
-                else
-                  TextButton.icon(
-                    onPressed: onReset,
-                    icon: const Icon(Icons.restart_alt_rounded, size: 17),
-                    label: const Text('Reset'),
-                    style: TextButton.styleFrom(
-                      foregroundColor: _ink,
-                      textStyle: GoogleFonts.baloo2(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                  ),
-              ],
             ),
           );
         },
       );
+
+  static const _strip = Color(0xFFE7D5B8);
 }
 
 class _Pip extends StatelessWidget {
@@ -127,8 +199,8 @@ class _Pip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Full: a 30 pip in a 44 target. Phone: 24 in 34, so eight of them, the
-    // toggle and reset still fit across a 360-wide screen.
+    // Full: a 30 pip in a 44 target. Phone: 24 in 34, so all nine fit on their
+    // own row across a 360-wide screen.
     final hit = compact ? 34.0 : 44.0;
     final pip = compact ? 24.0 : 30.0;
 

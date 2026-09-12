@@ -19,6 +19,15 @@ class _LanternStoryState extends State<LanternStory> {
   bool _noteGone = false;
   bool _talking = false;
   bool _mobile = false;
+  /// The intercept, in order: she taps "I couldn't do it", then picks what it
+  /// said. Lives only in this state and is cleared whenever the beat is left —
+  /// nothing she taps here is kept.
+  bool _couldnt = false;
+  String? _heard;
+  /// The prototype controls' day counter. The script's intercept is night four,
+  /// so arriving on it moves the day up to at least four; the presenter can
+  /// still step it anywhere.
+  int _day = 1;
   /// Grumble's page and The Dark run the same three steps: the lantern plays
   /// in the middle, rises to its place, then the page appears under it. Only
   /// one of them is ever on screen, so they share the flags.
@@ -33,6 +42,7 @@ class _LanternStoryState extends State<LanternStory> {
     'Handoff',
     'The Return',
     'Celebration',
+    'The intercept',
     'The Dark',
   ];
 
@@ -46,9 +56,14 @@ class _LanternStoryState extends State<LanternStory> {
         _step = step;
         _lanternDone = false;
         _lanternUp = false;
+        _couldnt = false;
+        _heard = null;
+        if (step == _interceptStep) _day = math.max(_day, 4);
       });
 
-  void _next() => _go(math.min(_step + 1, 7));
+  static const _interceptStep = 7;
+
+  void _next() => _go(math.min(_step + 1, _beats.length - 1));
 
   void _reset() => setState(() {
         _step = 0;
@@ -57,53 +72,61 @@ class _LanternStoryState extends State<LanternStory> {
         _talking = false;
         _lanternDone = false;
         _lanternUp = false;
+        _couldnt = false;
+        _heard = null;
+        _day = 1;
       });
 
   @override
   Widget build(BuildContext context) {
-    final story = Column(children: [
-      StoryNav(
-        beats: _beats,
-        step: _step,
-        mobile: _mobile,
-        onJump: _go,
-        onReset: _reset,
-        onToggleMobile: () => setState(() => _mobile = !_mobile),
-      ),
-      Expanded(
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 820),
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 480),
-              switchInCurve: Curves.easeOutCubic,
-              child: KeyedSubtree(key: ValueKey(_step), child: _screen()),
-            ),
-          ),
+    final content = Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 820),
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 480),
+          switchInCurve: Curves.easeOutCubic,
+          child: KeyedSubtree(key: ValueKey(_step), child: _screen()),
         ),
       ),
-    ]);
+    );
 
-    if (!_mobile) return Scaffold(body: SafeArea(child: story));
-
-    // Phone view: a 390 x 844 frame, the size of the device the demo is written
-    // for. The nav goes inside it and compacts itself from the frame's width.
+    // The prototype controls always sit above and outside the app, never inside
+    // the phone frame: they are the presenter's, and nobody watching should
+    // read them as something the child sees.
     return Scaffold(
-      backgroundColor: const Color(0xFFE7D5B8),
+      backgroundColor: _mobile ? const Color(0xFFE7D5B8) : null,
       body: SafeArea(
-        child: Center(
-          child: Container(
-            constraints: const BoxConstraints(maxWidth: 390, maxHeight: 844),
-            margin: const EdgeInsets.all(16),
-            clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              borderRadius: BorderRadius.circular(28),
-              border: Border.all(color: const Color(0xFF3A2E1F), width: 2),
-            ),
-            child: story,
+        child: Column(children: [
+          StoryNav(
+            beats: _beats,
+            step: _step,
+            day: _day,
+            mobile: _mobile,
+            onJump: _go,
+            onDay: (day) => setState(() => _day = day),
+            onReset: _reset,
+            onToggleMobile: () => setState(() => _mobile = !_mobile),
           ),
-        ),
+          Expanded(
+            child: !_mobile
+                ? content
+                // Phone view: a 390 x 844 frame, the size of the device the
+                // demo is written for, holding the app and nothing else.
+                : Center(
+                    child: Container(
+                      constraints: const BoxConstraints(maxWidth: 390, maxHeight: 844),
+                      margin: const EdgeInsets.all(16),
+                      clipBehavior: Clip.antiAlias,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).scaffoldBackgroundColor,
+                        borderRadius: BorderRadius.circular(28),
+                        border: Border.all(color: const Color(0xFF3A2E1F), width: 2),
+                      ),
+                      child: content,
+                    ),
+                  ),
+          ),
+        ]),
       ),
     );
   }
@@ -117,6 +140,7 @@ class _LanternStoryState extends State<LanternStory> {
       case 4: return _readingLeave();
       case 5: return _holdToTalk();
       case 6: return _earnedPage();
+      case _interceptStep: return _intercept();
       default: return _close();
     }
   }
@@ -155,20 +179,24 @@ class _LanternStoryState extends State<LanternStory> {
     );
   }
 
+  // Grumble is the Judge, not a curious friend — PLAN.md §5, and the voice the
+  // script names at 0:12. His line is read off the door like the rest of the
+  // writing. The book doesn't argue with him and doesn't offer to keep him: she
+  // rubs him out, and only then does he get a name.
   Widget _marginNote() => _PageScaffold(eyebrow: 'A note in the margin', child: Stack(clipBehavior: Clip.none, children: [
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           const SizedBox(height: 66 + 18),
           _afterLantern(Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text('Psst...', style: _display(48)), const SizedBox(height: 14), Text('Someone has scribbled on your page.', style: _body(21)),
-            const SizedBox(height: 150), Text('Rub it away to see what comes next.', style: _small()), const SizedBox(height: 42),
-            _WarmButton(label: 'Keep the note', icon: Icons.arrow_forward_rounded, onTap: _next),
+            Text('Someone wrote in your margin.', style: _display(44)), const SizedBox(height: 14), Text('Do you hear that voice too?', style: _body(21)),
+            const SizedBox(height: 150), Text(_noteGone ? 'It writes in everybody\'s book. This one is called Grumble.' : 'Rub it out with your finger.', style: _small()), const SizedBox(height: 42),
+            _WarmButton(label: 'Turn the page', icon: Icons.arrow_forward_rounded, onTap: _next),
           ])),
         ]),
         _risingLantern(LanternPhase.lit, 66),
         if (!_noteGone) Positioned(right: -10, top: 212, child: _afterLantern(GestureDetector(
           onPanUpdate: (_) => setState(() => _noteGone = true), onTap: () => setState(() => _noteGone = true),
-          child: Transform.rotate(angle: -0.045, child: CustomPaint(painter: _PencilNotePainter(), child: const SizedBox(width: 245, height: 125, child: Padding(
-            padding: EdgeInsets.fromLTRB(28, 24, 20, 8), child: Text('I wonder what\'s\nbehind the door...', style: TextStyle(fontSize: 20, height: 1.18, color: Color(0xFF7D827F), fontStyle: FontStyle.italic)),
+          child: Transform.rotate(angle: -0.045, child: CustomPaint(painter: _PencilNotePainter(), child: SizedBox(width: 245, height: 125, child: Padding(
+            padding: const EdgeInsets.fromLTRB(28, 24, 20, 8), child: Text(_door.marginalia.first, style: const TextStyle(fontSize: 20, height: 1.18, color: Color(0xFF7D827F), fontStyle: FontStyle.italic)),
           ))),
         )))),
         if (_noteGone) Positioned(right: 4, top: 234, child: Text('smudge', style: _small().copyWith(fontStyle: FontStyle.italic))),
@@ -225,6 +253,25 @@ class _LanternStoryState extends State<LanternStory> {
         _ArtifactSketch(), const SizedBox(height: 20), Text('There is still more to find tomorrow.', style: _story(21).copyWith(fontStyle: FontStyle.italic)), const SizedBox(height: 32), _WarmButton(label: 'Close the book', icon: Icons.nights_stay_rounded, onTap: _next),
       ]));
 
+  // Night four, she came back without it. PLAN.md §5: one tap at real friction,
+  // then the book asks what it said. It does not console her and does not
+  // reframe — two options, one about the night rather than about her, and a
+  // close that lets it go. All three read off the door.
+  Widget _intercept() => _PageScaffold(eyebrow: 'Night $_day', child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        if (!_couldnt) ...[
+          Text('Back again.', style: _display(44)), const SizedBox(height: 12), Text('How did tonight go?', style: _body(21)), const SizedBox(height: 34),
+          _QuietChoice(label: 'I did it', onTap: _next), const SizedBox(height: 12),
+          _QuietChoice(label: 'I couldn\'t do it', onTap: () => setState(() => _couldnt = true)),
+        ] else if (_heard == null) ...[
+          Text('What did it just say to you?', style: _display(40)), const SizedBox(height: 28),
+          for (final option in _door.interceptOptions) ...[_QuietChoice(label: option, onTap: () => setState(() => _heard = option)), const SizedBox(height: 12)],
+        ] else ...[
+          Text(_heard!, style: _story(20).copyWith(fontStyle: FontStyle.italic, color: const Color(0xFF7D827F))), const SizedBox(height: 18),
+          Text(_door.interceptClose, style: _display(40)), const SizedBox(height: 42),
+          _WarmButton(label: 'Close the book', icon: Icons.nights_stay_rounded, onTap: _next),
+        ],
+      ]));
+
   Widget _close() => _DarkInterlude(child: Center(child: Stack(children: [
         _afterLantern(Column(mainAxisSize: MainAxisSize.min, children: [
           const SizedBox(height: 72 + 30),
@@ -253,6 +300,14 @@ class _WarmButton extends StatelessWidget {
   const _WarmButton({required this.label, required this.icon, required this.onTap}); final String label; final IconData icon; final VoidCallback onTap;
   @override
   Widget build(BuildContext context) => SizedBox(width: double.infinity, child: FilledButton.icon(onPressed: onTap, icon: Icon(icon), label: Text(label), style: FilledButton.styleFrom(backgroundColor: const Color(0xFF3D6170), foregroundColor: const Color(0xFFF7F0E2), minimumSize: const Size.fromHeight(58), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)), textStyle: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16))));
+}
+
+/// A plain full-width choice, deliberately quieter than [_WarmButton]: none of
+/// the intercept's answers is the right one, so none of them gets the fill.
+class _QuietChoice extends StatelessWidget {
+  const _QuietChoice({required this.label, required this.onTap}); final String label; final VoidCallback onTap;
+  @override
+  Widget build(BuildContext context) => SizedBox(width: double.infinity, child: OutlinedButton(onPressed: onTap, style: OutlinedButton.styleFrom(minimumSize: const Size.fromHeight(58), alignment: Alignment.centerLeft, padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14), side: const BorderSide(color: Color(0xFFD5C8B5), width: 1.3), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18))), child: Text(label, style: _body(20, color: const Color(0xFF23363A)))));
 }
 
 class _Door extends StatelessWidget {
