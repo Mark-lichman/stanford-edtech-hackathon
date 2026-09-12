@@ -19,6 +19,7 @@ class _LanternStoryState extends State<LanternStory> {
   bool _noteGone = false;
   bool _talking = false;
   bool _mobile = false;
+  bool _lanternDone = false;
 
   static const _beats = [
     'Cover',
@@ -35,13 +36,21 @@ class _LanternStoryState extends State<LanternStory> {
   /// than carrying their own copy — doorways.dart is the writing of record.
   static final _door = doorways['hilda-troll']!;
 
-  void _next() => setState(() => _step = math.min(_step + 1, 7));
+  /// Every way onto a beat goes through here, so arriving back on Grumble
+  /// always relights the lantern and hides the page again until it is lit.
+  void _go(int step) => setState(() {
+        _step = step;
+        _lanternDone = false;
+      });
+
+  void _next() => _go(math.min(_step + 1, 7));
 
   void _reset() => setState(() {
         _step = 0;
         _interest = 'creatures';
         _noteGone = false;
         _talking = false;
+        _lanternDone = false;
       });
 
   @override
@@ -51,7 +60,7 @@ class _LanternStoryState extends State<LanternStory> {
         beats: _beats,
         step: _step,
         mobile: _mobile,
-        onJump: (i) => setState(() => _step = i),
+        onJump: _go,
         onReset: _reset,
         onToggleMobile: () => setState(() => _mobile = !_mobile),
       ),
@@ -120,19 +129,30 @@ class _LanternStoryState extends State<LanternStory> {
         Text('You can change your mind at any time.', style: _small()),
       ]));
 
+  /// Held back, and untappable, until the lantern on this page is lit.
+  Widget _afterLantern(Widget child) {
+    final lit = _lanternDone || MediaQuery.of(context).disableAnimations;
+    return IgnorePointer(
+      ignoring: !lit,
+      child: AnimatedOpacity(opacity: lit ? 1 : 0, duration: const Duration(milliseconds: 600), curve: Curves.easeOut, child: child),
+    );
+  }
+
   Widget _marginNote() => _PageScaffold(eyebrow: 'A note in the margin', child: Stack(clipBehavior: Clip.none, children: [
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          const Lantern(phase: LanternPhase.lit, height: 66), const SizedBox(height: 18),
-          Text('Psst...', style: _display(48)), const SizedBox(height: 14), Text('Someone has scribbled on your page.', style: _body(21)),
-          const SizedBox(height: 150), Text('Rub it away to see what comes next.', style: _small()), const SizedBox(height: 42),
-          _WarmButton(label: 'Keep the note', icon: Icons.arrow_forward_rounded, onTap: _next),
+          Center(child: Lantern(phase: LanternPhase.lit, height: 66, onEnd: () => setState(() => _lanternDone = true))), const SizedBox(height: 18),
+          _afterLantern(Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text('Psst...', style: _display(48)), const SizedBox(height: 14), Text('Someone has scribbled on your page.', style: _body(21)),
+            const SizedBox(height: 150), Text('Rub it away to see what comes next.', style: _small()), const SizedBox(height: 42),
+            _WarmButton(label: 'Keep the note', icon: Icons.arrow_forward_rounded, onTap: _next),
+          ])),
         ]),
-        if (!_noteGone) Positioned(right: -10, top: 212, child: GestureDetector(
+        if (!_noteGone) Positioned(right: -10, top: 212, child: _afterLantern(GestureDetector(
           onPanUpdate: (_) => setState(() => _noteGone = true), onTap: () => setState(() => _noteGone = true),
           child: Transform.rotate(angle: -0.045, child: CustomPaint(painter: _PencilNotePainter(), child: const SizedBox(width: 245, height: 125, child: Padding(
             padding: EdgeInsets.fromLTRB(28, 24, 20, 8), child: Text('I wonder what\'s\nbehind the door...', style: TextStyle(fontSize: 20, height: 1.18, color: Color(0xFF7D827F), fontStyle: FontStyle.italic)),
           ))),
-        ))),
+        )))),
         if (_noteGone) Positioned(right: 4, top: 234, child: Text('smudge', style: _small().copyWith(fontStyle: FontStyle.italic))),
       ]));
 

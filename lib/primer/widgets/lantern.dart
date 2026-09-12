@@ -14,10 +14,19 @@ import 'package:flutter/material.dart';
 enum LanternPhase { lit, out }
 
 class Lantern extends StatelessWidget {
-  const Lantern({super.key, required this.phase, this.height = 76});
+  const Lantern({
+    super.key,
+    required this.phase,
+    this.height = 76,
+    this.onEnd,
+  });
 
   final LanternPhase phase;
   final double height;
+
+  /// Called once the animation has finished, so a screen can hold its content
+  /// back until the lantern is lit.
+  final VoidCallback? onEnd;
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +42,9 @@ class Lantern extends StatelessWidget {
         tween: Tween(begin: 0, end: 1),
         duration: still
             ? Duration.zero
-            : Duration(milliseconds: lit ? 3200 : 520),
+            : Duration(milliseconds: lit ? 4200 : 520),
         curve: lit ? const Cubic(.33, .8, .4, 1) : Curves.easeIn,
+        onEnd: still ? null : onEnd,
         builder: (context, t, child) => CustomPaint(
           painter: _LanternPainter(lit: lit, t: t),
           size: Size(height * 66 / 82, height),
@@ -93,7 +103,8 @@ class _LanternPainter extends CustomPainter {
     canvas.drawPath(body, stroke);
 
     // Two animations of different lengths in the CSS; one timeline here, with
-    // the shorter of the pair finishing early.
+    // the shorter of the pair finishing early. The ratios are the CSS's even
+    // though the whole thing runs slower.
     final flameT = (lit ? t * 3200 / 2800 : t).clamp(0.0, 1.0);
     final glowT = (lit ? t : t * 520 / 460).clamp(0.0, 1.0);
 

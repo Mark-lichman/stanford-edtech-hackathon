@@ -30,4 +30,24 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Hello, Maya.'), findsOneWidget);
   });
+
+  // The Grumble page waits for its lantern. If this ever regresses, the button
+  // is on screen and tappable before the lantern has finished lighting.
+  testWidgets('Grumble holds its controls back until the lantern is lit',
+      (tester) async {
+    await tester.pumpWidget(const MaterialApp(home: LanternStory()));
+    await tester.tap(find.text("Open tonight's book"));
+    await tester.pump(const Duration(milliseconds: 600)); // switcher, not lantern
+
+    double opacityOf(String text) => tester
+        .widget<AnimatedOpacity>(find
+            .ancestor(of: find.text(text), matching: find.byType(AnimatedOpacity))
+            .first)
+        .opacity;
+
+    expect(opacityOf('Keep the note'), 0);
+
+    await tester.pumpAndSettle();
+    expect(opacityOf('Keep the note'), 1);
+  });
 }
