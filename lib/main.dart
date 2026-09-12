@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'lantern_story.dart';
 import 'primer/run.dart';
 import 'primer/widgets/widgets.dart';
 
@@ -12,7 +13,7 @@ class PrimerApp extends StatelessWidget {
   Widget build(BuildContext context) => const MaterialApp(
         title: 'The Primer',
         debugShowCheckedModeBanner: false,
-        home: Beats(),
+        home: LanternStory(),
       );
 }
 
@@ -91,6 +92,7 @@ class _Placeholder extends StatelessWidget {
         const SizedBox(height: 16),
         Text('${run.childName} · ${run.judgeName}'),
         Text('field guide: ${run.fieldGuide.length} pages'),
+        if (beat == 'celebration') Text('left behind: ${Run.leftBehind}'),
       ],
     );
     return beat == 'the dark' ? DarkPanel(child: body) : BookPage(child: body);
