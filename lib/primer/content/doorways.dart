@@ -9,11 +9,13 @@ class Doorway {
   const Doorway({
     required this.bookId,
     required this.wayIn,
+    this.wayInAsk = '',
     required this.prompt,
     required this.behavior,
     required this.celebration,
     required this.why,
-    required this.returnLine,
+    required this.readOn,
+    this.readOnFrom,
     required this.artifact,
     required this.artifactInUse,
     required this.marginalia,
@@ -28,6 +30,11 @@ class Doorway {
   /// answered. Then we hand her the book and close.
   final String wayIn;
 
+  /// What the book asks her to do next, after the story. Shown as its own
+  /// paragraph and, in the recording, after a pause and a soft chime, so she
+  /// can tell the story has stopped and the book is now talking to her.
+  final String wayInAsk;
+
   /// The anchor — an existing routine the quest hangs off.
   final String prompt;
 
@@ -40,9 +47,15 @@ class Doorway {
 
   final String why;
 
-  /// What she hunts for in the book and reads back in ten seconds. Deliberately
-  /// a thing she has to find, because the hunting is what builds a reader.
-  final String returnLine;
+  /// Where she starts reading on her own after the quest: the part of the
+  /// chapter that answers what the quest made her notice. Deliberately a thing
+  /// she has to find, because the hunting is what builds a reader. Read to
+  /// herself, never aloud on demand (Persona tab: she won't).
+  final String readOn;
+
+  /// Words from the chapter text that mark where [readOn] starts, so the page
+  /// can open there. Null when the book has no chapter text in Lantern.
+  final String? readOnFrom;
 
   final String artifact;
 
@@ -59,6 +72,11 @@ class Doorway {
   /// What the book says after she taps one. It does not console her and it does
   /// not reframe anything.
   final String interceptClose;
+
+  /// The way in exactly as it is read aloud: the book's title, then the words.
+  /// The page and tool/render_voice.dart both read it from here, because a
+  /// recording only plays when its text matches this to the letter.
+  String spokenWayIn(String title) => wayInAsk.isEmpty ? '$title. $wayIn' : '$title. $wayIn $wayInAsk';
 }
 
 /// The one authored door.
@@ -87,8 +105,8 @@ const dogMan = Doorway(
   celebration: 'Hold it up and say it out loud: I drew that.',
   why: 'Because the man who drew this got sent out of class for drawing, and '
       'drew anyway.',
-  returnLine: 'Go to the back of the book and find the line that says how many '
-      'steps it takes to draw him. Read it out loud.',
+  readOn: 'Go to the back of the book and find the line that says how many '
+      'steps it takes to draw him. Read it to yourself.',
   artifact: 'A Dog Man with one thing nobody else gave him',
   artifactInUse: 'He turns up in the story later, and the thing you added is '
       'the thing that works.',
@@ -104,7 +122,20 @@ const dogMan = Doorway(
   interceptClose: "You heard it. That's the hard part.",
 );
 
-/// Three authored doors, all real books. Hilda is the one the demo runs on: it
+/// Every authored door, keyed by [Book.id].
+///
+/// The three adventures' way-ins are recorded in Lily's voice, and a recording
+/// only plays while the text matches it exactly. Change a way-in together with
+/// a re-render (tool/render_voice.dart, about 400 characters a door), or that
+/// way-in falls back to the device voice.
+///
+/// The first three are the Cover's adventures, one home-ground book per
+/// public-domain series, and the run reads whichever one she chose. Only the
+/// home-ground book of each series is authored; the other two doors on each
+/// shelf fall back to it until somebody writes theirs.
+///
+/// Hilda, Dog Man and Harriet are the Epic shelves. Hilda was the one the demo
+/// ran on before the adventures: it
 /// is the only title that reads in twenty minutes whole, the only one at a
 /// level she can read aloud, and its quest is the Field Guide screen. Dog Man
 /// is the verified fallback. Harriet waits on somebody confirming Hamster
@@ -113,10 +144,140 @@ const dogMan = Doorway(
 /// Only one of these gets rehearsed. Authoring three was cheap; rehearsing
 /// three is how a demo dies.
 const doorways = <String, Doorway>{
+  'old-mother-west-wind': oldMotherWestWind,
+  'story-of-doctor-dolittle': storyOfDoctorDolittle,
+  'winnie-the-pooh': winnieThePooh,
   'hilda-troll': hildaAndTheTroll,
   'dog-man-1': dogMan,
   'harriet-invincible': harrietTheInvincible,
 };
+
+/// The meadow adventure: Thornton Burgess.
+///
+/// The Merry Little Breezes' whole day is going round to everybody and asking
+/// for the news, and Grandfather Frog always has some. That is the Field Guide
+/// habit with a frog's voice on it, and it needs no going outside: a spider in
+/// a corner is news if you watched it long enough.
+///
+/// Chapter one is about five minutes. It has Farmer Brown with a gun and Tommy
+/// Brown after the eggs; both are foiled, and it is gentle by 1910 standards.
+const oldMotherWestWind = Doorway(
+  bookId: 'old-mother-west-wind',
+  wayIn: 'Every morning Old Mother West Wind comes down from the Purple Hills '
+      'with a big bag over her shoulder. In the bag are her children, the '
+      'Merry Little Breezes. She shakes them out onto the Green Meadows, and '
+      'the first thing they do is race round to everybody and ask for the '
+      'news. Grandfather Frog always has some.',
+  wayInAsk: 'Listen to the first chapter. It is short. Then find out what the news '
+      'is in your house.',
+  prompt: 'After the chapter ends',
+  behavior: 'Find one living thing in your house: a plant, a spider in a '
+      'corner, a fly on the window, a pet. Watch it until you notice one thing '
+      'nobody ever told you about it. Then write it down as news, the way '
+      'Grandfather Frog would say it. Start with Chug-arum.',
+  celebration: 'Say it out loud: Chug-arum, I have news.',
+  why: 'Because the Breezes are not cleverer than anybody else. They just go '
+      'and look, every single morning.',
+  readOn: 'Start where Grandfather Frog says good morning.',
+  readOnFrom: 'which was his way of saying good morning',
+  artifact: 'A piece of news from your house',
+  artifactInUse: 'The Breezes carry it home over the Purple Hills tonight, and '
+      'tomorrow Grandfather Frog tells it first.',
+  marginalia: [
+    'nothing lives in your house',
+    'thats not news',
+    'it didnt even do anything',
+  ],
+  interceptOptions: [
+    'Tonight was too full.',
+    'It said nothing happened.',
+  ],
+  interceptClose: "You heard it. That's the hard part.",
+);
+
+/// The talking-to-animals adventure: Hugh Lofting.
+///
+/// Chapter two is the whole quest. Polynesia tells the Doctor that animals talk
+/// "with their ears, with their feet, with their tails", and the Doctor learns
+/// by watching Jip twitch his nose and writing it down in the butcher's book.
+/// She does the same with whatever animal she has, or the one at the window.
+///
+/// Chapter two only, "Animal Language": chapters one and two together run
+/// about twenty minutes read aloud, too long for a bedtime, and two is where
+/// the quest comes from. Only these two have been read for this door; the
+/// first book has passages later on that we will not send a child to.
+const storyOfDoctorDolittle = Doorway(
+  bookId: 'story-of-doctor-dolittle',
+  wayIn: 'Doctor Dolittle has so many animals in his house that people stop '
+      'coming to see him. Then one rainy afternoon his parrot, Polynesia, '
+      'tells him a secret. Animals can talk. Not just parrots. All of them. '
+      'They just do not always use their mouths, and you only hear it if you '
+      'watch. The Doctor gets a pencil and starts writing it down.',
+  wayInAsk: 'Listen to the chapter where it happens. Then go and watch an animal '
+      'the way Polynesia taught him.',
+  prompt: 'After the chapter ends',
+  behavior: 'Find an animal in your house or out of your window: a pet, a '
+      'bird, a fly, a spider. Watch it without making a sound. Write down one '
+      'thing it said without using its mouth: what it did, and what you think '
+      'it meant.',
+  celebration: 'Say it out loud: I heard that.',
+  why: 'Because the Doctor did not learn animal language by being clever. He '
+      "learned it by watching Jip's nose.",
+  readOn: 'Start where Polynesia tells the Doctor what animals talk with.',
+  readOnFrom: 'talk with their ears',
+  artifact: 'The first word in your animal dictionary',
+  artifactInUse: 'Later an animal in the story says it to you, and you are the '
+      'only one who knows what it means.',
+  marginalia: [
+    'animals dont talk',
+    'you dont know what it meant',
+    'it was just scratching',
+  ],
+  interceptOptions: [
+    'Tonight was too full.',
+    'It said I was making it up.',
+  ],
+  interceptClose: "You heard it. That's the hard part.",
+);
+
+/// The forest adventure: A. A. Milne.
+///
+/// Pooh hears a buzzing, sits down, and says "That buzzing-noise means
+/// something", then makes up songs all the way up the tree. Thinking about one
+/// sound for longer than anyone else would is the same habit as Hilda's
+/// drawing, and a hum is a thing she makes, not a score.
+const winnieThePooh = Doorway(
+  bookId: 'winnie-the-pooh',
+  wayIn: 'Winnie-the-Pooh is a bear who lives in a forest. One day he hears a '
+      'buzzing at the top of a tree, so he sits down and thinks. A buzzing '
+      'like that must mean something. Then he climbs, and makes up a song on '
+      'the way, and it all goes wrong in a very funny way.',
+  wayInAsk: 'Listen to the first chapter. Then find a sound in your house that '
+      'keeps going, and work out what it means.',
+  prompt: 'After the chapter ends',
+  behavior: 'Find a sound in your house that keeps going: the fridge, a clock, '
+      'the pipes, the rain. Sit next to it and think like Pooh. What is making '
+      'it, and why? Then make up a little song about it, four lines, the way '
+      'Pooh sings on his way up the tree.',
+  celebration: 'Say it out loud: That means something.',
+  why: 'Because Pooh is not clever, and he still works it out. He just thinks '
+      'about one sound for longer than anybody else would.',
+  readOn: 'Start where Pooh hears the buzzing and sits down to think.',
+  readOnFrom: 'That buzzing-noise means something',
+  artifact: 'Your first hum',
+  artifactInUse: 'One night the story goes quiet, and your hum is the thing '
+      'that gets it moving again.',
+  marginalia: [
+    'its just the fridge',
+    'your song is silly',
+    'that doesnt mean anything',
+  ],
+  interceptOptions: [
+    'Tonight was too full.',
+    'It said my song was silly.',
+  ],
+  interceptClose: "You heard it. That's the hard part.",
+);
 
 /// The fractions door.
 ///
@@ -148,8 +309,8 @@ const harrietTheInvincible = Doorway(
   celebration: 'Hold the paper up and say it out loud: I found where it stops.',
   why: 'Because Harriet does fractions in her head while falling off a cliff, '
       'and you just did one on the floor of your room.',
-  returnLine: 'Find the line where Harriet works out what the curse really '
-      'means. Read it out loud.',
+  readOn: 'Find the line where Harriet works out what the curse really '
+      'means. Read it to yourself.',
   artifact: 'A sheet of paper folded as far as it goes',
   artifactInUse: 'Later the story needs something small enough to hide, and '
       'this is the only thing you have that is small enough.',
@@ -195,8 +356,8 @@ const hildaAndTheTroll = Doorway(
   celebration: 'Hold up the page and say it out loud: I found that.',
   why: 'Because Hilda is not braver than everybody else. She just looks at '
       'things for longer.',
-  returnLine: 'Go back to the first page and find the very first thing anybody '
-      'says out loud. Read it.',
+  readOn: 'Go back to the first page and find the very first thing anybody '
+      'says out loud. Read it to yourself.',
   artifact: 'The first page of your field guide',
   artifactInUse: 'It goes in the front of the Field Guide, and everything you '
       'find after tonight goes in behind it.',

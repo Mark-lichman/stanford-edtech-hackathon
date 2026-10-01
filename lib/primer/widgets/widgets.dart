@@ -2,6 +2,7 @@
 library;
 
 export 'door.dart';
+export 'grumble.dart';
 export 'hold_to_talk.dart';
 export 'lantern.dart';
 export 'illustrations.dart';

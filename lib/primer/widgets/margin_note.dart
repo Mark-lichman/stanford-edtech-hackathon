@@ -16,6 +16,7 @@ class MarginNote extends StatelessWidget {
     this.onWiped,
     this.rotation = -0.045,
     this.label = 'Margin note',
+    this.hint = 'Drag across the note to wipe it away',
   });
 
   final String text;
@@ -24,11 +25,12 @@ class MarginNote extends StatelessWidget {
   final VoidCallback? onWiped;
   final double rotation;
   final String label;
+  final String hint;
 
   @override
   Widget build(BuildContext context) => Semantics(
         label: label,
-        hint: 'Drag across the note to wipe it away',
+        hint: hint,
         child: GestureDetector(
           onPanUpdate: onWiped == null ? null : (_) => onWiped!(),
           onTap: onWiped,

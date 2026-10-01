@@ -45,6 +45,19 @@ class Run {
       'A map of the airing cupboard, drawn by someone who got there first. '
       'They put the shelves the wrong way round.';
 
+  /// The answer in ink, under Grumble's pencil on his page. The research on
+  /// externalizing a child's critic pairs every appearance of it with proof it
+  /// was wrong, so this points at something she really did: the first page of
+  /// her field guide. From a grown-up who knows her, never another child.
+  ///
+  /// Seeded for the showcase, like the page left behind, and we say so on
+  /// stage. In the product her grown-up writes it; nothing she writes is sent.
+  static const inkNote = (
+    from: 'Dad',
+    text: "He's wrong. You found the dust creature under the radiator two "
+        'nights ago. I saw the page.',
+  );
+
   /// Celebration calls this. Named rather than mutated in place so there is one
   /// spot to look when the guide is wrong on stage.
   void earn(String artifactPage) {

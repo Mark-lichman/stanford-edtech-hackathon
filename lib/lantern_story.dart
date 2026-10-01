@@ -1,10 +1,14 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/gestures.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'primer/book.dart';
+import 'primer/chapter.dart';
 import 'primer/content/doorways.dart';
+import 'primer/read_aloud.dart';
+import 'primer/run.dart';
 import 'primer/widgets/widgets.dart';
 
 class LanternStory extends StatefulWidget {
@@ -15,18 +19,32 @@ class LanternStory extends StatefulWidget {
 
 class _LanternStoryState extends State<LanternStory> {
   int _step = 0;
-  String _interest = 'creatures';
-  bool _noteGone = false;
-  bool _talking = false;
+  String _interest = _adventures.first.key;
+  /// Tonight's three doors for [_interest], and the one she tapped.
+  List<Book> _shelfDoors = const [];
+  Book? _picked;
+  final _reader = ReadAloud();
   bool _mobile = false;
-  /// The intercept, in order: she taps "I couldn't do it", then picks what it
-  /// said. Lives only in this state and is cleared whenever the beat is left —
+  /// Grumble's page: she has tapped his note to the edge, and what she calls
+  /// him. The name lives only in this state; nothing she picks is kept.
+  bool _grumbleSet = false;
+  String _judgeName = 'Grumble';
+  /// Listen along: the paragraph being read, whether the voice is going, and
+  /// whether she has heard it to the end.
+  int _listenPara = 0;
+  bool _listening = false;
+  bool _heardAll = false;
+  /// A tiny read: the line she picked, as (paragraph, sentence).
+  (int, int)? _favourite;
+  /// Read on: how much she chose to read. Null until she picks; one line is
+  /// the floor, never nothing.
+  String? _amount;
+  /// Back again, in order: she taps "I couldn't do it", then picks what it
+  /// said. Lives only in this state and is cleared whenever the beat is left;
   /// nothing she taps here is kept.
   bool _couldnt = false;
   String? _heard;
-  /// The prototype controls' day counter. The script's intercept is night four,
-  /// so arriving on it moves the day up to at least four; the presenter can
-  /// still step it anywhere.
+  /// The prototype controls' day counter: which night of the eight it is.
   int _day = 1;
   /// Grumble's page and The Dark run the same three steps: the lantern plays
   /// in the middle, rises to its place, then the page appears under it. Only
@@ -39,37 +57,118 @@ class _LanternStoryState extends State<LanternStory> {
     'Grumble',
     'Three doors',
     'The way in',
-    'Handoff',
-    'The Return',
+    'Listen along',
+    'A tiny read',
+    'The quest',
+    'Back again',
+    'Read on',
     'Celebration',
-    'The intercept',
     'The Dark',
   ];
 
-  /// The one authored door. The story screens read their quest off this rather
-  /// than carrying their own copy — doorways.dart is the writing of record.
-  static final _door = doorways['hilda-troll']!;
+  static const _listenStep = 4, _readOnStep = 8, _darkStep = 10;
+
+  /// What she can call him instead. Picked, never typed: she contributes
+  /// through choices, never free text.
+  static const _judgeNames = ['Grumble', 'Mutter', 'Scrawl'];
+
+  /// The celebration's first line changes a little from night to night, so it
+  /// never turns into a payout she expects for finishing.
+  static const _found = ['You found it.', 'That one is yours now.', 'Look what you noticed.'];
+
+  /// What the Cover offers, one public-domain series each (book.dart has the
+  /// shelves). [door] is the series' home-ground book, the one that is
+  /// authored, and [title] is its title so the way in can name it before the
+  /// shelf has loaded.
+  static const _adventures = [
+    (key: 'meadow', label: 'meadow creatures', door: 'old-mother-west-wind', title: 'Old Mother West Wind'),
+    (key: 'animal-talk', label: 'talking animals', door: 'story-of-doctor-dolittle', title: 'The Story of Doctor Dolittle'),
+    (key: 'forest', label: 'a bear in the woods', door: 'winnie-the-pooh', title: 'Winnie-the-Pooh'),
+  ];
+
+  static const _source = SeededBookSource();
+
+  /// How far the two other doors may go. Fixed for the demo: one step, which
+  /// with the one-stretch rule shows steps 0, 1 and 2.
+  static const _reach = 1;
+
+  ({String key, String label, String door, String title}) get _adventure =>
+      _adventures.firstWhere((a) => a.key == _interest);
+
+  /// The authored door for tonight. The story screens read their quest off
+  /// this rather than carrying their own copy — doorways.dart is the writing of
+  /// record. Only each series' home book is authored, so a door she taps that
+  /// has none falls back to it, and [_doorTitle] follows, so the page never
+  /// names one book and tells the story of another.
+  Doorway get _door => doorways[_picked?.id] ?? doorways[_adventure.door]!;
+
+  String get _doorTitle => doorways.containsKey(_picked?.id) ? _picked!.title : _adventure.title;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadDoors();
+  }
+
+  /// Asks the shelf for tonight's doors. A slow answer for an adventure she has
+  /// since changed away from is dropped rather than shown.
+  void _loadDoors() {
+    final interest = _interest;
+    _source.doorsFor(interest: interest, reach: _reach).then((doors) {
+      if (!mounted || interest != _interest) return;
+      setState(() {
+        _shelfDoors = doors;
+        _picked = null;
+      });
+    });
+  }
+
+  void _choose(String interest) {
+    setState(() => _interest = interest);
+    _loadDoors();
+  }
 
   /// Every way onto a beat goes through here, so arriving back on Grumble
   /// always relights the lantern and hides the page again until it is lit.
-  void _go(int step) => setState(() {
+  void _go(int step) {
+    // The voice belongs to the page it was reading; leaving the page ends it.
+    _reader.stop();
+    _goTo(step);
+  }
+
+  void _goTo(int step) => setState(() {
         _step = step;
         _lanternDone = false;
         _lanternUp = false;
+        _listening = false;
         _couldnt = false;
         _heard = null;
-        if (step == _interceptStep) _day = math.max(_day, 4);
       });
-
-  static const _interceptStep = 7;
 
   void _next() => _go(math.min(_step + 1, _beats.length - 1));
 
-  void _reset() => setState(() {
+  @override
+  void dispose() {
+    _reader.dispose();
+    super.dispose();
+  }
+
+  void _reset() {
+    _reader.stop();
+    _resetState();
+    _loadDoors();
+  }
+
+  void _resetState() => setState(() {
         _step = 0;
-        _interest = 'creatures';
-        _noteGone = false;
-        _talking = false;
+        _interest = _adventures.first.key;
+        _picked = null;
+        _grumbleSet = false;
+        _judgeName = 'Grumble';
+        _listenPara = 0;
+        _heardAll = false;
+        _favourite = null;
+        _amount = null;
         _lanternDone = false;
         _lanternUp = false;
         _couldnt = false;
@@ -137,10 +236,12 @@ class _LanternStoryState extends State<LanternStory> {
       case 1: return _marginNote();
       case 2: return _doors();
       case 3: return _storyPage();
-      case 4: return _readingLeave();
-      case 5: return _holdToTalk();
-      case 6: return _earnedPage();
-      case _interceptStep: return _intercept();
+      case 4: return _listen();
+      case 5: return _tinyRead();
+      case 6: return _quest();
+      case 7: return _backAgain();
+      case 8: return _readOn();
+      case 9: return _earnedPage();
       default: return _close();
     }
   }
@@ -148,10 +249,10 @@ class _LanternStoryState extends State<LanternStory> {
   Widget _welcome() => _PageScaffold(eyebrow: 'A little book for tonight', child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         const _LanternMark(), const SizedBox(height: 52),
         Text('Hello, Maya.', style: _display(46)), const SizedBox(height: 12),
-        Text('What kind of story is tugging at you tonight?', style: _body(21)), const SizedBox(height: 30),
-        Wrap(spacing: 10, runSpacing: 10, children: [for (final choice in ['creatures', 'secret places', 'big feelings']) ChoiceChip(
-          label: Text(choice), selected: _interest == choice, onSelected: (_) => setState(() => _interest = choice),
-          labelStyle: TextStyle(color: _interest == choice ? const Color(0xFFF7F0E2) : const Color(0xFF325171), fontWeight: FontWeight.w800),
+        Text('What kind of adventure do you want tonight?', style: _body(21)), const SizedBox(height: 30),
+        Wrap(spacing: 10, runSpacing: 10, children: [for (final a in _adventures) ChoiceChip(
+          label: Text(a.label), selected: _interest == a.key, onSelected: (_) => _choose(a.key),
+          labelStyle: TextStyle(color: _interest == a.key ? const Color(0xFFF7F0E2) : const Color(0xFF325171), fontWeight: FontWeight.w800),
           selectedColor: const Color(0xFF3D6170), backgroundColor: const Color(0xFFE6D8C3), side: BorderSide.none,
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         )]), const SizedBox(height: 42),
@@ -164,7 +265,7 @@ class _LanternStoryState extends State<LanternStory> {
   /// height at the top for it to land in, so nothing jumps.
   Widget _risingLantern(LanternPhase phase, double height, {bool onDark = false}) => Positioned.fill(child: AnimatedAlign(
         alignment: _lanternDone || MediaQuery.of(context).disableAnimations ? Alignment.topCenter : Alignment.center,
-        duration: const Duration(milliseconds: 700),
+        duration: const Duration(milliseconds: 470),
         curve: Curves.easeInOutCubic,
         onEnd: () => setState(() => _lanternUp = true),
         child: Lantern(phase: phase, height: height, onDark: onDark, onEnd: () => setState(() => _lanternDone = true)),
@@ -175,101 +276,285 @@ class _LanternStoryState extends State<LanternStory> {
     final lit = _lanternUp || MediaQuery.of(context).disableAnimations;
     return IgnorePointer(
       ignoring: !lit,
-      child: AnimatedOpacity(opacity: lit ? 1 : 0, duration: const Duration(milliseconds: 600), curve: Curves.easeOut, child: child),
+      child: AnimatedOpacity(opacity: lit ? 1 : 0, duration: const Duration(milliseconds: 400), curve: Curves.easeOut, child: child),
     );
   }
 
-  // Grumble is the Judge, not a curious friend — PLAN.md §5, and the voice the
-  // script names at 0:12. His line is read off the door like the rest of the
-  // writing. The book doesn't argue with him and doesn't offer to keep him: she
-  // rubs him out, and only then does he get a name.
-  Widget _marginNote() => _PageScaffold(eyebrow: 'A note in the margin', child: Stack(clipBehavior: Clip.none, children: [
+  // Grumble is the Judge, not a curious friend (PLAN.md §5). The research on
+  // externalizing a child's critic changed three things here. He is named
+  // before she meets him, so she knows what she is looking at. She taps him to
+  // the edge rather than rubbing him out: pushing a thought away tends to bring
+  // it back, noticing it and reading on anyway does not. And he never gets the
+  // last word on the page: an answer in ink points at something she really did.
+  // She can rename him, by picking, because the name should be hers.
+  //
+  // He is a character, not a note that turns up from nowhere: on the first
+  // night the book introduces him, with his face, before his note appears. On
+  // later nights it only says he's back.
+  Widget _marginNote() => _PageScaffold(eyebrow: _day == 1 ? 'Before we start' : 'A note in the margin', child: Stack(clipBehavior: Clip.none, children: [
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           const SizedBox(height: 66 + 18),
           _afterLantern(Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text('Someone wrote in your margin.', style: _display(44)), const SizedBox(height: 14), Text('Do you hear that voice too?', style: _body(21)),
-            const SizedBox(height: 150), Text(_noteGone ? 'It writes in everybody\'s book. This one is called Grumble.' : 'Rub it out with your finger.', style: _small()), const SizedBox(height: 42),
-            _WarmButton(label: 'Turn the page', icon: Icons.arrow_forward_rounded, onTap: _next),
+            Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Text(_day == 1 ? 'Meet $_judgeName.' : '$_judgeName is back.', style: _display(42)), const SizedBox(height: 14),
+                Text(_day == 1
+                    ? "He lives in the margins of books and scribbles in grey pencil. He likes to tell you what you can't do. He is almost always wrong."
+                    : 'Still scribbling. Still mostly wrong.', style: _body(20)),
+              ])),
+              const SizedBox(width: 16),
+              GrumbleSketch(name: _judgeName),
+            ]),
+            const SizedBox(height: 22),
+            Text('Here is what he wrote tonight.', style: _small()), const SizedBox(height: 6),
+            AnimatedAlign(
+              alignment: _grumbleSet ? Alignment.centerRight : Alignment.centerLeft,
+              duration: const Duration(milliseconds: 520), curve: Curves.easeInOutCubic,
+              // Faded and smaller at the edge, never erased: he is still there,
+              // and she reads on anyway.
+              child: AnimatedOpacity(
+                opacity: _grumbleSet ? .45 : 1, duration: const Duration(milliseconds: 520),
+                child: AnimatedScale(
+                  scale: _grumbleSet ? .8 : 1, alignment: Alignment.centerRight, duration: const Duration(milliseconds: 520), curve: Curves.easeInOutCubic,
+                  child: SizedBox(width: 245, child: MarginNote(
+                    text: _door.marginalia.first,
+                    label: "$_judgeName's note", hint: 'Tap the note to move it to the edge',
+                    onWiped: _grumbleSet ? null : () => setState(() => _grumbleSet = true),
+                  )),
+                ),
+              ),
+            ),
+            const SizedBox(height: 18),
+            if (!_grumbleSet)
+              Text('Tap his note to move it to the edge. It can stay there.', style: _small())
+            else ...[
+              Text('He can stay at the edge. You can read anyway.', style: _small()), const SizedBox(height: 18),
+              Text('Want to call him something else?', style: _body(18)), const SizedBox(height: 10),
+              Wrap(spacing: 10, runSpacing: 10, children: [for (final name in _judgeNames) _Chip(label: name, selected: _judgeName == name, onTap: () => setState(() => _judgeName = name))]),
+              const SizedBox(height: 26),
+              _InkNote(text: Run.inkNote.text, from: Run.inkNote.from),
+              const SizedBox(height: 34),
+              _WarmButton(label: 'Turn the page', icon: Icons.arrow_forward_rounded, onTap: _next),
+            ],
           ])),
         ]),
         _risingLantern(LanternPhase.lit, 66),
-        // Aditya's MarginNote: wiped, the paper slides off and what Grumble wrote
-        // stays behind as a soft smudge — rubbed out, not erased (PLAN.md §5).
-        // It stays mounted after the wipe so the smudge can animate in.
-        Positioned(right: -10, top: 212, child: _afterLantern(SizedBox(width: 245, child: MarginNote(
-          text: _door.marginalia.first, underText: _door.marginalia.first, revealed: _noteGone,
-          label: 'Grumble\'s note', onWiped: () => setState(() => _noteGone = true),
-        )))),
       ]));
 
   Widget _doors() {
-    final books = [('The Night Garden', 'home ground', const Color(0xFFB8CDBD)), ('Hilda and the Troll', 'a small step away', const Color(0xFFE6B28F)), ('The Secret Lake', 'a little farther', const Color(0xFFA9B5D0))];
+    const colors = [Color(0xFFB8CDBD), Color(0xFFE6B28F), Color(0xFFA9B5D0)];
+    String distance(Book b) => switch (b.stepsOut) { 0 => 'home ground', 1 => 'a small step away', _ => 'a little farther' };
+    final books = _shelfDoors;
     return _PageScaffold(eyebrow: 'Three doors', child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Text('Which one is calling?', style: _display(43)), const SizedBox(height: 10), Text('There is no wrong door. Just one for tonight.', style: _body(20)), const SizedBox(height: 28),
-      for (var i = 0; i < books.length; i++) ...[_Door(title: books[i].$1, subtitle: books[i].$2, color: books[i].$3, onTap: _next), if (i != books.length - 1) const SizedBox(height: 13)],
+      for (var i = 0; i < books.length; i++) ...[_Door(title: books[i].title, subtitle: distance(books[i]), color: colors[i % colors.length], onTap: () { setState(() { _picked = books[i]; _listenPara = 0; _heardAll = false; _favourite = null; _amount = null; }); _next(); }), if (i != books.length - 1) const SizedBox(height: 13)],
     ]));
   }
 
   Widget _storyPage() => _PageScaffold(eyebrow: 'The book opens', child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text('The little door in the hill', style: _display(38)), const SizedBox(height: 25),
-        Text('At the edge of the mossy wood, where the moon made silver puddles between the roots, a tiny door appeared. It was no taller than a teacup. Behind it, someone was humming a song that sounded almost like her own.', style: _story(21)), const SizedBox(height: 18),
-        Text('The door had a brass handle, warm as a pocket stone. Maya put her ear against the wood. Something on the other side took one careful breath.', style: _story(21)), const SizedBox(height: 26),
-        Text('What do you think is waiting?', style: _story(22).copyWith(fontWeight: FontWeight.w800)), const SizedBox(height: 34),
-        Row(children: [const Icon(Icons.volume_up_rounded, color: Color(0xFF3D6170)), const SizedBox(width: 8), Flexible(child: Text('Tap the page to read it to me', style: _small().copyWith(color: const Color(0xFF3D6170), fontWeight: FontWeight.w800)))]), const SizedBox(height: 28),
-        _WarmButton(label: 'Take the book with you', icon: Icons.menu_book_rounded, onTap: _next),
+        // The whole passage is the button: a weak reader shouldn't have to find
+        // the small line to be read to. Tap again to stop.
+        ListenableBuilder(listenable: _reader, builder: (context, _) {
+          final text = _door.spokenWayIn(_doorTitle);
+          final reading = _reader.speaking == text;
+          return Semantics(button: true, label: reading ? 'Stop reading' : 'Read this page to me', child: InkWell(
+            onTap: () => _reader.toggle(text), borderRadius: BorderRadius.circular(14),
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(_doorTitle, style: _display(38)), const SizedBox(height: 25),
+              Text(_door.wayIn, style: _story(21)),
+              // The story stops here and the book turns to her: a quiet mark on
+              // the page, as the recording pauses and chimes at the same place.
+              if (_door.wayInAsk.isNotEmpty) ...[
+                const SizedBox(height: 20),
+                Center(child: Text('✦  ✦  ✦', style: _small().copyWith(color: const Color(0xFFB77A1F), letterSpacing: 2))),
+                const SizedBox(height: 16),
+                Text(_door.wayInAsk, style: _body(20, color: const Color(0xFF3D6170))),
+              ],
+              const SizedBox(height: 34),
+              Row(children: [Icon(reading ? Icons.graphic_eq_rounded : Icons.volume_up_rounded, color: const Color(0xFF3D6170)), const SizedBox(width: 8), Flexible(child: Text(reading ? 'Reading to you. Tap to stop.' : 'Tap the page to read it to me', style: _small().copyWith(color: const Color(0xFF3D6170), fontWeight: FontWeight.w800)))]),
+            ]),
+          ));
+        }), const SizedBox(height: 28),
+        _WarmButton(label: 'Listen to the chapter', icon: Icons.headphones_rounded, onTap: _next),
       ]));
 
-  // The task used to be "try the quest", which names nothing. The quest is
-  // authored — anchor, behaviour, celebration — so the screen reads it off the
-  // door instead of carrying its own copy. The anchor is its own plain line
-  // above the quest and gets no label: SCRIPT.md says it out loud at 0:38, so
-  // it has to be visibly a separate thing on the page.
-  Widget _readingLeave() => _DarkInterlude(child: Center(child: ConstrainedBox(
+  /// The chapter for tonight's door, once it has loaded. Loaded once per book
+  /// and cached, so moving between these pages doesn't flash.
+  Widget _withChapter(Widget Function(Chapter c) page) {
+    Widget show(Chapter? c) => c == null
+        ? _PageScaffold(eyebrow: 'The book opens', child: Text("This book isn't in Lantern's library yet.", style: _body(20)))
+        : page(c);
+    final (done, chapter) = Chapter.loaded(_door.bookId);
+    if (done) return show(chapter);
+    return FutureBuilder<Chapter?>(
+      future: Chapter.load(_door.bookId),
+      builder: (context, snap) => snap.connectionState == ConnectionState.done ? show(snap.data) : const SizedBox.shrink(),
+    );
+  }
+
+  // Listen along. Hearing a text before reading it is the best-supported way
+  // to make a struggling reader's own reading easier, but following along only
+  // helps when the pace is set for her, so the voice keeps a steady pace and
+  // the word being read is marked. Paragraph by paragraph, so she can pause.
+  Widget _listen() => _withChapter((c) => _PageScaffold(eyebrow: 'Listen along', fill: true, child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Expanded(child: ListenableBuilder(listenable: _reader, builder: (context, _) => SingleChildScrollView(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(c.title, style: _display(30)), const SizedBox(height: 16),
+          for (var i = 0; i < c.paragraphs.length; i++)
+            Padding(key: _paraKeys.putIfAbsent(i, GlobalKey.new), padding: const EdgeInsets.only(bottom: 14), child: _listenParagraph(c.paragraphs[i], i)),
+        ])))),
+        const SizedBox(height: 16),
+        Row(children: [
+          Expanded(child: _WarmButton(
+            label: _listening ? 'Pause' : _heardAll ? 'Hear it again' : _listenPara > 0 ? 'Keep listening' : 'Start listening',
+            icon: _listening ? Icons.pause_rounded : Icons.play_arrow_rounded,
+            onTap: () => _listening ? _pause() : _playFrom(_heardAll ? 0 : _listenPara, c),
+          )),
+          if (_heardAll) ...[const SizedBox(width: 12), Expanded(child: _WarmButton(label: 'Next', icon: Icons.arrow_forward_rounded, onTap: _next))],
+        ]),
+        if (!_heardAll) Align(alignment: Alignment.centerRight, child: TextButton(onPressed: _next, child: Text("I'll read it myself", style: _small()))),
+      ])));
+
+  final _paraKeys = <int, GlobalKey>{};
+
+  Widget _listenParagraph(String text, int i) {
+    final current = i == _listenPara && (_listening || _reader.speaking == text);
+    final word = _reader.speaking == text ? _reader.word : null;
+    final style = _story(20).copyWith(color: current || !_listening ? const Color(0xFF2B3939) : const Color(0xFF8A938F));
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(color: current ? const Color(0xFFF4E3BE) : null, borderRadius: BorderRadius.circular(8)),
+      child: word == null || word.$2 > text.length
+          ? Text(text, style: style)
+          : Text.rich(TextSpan(style: style, children: [
+              TextSpan(text: text.substring(0, word.$1)),
+              TextSpan(text: text.substring(word.$1, word.$2), style: const TextStyle(backgroundColor: Color(0xFFE9B96A))),
+              TextSpan(text: text.substring(word.$2)),
+            ])),
+    );
+  }
+
+  void _playFrom(int i, Chapter c) {
+    setState(() { _listenPara = i; _listening = true; _heardAll = false; });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final ctx = _paraKeys[i]?.currentContext;
+      if (ctx != null) Scrollable.ensureVisible(ctx, alignment: .25, duration: const Duration(milliseconds: 400), curve: Curves.easeOut);
+    });
+    _reader.speak(c.paragraphs[i], onDone: () {
+      if (!mounted || _step != _listenStep || !_listening) return;
+      if (i + 1 < c.paragraphs.length) {
+        _playFrom(i + 1, c);
+      } else {
+        setState(() { _listening = false; _heardAll = true; _listenPara = 0; });
+      }
+    });
+  }
+
+  void _pause() {
+    _reader.stop();
+    setState(() => _listening = false);
+  }
+
+  // A tiny read, straight after listening: a listening preview works when her
+  // own reading follows it at once. One line she chose, read to herself. No
+  // mic and no right answer; the Persona tab found she won't read aloud on
+  // demand, and nothing she picks is kept.
+  Widget _tinyRead() => _withChapter((c) => _PageScaffold(eyebrow: 'A tiny read', fill: true, child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Expanded(child: SingleChildScrollView(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text('Find your favourite line.', style: _display(34)), const SizedBox(height: 8),
+          Text('Tap it, then read it to yourself. Nobody is listening.', style: _body(19)), const SizedBox(height: 16),
+          _TapText(
+            paragraphs: c.paragraphs, bySentence: true, selected: _favourite,
+            onTap: (p, i, _) => setState(() => _favourite = (p, i)),
+          ),
+        ]))),
+        const SizedBox(height: 16),
+        _WarmButton(label: _favourite == null ? 'Pick a line first' : 'I read it', icon: Icons.check_rounded, onTap: _favourite == null ? null : _next),
+      ])));
+
+  // The quest, after the chapter: a hands-on thing before her main reading,
+  // and the one place she cannot be wrong. Anchor, quest and the line she says
+  // when it is done, all read off the door.
+  Widget _quest() => _DarkInterlude(child: Center(child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 560),
         child: SingleChildScrollView(child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.start, children: [
           const Icon(Icons.nights_stay_rounded, size: 38, color: Color(0xFFECCB87)), const SizedBox(height: 26),
-          Text('Now go find out.', style: _display(40, color: const Color(0xFFF7F0E2))), const SizedBox(height: 12),
-          Text('Read Hilda and the Troll — it is short.', style: _body(20, color: const Color(0xFFD9CDBD))), const SizedBox(height: 34),
+          Text('Now go find out.', style: _display(40, color: const Color(0xFFF7F0E2))), const SizedBox(height: 34),
           Text(_door.prompt, style: _display(24, color: const Color(0xFFECCB87))), const SizedBox(height: 12),
           Text(_door.behavior, style: _story(20).copyWith(color: const Color(0xFFE8DECB))), const SizedBox(height: 22),
           Text(_door.celebration, style: _body(19, color: const Color(0xFFD9CDBD))), const SizedBox(height: 44),
-          TextButton(onPressed: _next, child: Text('I\'m back', style: _small().copyWith(color: const Color(0xFFECCB87), fontWeight: FontWeight.w800))),
+          TextButton(onPressed: _next, child: Text("I'm back", style: _small().copyWith(color: const Color(0xFFECCB87), fontWeight: FontWeight.w800))),
         ])),
       )));
 
-  Widget _holdToTalk() => _PageScaffold(eyebrow: 'One line from the real book', child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text('Tell the page what you found.', style: _display(40)), const SizedBox(height: 15), Text('Find one line you liked. Hold the lantern and say it out loud.', style: _body(20)), const SizedBox(height: 46),
-        Center(child: GestureDetector(onLongPressStart: (_) { HapticFeedback.lightImpact(); setState(() => _talking = true); }, onLongPressEnd: (_) => setState(() => _talking = false), child: AnimatedContainer(
-          duration: const Duration(milliseconds: 220), width: 178, height: 178,
-          decoration: BoxDecoration(shape: BoxShape.circle, color: _talking ? const Color(0xFFE78A62) : const Color(0xFFF1B589), border: Border.all(color: const Color(0xFFBB694E), width: 3)),
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [Icon(_talking ? Icons.graphic_eq_rounded : Icons.mic_none_rounded, size: 42, color: const Color(0xFF4B302B)), const SizedBox(height: 8), Text(_talking ? 'Listening...' : 'Hold to talk', style: const TextStyle(fontWeight: FontWeight.w900, color: Color(0xFF4B302B)))]),
-        ))), const SizedBox(height: 28), Center(child: const _GentleLevel()), const SizedBox(height: 34),
-        Center(child: TextButton(onPressed: _next, child: Text('I\'d rather not talk tonight', style: _small().copyWith(decoration: TextDecoration.underline)))), const SizedBox(height: 8), Center(child: Text('You can still keep going.', style: _small())),
-      ]));
-
-  Widget _earnedPage() => _PageScaffold(eyebrow: 'A new page, made by you', celebration: true, child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Row(children: [const Text('✦', style: TextStyle(fontSize: 34, color: Color(0xFFB77A1F))), const SizedBox(width: 10), Flexible(child: Text('You made it into the story.', style: _small().copyWith(fontWeight: FontWeight.w900, color: const Color(0xFF8B5B1F))))]), const SizedBox(height: 30),
-        Text('Maya held the line\nlike a bright pebble.', style: _display(40)), const SizedBox(height: 24), Text('The little door opened. Behind it was a room full of sleeping moths, each one carrying a small piece of the night sky.', style: _story(21)), const SizedBox(height: 24),
-        _ArtifactSketch(), const SizedBox(height: 20), Text('There is still more to find tomorrow.', style: _story(21).copyWith(fontStyle: FontStyle.italic)), const SizedBox(height: 32), _WarmButton(label: 'Close the book', icon: Icons.nights_stay_rounded, onTap: _next),
-      ]));
-
-  // Night four, she came back without it. PLAN.md §5: one tap at real friction,
-  // then the book asks what it said. It does not console her and does not
-  // reframe — two options, one about the night rather than about her, and a
-  // close that lets it go. All three read off the door.
-  Widget _intercept() => _PageScaffold(eyebrow: 'Night $_day', child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+  // Back from the quest. "I did it" goes on to her reading. "I couldn't" is the
+  // intercept (PLAN.md \u00a75): one tap at real friction, then the book asks what
+  // it said. It does not console her and does not reframe: two options, one
+  // about the night rather than about her, and a close that lets it go. All
+  // three read off the door.
+  Widget _backAgain() => _PageScaffold(eyebrow: 'Night $_day', child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         if (!_couldnt) ...[
-          Text('Back again.', style: _display(44)), const SizedBox(height: 12), Text('How did tonight go?', style: _body(21)), const SizedBox(height: 34),
-          _QuietChoice(label: 'I did it', onTap: _next), const SizedBox(height: 12),
-          _QuietChoice(label: 'I couldn\'t do it', onTap: () => setState(() => _couldnt = true)),
+          Text('Back again.', style: _display(44)), const SizedBox(height: 12), Text('How did the quest go?', style: _body(21)), const SizedBox(height: 34),
+          _QuietChoice(label: 'I did it', onTap: () => _go(_readOnStep)), const SizedBox(height: 12),
+          _QuietChoice(label: "I couldn't do it", onTap: () => setState(() => _couldnt = true)),
         ] else if (_heard == null) ...[
           Text('What did it just say to you?', style: _display(40)), const SizedBox(height: 28),
           for (final option in _door.interceptOptions) ...[_QuietChoice(label: option, onTap: () => setState(() => _heard = option)), const SizedBox(height: 12)],
         ] else ...[
           Text(_heard!, style: _story(20).copyWith(fontStyle: FontStyle.italic, color: const Color(0xFF7D827F))), const SizedBox(height: 18),
           Text(_door.interceptClose, style: _display(40)), const SizedBox(height: 42),
-          _WarmButton(label: 'Close the book', icon: Icons.nights_stay_rounded, onTap: _next),
+          _WarmButton(label: 'Close the book', icon: Icons.nights_stay_rounded, onTap: () => _go(_darkStep)),
         ],
+      ]));
+
+  // Read on, as much as she likes, from the part that answers what the quest
+  // made her notice. Choosing raises motivation, but choosing how much is
+  // untested and can settle at zero, so the floor is one line. Any word she
+  // taps is read to her: help on demand, never instead of her reading.
+  Widget _readOn() => _withChapter((c) {
+        final from = c.paragraphWith(_door.readOnFrom);
+        final shown = switch (_amount) {
+          'a line' => [Chapter.sentences(c.paragraphs[from]).firstWhere((x) => x.contains(_door.readOnFrom ?? ''), orElse: () => Chapter.sentences(c.paragraphs[from]).first)],
+          'a paragraph' => [c.paragraphs[from]],
+          'a page' => _page(c.paragraphs, from),
+          'the whole chapter' => c.paragraphs,
+          _ => const <String>[],
+        };
+        return _PageScaffold(eyebrow: 'Read on', fill: true, child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Expanded(child: SingleChildScrollView(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text('Read on, as much as you like.', style: _display(34)), const SizedBox(height: 8),
+            Text(_door.readOn, style: _body(19)), const SizedBox(height: 14),
+            Wrap(spacing: 10, runSpacing: 10, children: [for (final a in const ['a line', 'a paragraph', 'a page', 'the whole chapter']) _Chip(label: a, selected: _amount == a, onTap: () => setState(() => _amount = a))]),
+            const SizedBox(height: 16),
+            if (_amount == null)
+              Text('Pick how much. One line counts.', style: _small())
+            else ...[
+              Text('Tap any word to hear it.', style: _small()), const SizedBox(height: 10),
+              _TapText(paragraphs: shown, bySentence: false, onTap: (_, _, word) => _reader.speak(word)),
+            ],
+          ]))),
+          const SizedBox(height: 16),
+          _WarmButton(label: "I'm done reading", icon: Icons.check_rounded, onTap: _amount == null ? null : _next),
+        ]));
+      });
+
+  /// About a page: paragraphs from [from] until roughly 150 words.
+  static List<String> _page(List<String> paragraphs, int from) {
+    final out = <String>[];
+    var words = 0;
+    for (var i = from; i < paragraphs.length && words < 150; i++) {
+      out.add(paragraphs[i]);
+      words += paragraphs[i].split(RegExp(r'\s+')).length;
+    }
+    return out;
+  }
+
+  // Celebrate what she found, never how much she read: a reward she can expect
+  // for finishing undermines the wanting, and praise does little for children.
+  // She says the line herself, and the first line shifts from night to night.
+  Widget _earnedPage() => _PageScaffold(eyebrow: 'What you found', celebration: true, child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Row(children: [const Text('✦', style: TextStyle(fontSize: 34, color: Color(0xFFB77A1F))), const SizedBox(width: 10), Flexible(child: Text(_found[(_day - 1) % _found.length], style: _small().copyWith(fontWeight: FontWeight.w900, color: const Color(0xFF8B5B1F))))]), const SizedBox(height: 26),
+        Text(_door.celebration, style: _display(36)), const SizedBox(height: 22), Text(_door.artifactInUse, style: _story(21)), const SizedBox(height: 24),
+        _ArtifactSketch(label: _door.artifact), const SizedBox(height: 20), Text('There is still more to find tomorrow.', style: _story(21).copyWith(fontStyle: FontStyle.italic)), const SizedBox(height: 32), _WarmButton(label: 'Close the book', icon: Icons.nights_stay_rounded, onTap: _next),
       ]));
 
   Widget _close() => _DarkInterlude(child: Center(child: Stack(children: [
@@ -288,16 +573,21 @@ TextStyle _story(double size) => GoogleFonts.baloo2(fontSize: size, height: 1.55
 TextStyle _small() => GoogleFonts.baloo2(fontSize: 14, height: 1.35, color: const Color(0xFF7C6D5C));
 
 class _PageScaffold extends StatelessWidget {
-  const _PageScaffold({required this.eyebrow, required this.child, this.celebration = false});
+  const _PageScaffold({required this.eyebrow, required this.child, this.celebration = false, this.fill = false});
   final String eyebrow; final Widget child; final bool celebration;
+  /// The page takes the full height and [child] scrolls inside it, for pages
+  /// holding a whole chapter with their buttons kept in view.
+  final bool fill;
   @override
-  Widget build(BuildContext context) => Padding(padding: const EdgeInsets.fromLTRB(18, 12, 18, 18), child: Column(children: [
+  Widget build(BuildContext context) => fill
+      ? Padding(padding: const EdgeInsets.fromLTRB(18, 12, 18, 18), child: CustomPaint(painter: _PageBorderPainter(), child: Container(width: double.infinity, padding: const EdgeInsets.fromLTRB(30, 30, 30, 24), color: const Color(0xFFF7F0E2), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(eyebrow.toUpperCase(), style: GoogleFonts.baloo2(fontSize: 11, letterSpacing: 1.7, fontWeight: FontWeight.w900, color: const Color(0xFF718080))), const SizedBox(height: 12), Expanded(child: child)]))))
+      : Padding(padding: const EdgeInsets.fromLTRB(18, 12, 18, 18), child: Column(children: [
     Expanded(child: Center(child: SingleChildScrollView(child: CustomPaint(painter: _PageBorderPainter(), child: Container(width: double.infinity, padding: const EdgeInsets.fromLTRB(30, 30, 30, 34), color: celebration ? const Color(0xFFF8E3A5) : const Color(0xFFF7F0E2), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(eyebrow.toUpperCase(), style: GoogleFonts.baloo2(fontSize: 11, letterSpacing: 1.7, fontWeight: FontWeight.w900, color: const Color(0xFF718080))), const SizedBox(height: 12), child])))))),
   ]));
 }
 
 class _WarmButton extends StatelessWidget {
-  const _WarmButton({required this.label, required this.icon, required this.onTap}); final String label; final IconData icon; final VoidCallback onTap;
+  const _WarmButton({required this.label, required this.icon, required this.onTap}); final String label; final IconData icon; final VoidCallback? onTap;
   @override
   Widget build(BuildContext context) => SizedBox(width: double.infinity, child: FilledButton.icon(onPressed: onTap, icon: Icon(icon), label: Text(label), style: FilledButton.styleFrom(backgroundColor: const Color(0xFF3D6170), foregroundColor: const Color(0xFFF7F0E2), minimumSize: const Size.fromHeight(58), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)), textStyle: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16))));
 }
@@ -322,15 +612,10 @@ class _Cover extends StatelessWidget {
   Widget build(BuildContext context) => Container(width: 52, height: 58, decoration: BoxDecoration(color: color, borderRadius: const BorderRadius.only(topLeft: Radius.circular(4), bottomLeft: Radius.circular(4), topRight: Radius.circular(12), bottomRight: Radius.circular(5)), border: Border.all(color: const Color(0xFF60716F), width: 1.2)), child: const Center(child: Icon(Icons.auto_awesome, size: 22, color: Color(0xFF3D6170))));
 }
 
-class _GentleLevel extends StatelessWidget {
-  const _GentleLevel();
-  @override
-  Widget build(BuildContext context) => Row(mainAxisSize: MainAxisSize.min, children: [for (var i = 0; i < 5; i++) Container(width: 5, height: 9 + i * 3.0, margin: const EdgeInsets.symmetric(horizontal: 2), decoration: BoxDecoration(color: i < 2 ? const Color(0xFFE78A62) : const Color(0xFFD7C7B6), borderRadius: BorderRadius.circular(4)))]);
-}
-
 class _ArtifactSketch extends StatelessWidget {
+  const _ArtifactSketch({required this.label}); final String label;
   @override
-  Widget build(BuildContext context) => Container(width: double.infinity, padding: const EdgeInsets.all(16), decoration: BoxDecoration(border: Border.all(color: const Color(0xFFD1B76D), width: 1.2), borderRadius: BorderRadius.circular(16)), child: Row(children: [CustomPaint(size: const Size(76, 56), painter: _MothPainter()), const SizedBox(width: 16), Expanded(child: Text('your moth\nnow lives here', style: _display(23, color: const Color(0xFF8B5B1F))))]));
+  Widget build(BuildContext context) => Container(width: double.infinity, padding: const EdgeInsets.all(16), decoration: BoxDecoration(border: Border.all(color: const Color(0xFFD1B76D), width: 1.2), borderRadius: BorderRadius.circular(16)), child: Row(children: [CustomPaint(size: const Size(76, 56), painter: _MothPainter()), const SizedBox(width: 16), Expanded(child: Text(label, style: _display(23, color: const Color(0xFF8B5B1F))))]));
 }
 
 class _LanternMark extends StatelessWidget {
@@ -363,4 +648,93 @@ class _MothPainter extends CustomPainter {
     final line = Paint()..color = const Color(0xFF3D6170)..strokeWidth = 1.5; canvas.drawLine(const Offset(34, 23), const Offset(25, 12), line); canvas.drawLine(const Offset(42, 23), const Offset(51, 12), line);
   }
   @override bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+/// A small choice chip in the book's colours, for picks that aren't the
+/// page's main action: a name for him, how much to read.
+class _Chip extends StatelessWidget {
+  const _Chip({required this.label, required this.selected, required this.onTap}); final String label; final bool selected; final VoidCallback onTap;
+  @override
+  Widget build(BuildContext context) => ChoiceChip(
+        label: Text(label), selected: selected, onSelected: (_) => onTap(),
+        labelStyle: TextStyle(color: selected ? const Color(0xFFF7F0E2) : const Color(0xFF325171), fontWeight: FontWeight.w800),
+        selectedColor: const Color(0xFF3D6170), backgroundColor: const Color(0xFFE6D8C3), side: BorderSide.none,
+        padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
+      );
+}
+
+/// The answer in ink, under Grumble's pencil: from a grown-up who knows her,
+/// pointing at something she really did.
+class _InkNote extends StatelessWidget {
+  const _InkNote({required this.text, required this.from}); final String text; final String from;
+  @override
+  Widget build(BuildContext context) => Semantics(
+        label: 'A note from $from: $text',
+        child: Transform.rotate(angle: .012, child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.fromLTRB(18, 14, 18, 16),
+          decoration: BoxDecoration(color: const Color(0xFFFFFBF2), border: Border.all(color: const Color(0xFFC9D3E3)), borderRadius: BorderRadius.circular(6)),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(text, style: GoogleFonts.caveat(fontSize: 27, height: 1.05, fontWeight: FontWeight.w600, color: const Color(0xFF24408E))),
+            const SizedBox(height: 6),
+            Align(alignment: Alignment.centerRight, child: Text(from, style: GoogleFonts.caveat(fontSize: 25, fontWeight: FontWeight.w700, color: const Color(0xFF24408E)))),
+          ]),
+        )),
+      );
+}
+
+/// Chapter text she can touch: by sentence (pick a favourite line) or by word
+/// (tap one to hear it). [onTap] gets the paragraph, the index of the sentence
+/// or word within it, and its text.
+class _TapText extends StatefulWidget {
+  const _TapText({required this.paragraphs, required this.bySentence, required this.onTap, this.selected});
+  final List<String> paragraphs;
+  final bool bySentence;
+  final (int, int)? selected;
+  final void Function(int paragraph, int index, String text) onTap;
+  @override
+  State<_TapText> createState() => _TapTextState();
+}
+
+class _TapTextState extends State<_TapText> {
+  final _recognizers = <TapGestureRecognizer>[];
+
+  void _clear() {
+    for (final r in _recognizers) {
+      r.dispose();
+    }
+    _recognizers.clear();
+  }
+
+  @override
+  void dispose() {
+    _clear();
+    super.dispose();
+  }
+
+  TextSpan _tappable(String text, VoidCallback onTap, {bool picked = false}) {
+    final r = TapGestureRecognizer()..onTap = onTap;
+    _recognizers.add(r);
+    return TextSpan(text: text, recognizer: r, mouseCursor: SystemMouseCursors.click, style: picked ? const TextStyle(backgroundColor: Color(0xFFE9B96A)) : null);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _clear();
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      for (var p = 0; p < widget.paragraphs.length; p++)
+        Padding(padding: const EdgeInsets.only(bottom: 14), child: Text.rich(TextSpan(style: _story(20), children: [
+          if (widget.bySentence)
+            for (final (i, sentence) in Chapter.sentences(widget.paragraphs[p]).indexed) ...[
+              _tappable(sentence, () => widget.onTap(p, i, sentence), picked: widget.selected == (p, i)),
+              const TextSpan(text: ' '),
+            ]
+          else
+            for (final (i, m) in RegExp(r'\S+|\s+').allMatches(widget.paragraphs[p]).indexed)
+              m.group(0)!.trim().isEmpty
+                  ? TextSpan(text: m.group(0))
+                  : _tappable(m.group(0)!, () => widget.onTap(p, i, m.group(0)!.replaceAll(RegExp(r'^[^\w]+|[^\w]+$'), ''))),
+        ]))),
+    ]);
+  }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:stanford_edtech/primer/book.dart';
+import 'package:stanford_edtech/primer/content/doorways.dart';
 
 void main() {
   const source = SeededBookSource();
@@ -18,6 +19,18 @@ void main() {
     expect(near.map((b) => b.stepsOut), containsAll([0, 1]));
     expect(far.map((b) => b.stepsOut).reduce((a, b) => a > b ? a : b),
         greaterThan(near.map((b) => b.stepsOut).reduce((a, b) => a > b ? a : b)));
+  });
+
+  // The Cover's adventures fall back to the home door when she taps one that
+  // isn't written yet, so the home door must always be.
+  test('every adventure shelf has three doors and an authored home door', () async {
+    for (final interest in ['meadow', 'animal-talk', 'forest']) {
+      final doors = await source.doorsFor(interest: interest, reach: 1);
+      expect(doors.length, 3, reason: interest);
+      final home = doors.singleWhere((b) => b.isHomeGround);
+      expect(doorways.containsKey(home.id), isTrue, reason: '$interest home ${home.id}');
+      expect(doors.every((b) => b.linkConfirmed), isTrue, reason: interest);
+    }
   });
 
   test('unknown interest fails loudly rather than showing an empty shelf', () {

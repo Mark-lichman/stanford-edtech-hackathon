@@ -1,4 +1,4 @@
-// The nav is the one piece of stage chrome that has to survive a phone: nine
+// The nav is the one piece of stage chrome that has to survive a phone: eleven
 // pips, the day, the toggle and reset across 360 wide, on every beat, without a
 // RenderFlex overflow — which Flutter reports as an exception, so the test
 // fails on it.
@@ -6,11 +6,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stanford_edtech/lantern_story.dart';
+import 'package:stanford_edtech/primer/chapter.dart';
 import 'package:stanford_edtech/primer/content/doorways.dart';
+import 'package:stanford_edtech/primer/run.dart';
 import 'package:stanford_edtech/primer/widgets/widgets.dart';
 
 void main() {
   GoogleFonts.config.allowRuntimeFetching = false;
+
+  // Chapter text loads from the asset bundle, which a widget test's fake clock
+  // never waits for. Load every chapter for real before any test, so pages
+  // find them already loaded instead of on a load that never finishes.
+  setUpAll(() async {
+    TestWidgetsFlutterBinding.ensureInitialized();
+    for (final id in ['old-mother-west-wind', 'story-of-doctor-dolittle', 'winnie-the-pooh']) {
+      expect(await Chapter.load(id), isNotNull, reason: id);
+    }
+  });
 
   testWidgets('phone view fits every beat at 360 wide, and reset goes home',
       (tester) async {
@@ -23,7 +35,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byTooltip('Full width'), findsOneWidget);
 
-    for (var beat = 9; beat >= 1; beat--) {
+    for (var beat = 11; beat >= 1; beat--) {
       await tester.tap(find.bySemanticsLabel(RegExp('^Beat $beat,')));
       await tester.pumpAndSettle();
     }
@@ -33,11 +45,13 @@ void main() {
     expect(find.text('Hello, Maya.'), findsOneWidget);
   });
 
-  // The Grumble page waits for its lantern. If this ever regresses, the button
+  // The Grumble page waits for its lantern. If this ever regresses, the page
   // is on screen and tappable before the lantern has finished lighting.
   testWidgets('Grumble lights the lantern centred, raises it, then shows the page',
       (tester) async {
     await tester.pumpWidget(const MaterialApp(home: LanternStory()));
+    // The Cover scrolls; at the test's 800x600 the button sits on the fold.
+    await tester.ensureVisible(find.text("Open tonight's book"));
     await tester.tap(find.text("Open tonight's book"));
     await tester.pump(const Duration(milliseconds: 600)); // switcher, not lantern
 
@@ -51,23 +65,92 @@ void main() {
         .widget<AnimatedAlign>(find.ancestor(of: find.byType(Lantern), matching: find.byType(AnimatedAlign)))
         .alignment as Alignment;
 
+    const heading = 'Meet Grumble.';
     expect(lanternAt(), Alignment.center);
-    expect(opacityOf('Turn the page'), 0);
+    expect(opacityOf(heading), 0);
 
     // Lit, but not yet at the top: the page still waits.
-    await tester.pump(const Duration(milliseconds: 4200));
-    await tester.pump(const Duration(milliseconds: 100));
+    // Frame by frame, as a screen would: a single big jump of the clock ends
+    // the lighting a frame later than it would on a device.
+    for (var i = 0; i < 50 && lanternAt() != Alignment.topCenter; i++) {
+      await tester.pump(const Duration(milliseconds: 100));
+    }
     expect(lanternAt(), Alignment.topCenter);
-    expect(opacityOf('Turn the page'), 0);
+    expect(opacityOf(heading), 0);
 
     await tester.pumpAndSettle();
-    expect(opacityOf('Turn the page'), 1);
+    expect(opacityOf(heading), 1);
+  });
+
+  // He is introduced, with his face, before his note; she taps him to the edge rather than
+  // rubbing him out, and the page doesn't move on until the ink has answered.
+  testWidgets('Grumble moves to the edge, can be renamed, and ink answers him',
+      (tester) async {
+    await tester.pumpWidget(const MaterialApp(home: LanternStory()));
+    await tester.tap(find.bySemanticsLabel(RegExp('^Beat 2,')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Meet Grumble.'), findsOneWidget, reason: 'introduced before his note');
+    expect(find.bySemanticsLabel(RegExp('drawing of Grumble')), findsOneWidget);
+    expect(find.text('Turn the page'), findsNothing, reason: 'no way on until she has met him');
+
+    await tester.tap(find.bySemanticsLabel(RegExp("^Grumble's note")));
+    await tester.pumpAndSettle();
+    expect(find.text(Run.inkNote.text), findsOneWidget);
+
+    await tester.ensureVisible(find.text('Mutter'));
+    await tester.tap(find.text('Mutter'));
+    await tester.pumpAndSettle();
+    expect(find.text('Meet Mutter.'), findsOneWidget);
+    expect(find.text('Turn the page'), findsOneWidget);
+  });
+
+  // The night as the journey draws it: listen, a tiny read, the quest, then
+  // her own reading from the part that answers it, and a celebration of what
+  // she found. No mic anywhere.
+  testWidgets('a whole night runs from the chapter to The Dark', (tester) async {
+    tester.view.physicalSize = const Size(900, 1100);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    final door = doorways['old-mother-west-wind']!;
+
+    await tester.pumpWidget(const MaterialApp(home: LanternStory()));
+    await tester.tap(find.bySemanticsLabel(RegExp('^Beat 5,')));
+    await tester.pumpAndSettle();
+    expect(find.text("Mrs. Redwing's Speckled Egg"), findsOneWidget);
+
+    await tester.tap(find.text("I'll read it myself"));
+    await tester.pumpAndSettle();
+    expect(find.text('Pick a line first'), findsOneWidget);
+    await tester.tapOnText(find.textRange.ofSubstring('Old Mother West Wind came down from the Purple Hills').last);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('I read it'));
+    await tester.pumpAndSettle();
+
+    expect(find.text(door.behavior), findsOneWidget);
+    await tester.tap(find.text("I'm back"));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('I did it'));
+    await tester.pumpAndSettle();
+
+    expect(find.text(door.readOn), findsOneWidget);
+    expect(find.text("I'm done reading"), findsOneWidget);
+    await tester.tap(find.text('a line'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('Chug-arum', findRichText: true), findsOneWidget, reason: 'opens where the quest points');
+    await tester.tap(find.text("I'm done reading"));
+    await tester.pumpAndSettle();
+
+    expect(find.text(door.celebration), findsOneWidget);
+    await tester.tap(find.text('Close the book'));
+    await tester.pumpAndSettle();
+    expect(find.text('The lantern is dimming.'), findsOneWidget);
   });
 
   testWidgets('The Dark puts the lantern out centred, raises it, then speaks',
       (tester) async {
     await tester.pumpWidget(const MaterialApp(home: LanternStory()));
-    await tester.tap(find.bySemanticsLabel(RegExp('^Beat 9,')));
+    await tester.tap(find.bySemanticsLabel(RegExp('^Beat 11,')));
     await tester.pump(const Duration(milliseconds: 600));
 
     final lantern = find.ancestor(of: find.byType(Lantern), matching: find.byType(AnimatedAlign));
@@ -81,18 +164,18 @@ void main() {
     expect(tester.widget<AnimatedOpacity>(heading.first).opacity, 1);
   });
 
-  // The intercept is never-cut. It asks, never consoles, reads every line off
-  // the door, and keeps nothing: leaving the beat clears what she tapped.
+  // The intercept is never-cut. Back from a quest she couldn't do, it asks,
+  // never consoles, reads every line off the door, and keeps nothing: leaving
+  // the beat clears what she tapped.
   testWidgets("the intercept asks what it said, then lets it go; day follows",
       (tester) async {
-    final door = doorways['hilda-troll']!;
+    final door = doorways['old-mother-west-wind']!;
     await tester.pumpWidget(const MaterialApp(home: LanternStory()));
     expect(find.text('Day 1'), findsOneWidget);
 
     await tester.tap(find.bySemanticsLabel(RegExp('^Beat 8,')));
     await tester.pumpAndSettle();
-    expect(find.text('Day 4'), findsOneWidget, reason: 'script calls it night four');
-    expect(find.text('NIGHT 4'), findsOneWidget);
+    expect(find.text('NIGHT 1'), findsOneWidget);
 
     await tester.tap(find.text("I couldn't do it"));
     await tester.pumpAndSettle();
@@ -107,7 +190,7 @@ void main() {
 
     await tester.tap(find.byTooltip('Next day'));
     await tester.pumpAndSettle();
-    expect(find.text('NIGHT 5'), findsOneWidget);
+    expect(find.text('NIGHT 2'), findsOneWidget);
 
     await tester.tap(find.bySemanticsLabel(RegExp('^Beat 7,')));
     await tester.pumpAndSettle();

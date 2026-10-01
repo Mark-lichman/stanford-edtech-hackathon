@@ -22,7 +22,8 @@ class Book {
   final int stepsOut;
 
   /// Where tapping the door sends her. For Epic this is
-  /// `https://www.getepic.com/book/{id}`; for a seeded book it may be a stub.
+  /// `https://www.getepic.com/book/{id}`; for a public-domain book it is the
+  /// Project Gutenberg page; for a seeded book it may be a stub.
   final String deepLink;
 
   final String? coverUrl;
@@ -59,7 +60,117 @@ class SeededBookSource implements BookSource {
   // list it under "available on Amazon", not on Epic. Don't put it back without
   // a working getepic.com/book link.
   static const _shelf = <String, List<Book>>{
-    // The shelf the demo runs on. Only Hilda and the Troll is confirmed
+    // The three adventures the Cover offers. Each is one public-domain series
+    // (US: published 1930 or earlier), so the door opens the whole real book
+    // on Project Gutenberg and nothing waits on Epic. Every id was looked up on
+    // gutenberg.org and the title on the page matches.
+    //
+    // Thornton Burgess: the meadow animals, told as bedtime-length chapters by
+    // a naturalist. The Bird Book is a field guide written as a story.
+    'meadow': [
+      Book(
+        id: 'old-mother-west-wind',
+        title: 'Old Mother West Wind',
+        stepsOut: 0,
+        deepLink: 'https://www.gutenberg.org/ebooks/2557',
+        linkConfirmed: true,
+      ),
+      // His rabbit is called Peter Rabbit in the text, the same name as
+      // Potter's, which Frederick Warne trademarks. The text is free to use;
+      // keep the name off anything we brand.
+      Book(
+        id: 'peter-cottontail',
+        title: 'The Adventures of Peter Cottontail',
+        stepsOut: 1,
+        deepLink: 'https://www.gutenberg.org/ebooks/46866',
+        linkConfirmed: true,
+      ),
+      Book(
+        id: 'reddy-fox',
+        title: 'The Adventures of Reddy Fox',
+        stepsOut: 2,
+        deepLink: 'https://www.gutenberg.org/ebooks/1825',
+        linkConfirmed: true,
+      ),
+      Book(
+        id: 'burgess-bird-book',
+        title: 'The Burgess Bird Book for Children',
+        stepsOut: 3,
+        deepLink: 'https://www.gutenberg.org/ebooks/3074',
+        linkConfirmed: true,
+      ),
+    ],
+
+    // Hugh Lofting, 1920 to 1928. The originals carry racist passages (the
+    // Prince Bumpo chapters in the first two books), and the cleaned-up 1988
+    // editions are still in copyright, so every chapter a door sends her to is
+    // one somebody has read first. The authored door uses chapters one and two.
+    'animal-talk': [
+      Book(
+        id: 'story-of-doctor-dolittle',
+        title: 'The Story of Doctor Dolittle',
+        stepsOut: 0,
+        deepLink: 'https://www.gutenberg.org/ebooks/501',
+        linkConfirmed: true,
+      ),
+      Book(
+        id: 'voyages-of-doctor-dolittle',
+        title: 'The Voyages of Doctor Dolittle',
+        stepsOut: 1,
+        deepLink: 'https://www.gutenberg.org/ebooks/1154',
+        linkConfirmed: true,
+      ),
+      Book(
+        id: 'doctor-dolittles-post-office',
+        title: "Doctor Dolittle's Post Office",
+        stepsOut: 2,
+        deepLink: 'https://www.gutenberg.org/ebooks/58947',
+        linkConfirmed: true,
+      ),
+      Book(
+        id: 'doctor-dolittle-in-the-moon',
+        title: 'Doctor Dolittle in the Moon',
+        stepsOut: 3,
+        deepLink: 'https://www.gutenberg.org/ebooks/73411',
+        linkConfirmed: true,
+      ),
+    ],
+
+    // A. A. Milne. The text and Shepard's drawings are free in the US; Disney's
+    // Pooh (the red shirt, the look) is trademarked and stays out.
+    'forest': [
+      Book(
+        id: 'winnie-the-pooh',
+        title: 'Winnie-the-Pooh',
+        stepsOut: 0,
+        deepLink: 'https://www.gutenberg.org/ebooks/67098',
+        linkConfirmed: true,
+      ),
+      Book(
+        id: 'house-at-pooh-corner',
+        title: 'The House at Pooh Corner',
+        stepsOut: 1,
+        deepLink: 'https://www.gutenberg.org/ebooks/73011',
+        linkConfirmed: true,
+      ),
+      Book(
+        id: 'now-we-are-six',
+        title: 'Now We Are Six',
+        stepsOut: 2,
+        deepLink: 'https://www.gutenberg.org/ebooks/70516',
+        linkConfirmed: true,
+      ),
+      Book(
+        id: 'when-we-were-very-young',
+        title: 'When We Were Very Young',
+        stepsOut: 3,
+        deepLink: 'https://www.gutenberg.org/ebooks/70271',
+        linkConfirmed: true,
+      ),
+    ],
+
+    // The shelf the demo first ran on, before the Cover offered the three
+    // adventures above. Kept for the Epic pitch. Only Hilda and the Troll is confirmed
     // open — Amlan checked the rest and could not stand them up (a4f7416),
     // so they carry linkConfirmed: false and the ids stay for re-checking.
     // The whole series being on Epic is what makes the eight-week walk a
