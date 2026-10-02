@@ -1,4 +1,4 @@
-// The nav is the one piece of stage chrome that has to survive a phone: eleven
+// The nav is the one piece of stage chrome that has to survive a phone: thirteen
 // pips, the day, the toggle and reset across 360 wide, on every beat, without a
 // RenderFlex overflow — which Flutter reports as an exception, so the test
 // fails on it.
@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:stanford_edtech/lantern_story.dart';
 import 'package:stanford_edtech/primer/chapter.dart';
 import 'package:stanford_edtech/primer/content/doorways.dart';
+import 'package:stanford_edtech/primer/content/week_story.dart';
 import 'package:stanford_edtech/primer/run.dart';
 import 'package:stanford_edtech/primer/widgets/widgets.dart';
 
@@ -35,7 +36,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byTooltip('Full width'), findsOneWidget);
 
-    for (var beat = 11; beat >= 1; beat--) {
+    for (var beat = 13; beat >= 1; beat--) {
       await tester.tap(find.bySemanticsLabel(RegExp('^Beat $beat,')));
       await tester.pumpAndSettle();
     }
@@ -201,5 +202,45 @@ void main() {
     await tester.tap(find.byTooltip('Reset'));
     await tester.pumpAndSettle();
     expect(find.text('Day 1'), findsOneWidget);
+  });
+
+  // A week later the book tells a story made from her week. Scrawl writes in
+  // pencil, every note is answered on the same page, and the voice never reads
+  // his lines.
+  testWidgets('the grown-ups slide shows her week, then her story answers Scrawl', (tester) async {
+    tester.view.physicalSize = const Size(900, 1100);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(const MaterialApp(home: LanternStory()));
+    await tester.tap(find.bySemanticsLabel(RegExp('^Beat 12,')));
+    await tester.pumpAndSettle();
+    expect(find.text('A week goes by.'), findsOneWidget);
+    expect(find.text('Day 8'), findsOneWidget);
+    for (final n in weekNights) {
+      expect(find.text(n.found), findsOneWidget, reason: n.day);
+    }
+
+    await tester.ensureVisible(find.text("Show Maya's story"));
+    await tester.tap(find.text("Show Maya's story"));
+    await tester.pumpAndSettle();
+    expect(find.text(weekStoryTitle), findsOneWidget);
+    await tester.tap(find.text('Open the story'));
+    await tester.pumpAndSettle();
+    for (final page in weekStory) {
+      if (page.text.isNotEmpty) expect(find.text(page.text), findsOneWidget);
+      if (page.scrawl != null) {
+        expect(find.text(page.scrawl!), findsOneWidget);
+        expect(page.answer, isNotNull, reason: 'every note of his is answered');
+        expect(page.spoken, isNot(contains(page.scrawl!)), reason: 'his pencil is never read aloud');
+      }
+      if (page == weekStory.last) break;
+      await tester.tap(find.text('Turn the page'));
+      await tester.pumpAndSettle();
+    }
+
+    await tester.tap(find.text('Close the book'));
+    await tester.pumpAndSettle();
+    expect(find.text('The lantern is dimming.'), findsOneWidget);
   });
 }

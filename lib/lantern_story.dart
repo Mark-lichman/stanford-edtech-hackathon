@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'primer/book.dart';
 import 'primer/chapter.dart';
 import 'primer/content/doorways.dart';
+import 'primer/content/week_story.dart';
 import 'primer/read_aloud.dart';
 import 'primer/run.dart';
 import 'primer/widgets/widgets.dart';
@@ -46,6 +47,8 @@ class _LanternStoryState extends State<LanternStory> {
   String? _heard;
   /// The prototype controls' day counter: which night of the eight it is.
   int _day = 1;
+  /// A week later: -1 is the title page, then the story's pages in order.
+  int _weekPage = -1;
   /// Grumble's page and The Dark run the same three steps: the lantern plays
   /// in the middle, rises to its place, then the page appears under it. Only
   /// one of them is ever on screen, so they share the flags.
@@ -64,9 +67,11 @@ class _LanternStoryState extends State<LanternStory> {
     'Read on',
     'Celebration',
     'The Dark',
+    'For the grown-ups',
+    "Maya's story",
   ];
 
-  static const _listenStep = 4, _readOnStep = 8, _darkStep = 10;
+  static const _listenStep = 4, _readOnStep = 8, _darkStep = 10, _grownUpsStep = 11, _weekStep = 12;
 
   /// What she can call him instead. Picked, never typed: she contributes
   /// through choices, never free text.
@@ -138,6 +143,8 @@ class _LanternStoryState extends State<LanternStory> {
 
   void _goTo(int step) => setState(() {
         _step = step;
+        if (step >= _grownUpsStep) _day = 8;
+        if (step == _weekStep) _weekPage = -1;
         _lanternDone = false;
         _lanternUp = false;
         _listening = false;
@@ -242,7 +249,9 @@ class _LanternStoryState extends State<LanternStory> {
       case 7: return _backAgain();
       case 8: return _readOn();
       case 9: return _earnedPage();
-      default: return _close();
+      case _darkStep: return _close();
+      case _grownUpsStep: return _grownUps();
+      default: return _weekLater();
     }
   }
 
@@ -556,6 +565,110 @@ class _LanternStoryState extends State<LanternStory> {
         Text(_door.celebration, style: _display(36)), const SizedBox(height: 22), Text(_door.artifactInUse, style: _story(21)), const SizedBox(height: 24),
         _ArtifactSketch(label: _door.artifact), const SizedBox(height: 20), Text('There is still more to find tomorrow.', style: _story(21).copyWith(fontStyle: FontStyle.italic)), const SizedBox(height: 32), _WarmButton(label: 'Close the book', icon: Icons.nights_stay_rounded, onTap: _next),
       ]));
+
+  // For the grown-ups. The one screen that steps outside the book: it talks
+  // to the parents and sponsors watching, says a week has gone by, shows the
+  // week night by night (the hard night included, because they should see it
+  // was allowed), and says what the book is about to do. Plain type on a cool
+  // card, so nobody mistakes it for a page Maya sees.
+  Widget _grownUps() {
+    const ink = Color(0xFF1F2B2E), quiet = Color(0xFF5A6A6C), line = Color(0xFFD3DCDE);
+    TextStyle plain(double size, {FontWeight w = FontWeight.w400, Color c = ink}) => GoogleFonts.nunitoSans(fontSize: size, height: 1.45, fontWeight: w, color: c);
+    Widget point(String text) => Padding(padding: const EdgeInsets.only(bottom: 8), child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Padding(padding: const EdgeInsets.only(top: 9, right: 10), child: Container(width: 6, height: 6, decoration: const BoxDecoration(color: Color(0xFF3D6170), shape: BoxShape.circle))),
+          Expanded(child: Text(text, style: plain(16))),
+        ]));
+    return Padding(padding: const EdgeInsets.fromLTRB(18, 12, 18, 18), child: Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(30, 28, 30, 22),
+      decoration: BoxDecoration(color: const Color(0xFFEEF2F3), borderRadius: BorderRadius.circular(14), border: Border.all(color: line)),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Text('FOR THE GROWN-UPS', style: plain(12, w: FontWeight.w800, c: quiet).copyWith(letterSpacing: 1.6)),
+        const SizedBox(height: 10),
+        Expanded(child: SingleChildScrollView(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text('A week goes by.', style: _display(38, color: ink)), const SizedBox(height: 8),
+          Text("This is Maya's first week with Lantern, night by night. It is a simulated week: our research persona chose each book and quest the way Maya would.", style: plain(16, c: quiet)),
+          const SizedBox(height: 18),
+          for (final n in weekNights)
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 9),
+              decoration: const BoxDecoration(border: Border(top: BorderSide(color: line))),
+              child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                SizedBox(width: 46, child: Text(n.day, style: plain(15, w: FontWeight.w800))),
+                Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text(n.book, style: plain(14, w: FontWeight.w700, c: quiet)),
+                  Text(n.found, style: plain(16)),
+                ])),
+              ]),
+            ),
+          const SizedBox(height: 18),
+          Text('What Lantern did', style: plain(17, w: FontWeight.w800)), const SizedBox(height: 8),
+          point('Read every chapter to her first, then let her choose how much to read herself: a line or more.'),
+          point('Never marked her wrong, never counted, and never asked her to read aloud.'),
+          point("On the night she couldn't do it, named the voice instead of fixing her."),
+          point('Closed the book every night.'),
+          const SizedBox(height: 12),
+          Text('What happens tonight', style: plain(17, w: FontWeight.w800)), const SizedBox(height: 8),
+          Text('On night eight the book tells a story about Maya. Every line comes from her week: her cat, her spider, her hum, her own words. Scrawl is in it too, and every time he writes, the page shows him wrong.', style: plain(16)),
+        ]))),
+        const SizedBox(height: 16),
+        _WarmButton(label: "Show Maya's story", icon: Icons.auto_stories_rounded, onTap: _next),
+      ]),
+    ));
+  }
+
+  // Maya's story, night eight. The book tells a story about her, made only from what she
+  // did (week_story.dart has the week and what was left out). Short pages,
+  // her own words, and Scrawl answered with proof every time he writes. Tap a
+  // page to hear it; his pencil is never read aloud.
+  Widget _weekLater() {
+    final title = _weekPage < 0;
+    final last = _weekPage == weekStory.length - 1;
+    final page = title ? null : weekStory[_weekPage];
+    void turn(int to) {
+      _reader.stop();
+      setState(() => _weekPage = to);
+    }
+
+    return _PageScaffold(eyebrow: 'Night 8', fill: true, child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Expanded(child: SingleChildScrollView(child: title
+          ? Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(weekStoryTitle, style: _display(42)), const SizedBox(height: 12),
+              Text('Tonight the book has a story for you. It is made from your week.', style: _body(20)), const SizedBox(height: 30),
+              Text('Stories you picked this week', style: _small()), const SizedBox(height: 8),
+              for (final b in weekBooks) Padding(padding: const EdgeInsets.only(bottom: 6), child: Text(b, style: _body(18))),
+            ])
+          : ListenableBuilder(listenable: _reader, builder: (context, _) {
+              final reading = _reader.speaking == page!.spoken;
+              return Semantics(button: true, label: reading ? 'Stop reading' : 'Read this page to me', child: InkWell(
+                onTap: () => _reader.toggle(page.spoken), borderRadius: BorderRadius.circular(14),
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  if (page.text.isNotEmpty) Text(page.text, style: _story(24)),
+                  if (page.verse.isNotEmpty) Padding(padding: const EdgeInsets.fromLTRB(24, 14, 0, 0), child: Text(page.verse.join('\n'), style: _story(23).copyWith(fontStyle: FontStyle.italic))),
+                  if (page.scrawl != null) ...[
+                    const SizedBox(height: 22),
+                    Align(alignment: Alignment.centerRight, child: SizedBox(width: 245, child: MarginNote(text: page.scrawl!, label: "$weekJudgeName's note", hint: ''))),
+                  ],
+                  if (page.answer != null) ...[const SizedBox(height: 16), Text(page.answer!, style: _story(24).copyWith(fontWeight: FontWeight.w800))],
+                  const SizedBox(height: 26),
+                  Row(children: [Icon(reading ? Icons.graphic_eq_rounded : Icons.volume_up_rounded, color: const Color(0xFF3D6170)), const SizedBox(width: 8), Flexible(child: Text(reading ? 'Reading to you. Tap to stop.' : 'Tap the page to hear it', style: _small().copyWith(color: const Color(0xFF3D6170), fontWeight: FontWeight.w800)))]),
+                ]),
+              ));
+            }))),
+      const SizedBox(height: 14),
+      if (!title) Padding(padding: const EdgeInsets.only(bottom: 12), child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        for (var i = 0; i < weekStory.length; i++) Container(width: 7, height: 7, margin: const EdgeInsets.symmetric(horizontal: 3), decoration: BoxDecoration(shape: BoxShape.circle, color: i == _weekPage ? const Color(0xFF3D6170) : const Color(0xFFD5C8B5))),
+      ])),
+      Row(children: [
+        if (!title) ...[TextButton(onPressed: () => turn(_weekPage - 1), child: Text('Back', style: _small().copyWith(fontWeight: FontWeight.w800))), const SizedBox(width: 8)],
+        Expanded(child: _WarmButton(
+          label: title ? 'Open the story' : last ? 'Close the book' : 'Turn the page',
+          icon: last ? Icons.nights_stay_rounded : Icons.arrow_forward_rounded,
+          onTap: last ? () => _go(_darkStep) : () => turn(_weekPage + 1),
+        )),
+      ]),
+    ]));
+  }
 
   Widget _close() => _DarkInterlude(child: Center(child: Stack(children: [
         _afterLantern(Column(mainAxisSize: MainAxisSize.min, children: [
