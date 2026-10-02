@@ -671,6 +671,7 @@ class _LanternStoryState extends State<LanternStory> {
                     Align(alignment: Alignment.centerRight, child: SizedBox(width: 245, child: MarginNote(text: page.scrawl!, label: "$weekJudgeName's note", hint: ''))),
                   ],
                   if (page.answer != null) ...[const SizedBox(height: 16), Text(page.answer!, style: _story(24).copyWith(fontWeight: FontWeight.w800))],
+                  if (page.after != null) ...[const SizedBox(height: 16), Text(page.after!, style: _story(24))],
                   if (page.quiet != null) ...[
                     const SizedBox(height: 26),
                     Align(alignment: Alignment.centerRight, child: SizedBox(width: 170, child: MarginNote(text: ' ' * 16, label: 'An empty margin note', hint: ''))),

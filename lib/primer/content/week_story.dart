@@ -8,7 +8,7 @@
 /// erased, shrunk or fought, and he is never read aloud.
 ///
 /// Seeded for the showcase. Her week was chosen by our research persona in
-/// character, and the text went through four rounds of review by that persona:
+/// character, and the text went through six rounds of review by that persona:
 ///
 ///   Mon  Old Mother West Wind   Biscuit "sleeps with one ear awake"
 ///   Tue  Doctor Dolittle        "Tail tip flick = HURRY UP"
@@ -28,9 +28,10 @@ library;
 /// sketch appears once, small, on the page where she names him; elsewhere he
 /// is only a pencil slip in the margin, answered on the same page in larger,
 /// darker type, so Maya always has the last word. On the last page the margin
-/// is quiet: he retires without being shrunk or beaten.
+/// is quiet and he has put his pencil down: he retires without being
+/// shrunk or beaten.
 class WeekPage {
-  const WeekPage(this.text, {this.verse = const [], this.scrawl, this.answer, this.namesHim = false, this.quiet});
+  const WeekPage(this.text, {this.verse = const [], this.scrawl, this.answer, this.after, this.namesHim = false, this.quiet});
 
   /// What the page says. A line break starts a new line.
   final String text;
@@ -44,6 +45,9 @@ class WeekPage {
   /// The proof that answers him, straight under his note.
   final String? answer;
 
+  /// Plain story text that carries on after the answer.
+  final String? after;
+
   /// The page where she renames him: the one place his face is drawn.
   final bool namesHim;
 
@@ -51,7 +55,7 @@ class WeekPage {
   final String? quiet;
 
   /// What the voice reads: everything on the page except his pencil.
-  String get spoken => [text, ...verse, ?answer, ?quiet].join(' ');
+  String get spoken => [text, ...verse, ?answer, ?after, ?quiet].join(' ');
 }
 
 const weekStoryTitle = 'Maya and the Night House';
@@ -90,34 +94,41 @@ const aboutScrawl = 'Scrawl is how Lantern draws Maya\'s inner critic, the voice
     'The book never fights or erases him. It lets her notice him, then answers him with proof from her own week. '
     'He got through once, on Wednesday. By the weekend, Maya was answering him herself.';
 
-/// Eleven pages, reviewed four times by the persona. Pages 3, 4, 6, 7 and 9
-/// came in the fourth round, from parts of her week the first draft left out.
+/// One bedtime walk through the house, so the week reads as one story rather
+/// than a tour of moments. Scrawl dares her on page 3, she goes looking for
+/// news for the Merry Little Breezes (landing, bathroom, stairs, kitchen, back
+/// to bed), and page 11 answers the dare in her own Monday words. Connecting
+/// narration is only ever where she goes and when; what she found and said is
+/// her week, quoted. Reviewed six times by the persona, the last two for
+/// cohesion.
 const weekStory = <WeekPage>[
-  WeekPage('The house is quiet. Maya looks for news. The Merry Little Breezes do that too. "What is the news?"'),
-  WeekPage(
-    'Maya\'s first stop is Biscuit. Biscuit is asleep on the warm radiator. Maya writes her news the Grandfather Frog way:\n'
-    '"Chug-arum. Biscuit sleeps with one ear awake. It turns when the fridge opens."',
-  ),
+  WeekPage('It is bedtime, and the house is quiet. Soon the Merry Little Breezes will come. They always ask, "What is the news?"'),
   WeekPage('There is a grey pencil in this book. It used to be called Grumble. "Grumble is a baby name," says Maya. "He\'s messy, so he\'s Scrawl."', namesHim: true),
-  WeekPage('At dinner, Biscuit sits by his bowl. Dad picks up the tin. The tip of Biscuit\'s tail flicks. Maya knows cat talk, like Doctor Dolittle. Tail tip flick = HURRY UP.'),
+  WeekPage('', scrawl: 'nothing lives in your house', answer: 'Maya picks up her field guide. She goes looking for news.'),
   WeekPage(
-    'On the stairs, Biscuit blinks at Maya. Slow blink = I like you but I\'m busy.',
-    scrawl: 'it was just blinking',
-    answer: '"You don\'t speak cat," says Maya.',
-  ),
-  WeekPage('Peter Cottontail has a hiding place in the briar patch. Mr Legs has one too. Mr Legs lives behind the tap. He goes in when the water runs and comes out when it stops.'),
-  WeekPage(
-    '',
-    scrawl: 'it will be gone tomorrow',
-    answer: 'Maya checks the tap before bed. Mr Legs is there. Maya wants to know if spiders sleep.',
+    'On the landing, Biscuit is asleep on the warm radiator. Maya writes her news the Grandfather Frog way:\n'
+    '"Chug-arum. Biscuit sleeps with one ear awake. It turns when the fridge opens."',
   ),
   WeekPage(
     'The radiator ticks fast when it\'s getting hot and slow when it\'s going to sleep. The dust creature is waiting.',
     scrawl: 'thats not news',
-    answer: '"It is to me," says Maya. The dust creature under the radiator. It only comes out when the heating stops ticking.',
+    answer: '"It is to me," says Maya.',
   ),
   WeekPage(
-    'Down in the kitchen, the dishwasher hums. Pooh says, "That buzzing-noise means something." Maya has a hum for the dishwasher:',
+    'In the bathroom, Mr Legs lives behind the tap. He goes in when the water runs and comes out when it stops.',
+    scrawl: 'it will be gone tomorrow',
+    answer: 'Maya checks the tap. Mr Legs is there.',
+    after: 'Maya wants to know if spiders sleep.',
+  ),
+  WeekPage('Maya goes down the stairs. Biscuit wakes up and follows her. On the stairs, Biscuit blinks at Maya. Slowly.'),
+  WeekPage(
+    'Slow blink = I like you but I\'m busy.',
+    scrawl: 'it was just blinking',
+    answer: '"You don\'t speak cat," says Maya.',
+    after: 'Earlier, at dinner, when Dad picked up the tin, the tip of Biscuit\'s tail flicked. Tail tip flick = HURRY UP.',
+  ),
+  WeekPage(
+    'In the kitchen, the dishwasher hums. Pooh says, "That buzzing-noise means something." Maya has a hum for the dishwasher:',
     verse: [
       'The dishwasher is humming,',
       'it hums when we\'re in bed,',
@@ -126,12 +137,13 @@ const weekStory = <WeekPage>[
     ],
   ),
   WeekPage(
-    '',
-    scrawl: 'nothing lives in your house',
-    answer: 'Biscuit lives here.\nMr Legs lives here.\nThe dust creature lives here.\nThe green mark on the back of the third stair. It was there before we were.',
+    'Back in bed, Maya opens her field guide.\n'
+    '"The dust creature under the radiator. It only comes out when the heating stops ticking."\n'
+    '"The green mark on the back of the third stair. It was there before we were."',
   ),
+  WeekPage('"Biscuit LIVES here," says Maya.'),
   WeekPage(
-    'Maya goes up the stairs. If the Merry Little Breezes ask Maya, "What is the news?" she has lots.',
-    quiet: 'The margin is quiet tonight. Maybe Scrawl is listening.',
+    'The Merry Little Breezes come. "What is the news?" Maya has lots.',
+    quiet: 'The margin is quiet. Scrawl has put his pencil down.',
   ),
 ];
