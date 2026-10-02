@@ -23,8 +23,14 @@
 /// read on any night, and the line she picked in the intercept.
 library;
 
+/// How much of him the story shows, decided by a persona review before it was
+/// built: he is the theme, never the star. He is not on the title page. His
+/// sketch appears once, small, on the page where she names him; elsewhere he
+/// is only a pencil slip in the margin, answered on the same page in larger,
+/// darker type, so Maya always has the last word. On the last page the margin
+/// is quiet: he retires without being shrunk or beaten.
 class WeekPage {
-  const WeekPage(this.text, {this.verse = const [], this.scrawl, this.answer});
+  const WeekPage(this.text, {this.verse = const [], this.scrawl, this.answer, this.namesHim = false, this.quiet});
 
   /// What the page says. A line break starts a new line.
   final String text;
@@ -38,8 +44,14 @@ class WeekPage {
   /// The proof that answers him, straight under his note.
   final String? answer;
 
+  /// The page where she renames him: the one place his face is drawn.
+  final bool namesHim;
+
+  /// An empty slip in the margin and this line: the night he doesn't write.
+  final String? quiet;
+
   /// What the voice reads: everything on the page except his pencil.
-  String get spoken => [text, ...verse, ?answer].join(' ');
+  String get spoken => [text, ...verse, ?answer, ?quiet].join(' ');
 }
 
 const weekStoryTitle = 'Maya and the Night House';
@@ -59,15 +71,24 @@ const weekBooks = [
 /// Her week, night by night, for the grown-ups' slide: what a parent or a
 /// sponsor needs to see before the story makes sense. Grown-ups may see the
 /// hard night; the story she reads never mentions it.
-const weekNights = <({String day, String book, String found})>[
-  (day: 'Mon', book: 'Old Mother West Wind', found: 'Her first news: Biscuit the cat "sleeps with one ear awake."'),
-  (day: 'Tue', book: 'The Story of Doctor Dolittle', found: 'Cat talk at dinner: "Tail tip flick = HURRY UP."'),
-  (day: 'Wed', book: 'Winnie-the-Pooh', found: "Couldn't do the quest. The book asked what the voice said, then let it go."),
-  (day: 'Thu', book: 'Winnie-the-Pooh', found: 'Went back and finished her dishwasher hum. Renamed Grumble "Scrawl".'),
-  (day: 'Fri', book: 'The Adventures of Peter Cottontail', found: 'Found Mr Legs, the spider who hides behind the bathroom tap.'),
-  (day: 'Sat', book: 'Old Mother West Wind', found: 'The radiator ticks slow "when it\'s going to sleep."'),
-  (day: 'Sun', book: 'The Story of Doctor Dolittle', found: '"Slow blink = I like you but I\'m busy."'),
+///
+/// [answered] is who answered Grumble that night: the theme for grown-ups is
+/// her progress, so the slide shows who answered him, not a list of what he
+/// said. Only Wednesday quotes him, because that is where honesty matters.
+const weekNights = <({String day, String book, String found, String answered})>[
+  (day: 'Mon', book: 'Old Mother West Wind', found: 'Her first news: Biscuit the cat "sleeps with one ear awake."', answered: 'Maya'),
+  (day: 'Tue', book: 'The Story of Doctor Dolittle', found: 'Cat talk at dinner: "Tail tip flick = HURRY UP."', answered: 'Dad'),
+  (day: 'Wed', book: 'Winnie-the-Pooh', found: 'Couldn\'t do the quest. Grumble wrote "your song is silly". The book asked what the voice said, then let it go.', answered: 'He got through'),
+  (day: 'Thu', book: 'Winnie-the-Pooh', found: 'Went back and finished her dishwasher hum. Renamed Grumble "Scrawl".', answered: 'Maya'),
+  (day: 'Fri', book: 'The Adventures of Peter Cottontail', found: 'Found Mr Legs, the spider who hides behind the bathroom tap.', answered: 'Maya'),
+  (day: 'Sat', book: 'Old Mother West Wind', found: 'The radiator ticks slow "when it\'s going to sleep."', answered: 'Maya'),
+  (day: 'Sun', book: 'The Story of Doctor Dolittle', found: '"Slow blink = I like you but I\'m busy."', answered: 'Maya'),
 ];
+
+/// For the grown-ups: what Scrawl is, and why the book never fights him.
+const aboutScrawl = 'Scrawl is how Lantern draws Maya\'s inner critic, the voice that says she is bad at reading. '
+    'The book never fights or erases him. It lets her notice him, then answers him with proof from her own week. '
+    'He got through once, on Wednesday. By the weekend, Maya was answering him herself.';
 
 /// Eleven pages, reviewed four times by the persona. Pages 3, 4, 6, 7 and 9
 /// came in the fourth round, from parts of her week the first draft left out.
@@ -77,7 +98,7 @@ const weekStory = <WeekPage>[
     'Maya\'s first stop is Biscuit. Biscuit is asleep on the warm radiator. Maya writes her news the Grandfather Frog way:\n'
     '"Chug-arum. Biscuit sleeps with one ear awake. It turns when the fridge opens."',
   ),
-  WeekPage('There is a grey pencil in this book. It used to be called Grumble. "Grumble is a baby name," says Maya. "He\'s messy, so he\'s Scrawl."'),
+  WeekPage('There is a grey pencil in this book. It used to be called Grumble. "Grumble is a baby name," says Maya. "He\'s messy, so he\'s Scrawl."', namesHim: true),
   WeekPage('At dinner, Biscuit sits by his bowl. Dad picks up the tin. The tip of Biscuit\'s tail flicks. Maya knows cat talk, like Doctor Dolittle. Tail tip flick = HURRY UP.'),
   WeekPage(
     'On the stairs, Biscuit blinks at Maya. Slow blink = I like you but I\'m busy.',
@@ -109,5 +130,8 @@ const weekStory = <WeekPage>[
     scrawl: 'nothing lives in your house',
     answer: 'Biscuit lives here.\nMr Legs lives here.\nThe dust creature lives here.\nThe green mark on the back of the third stair. It was there before we were.',
   ),
-  WeekPage('Maya goes up the stairs. If the Merry Little Breezes ask Maya, "What is the news?" she has lots.'),
+  WeekPage(
+    'Maya goes up the stairs. If the Merry Little Breezes ask Maya, "What is the news?" she has lots.',
+    quiet: 'The margin is quiet tonight. Maybe Scrawl is listening.',
+  ),
 ];

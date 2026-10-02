@@ -220,6 +220,8 @@ void main() {
     for (final n in weekNights) {
       expect(find.text(n.found), findsOneWidget, reason: n.day);
     }
+    expect(find.text(aboutScrawl), findsOneWidget);
+    expect(find.text('Who answered Grumble'), findsOneWidget);
 
     await tester.ensureVisible(find.text("Show Maya's story"));
     await tester.tap(find.text("Show Maya's story"));
@@ -234,6 +236,7 @@ void main() {
         expect(page.answer, isNotNull, reason: 'every note of his is answered');
         expect(page.spoken, isNot(contains(page.scrawl!)), reason: 'his pencil is never read aloud');
       }
+      if (page.quiet != null) expect(find.text(page.quiet!), findsOneWidget);
       if (page == weekStory.last) break;
       await tester.tap(find.text('Turn the page'));
       await tester.pumpAndSettle();

@@ -589,6 +589,12 @@ class _LanternStoryState extends State<LanternStory> {
           Text('A week goes by.', style: _display(38, color: ink)), const SizedBox(height: 8),
           Text("This is Maya's first week with Lantern, night by night. It is a simulated week: our research persona chose each book and quest the way Maya would.", style: plain(16, c: quiet)),
           const SizedBox(height: 18),
+          Padding(padding: const EdgeInsets.only(bottom: 6), child: Row(children: [
+            const SizedBox(width: 46),
+            Expanded(child: Text('Book, and what she found', style: plain(13, w: FontWeight.w700, c: quiet))),
+            const SizedBox(width: 12),
+            SizedBox(width: 118, child: Text('Who answered Grumble', style: plain(13, w: FontWeight.w700, c: quiet))),
+          ])),
           for (final n in weekNights)
             Container(
               padding: const EdgeInsets.symmetric(vertical: 9),
@@ -599,6 +605,8 @@ class _LanternStoryState extends State<LanternStory> {
                   Text(n.book, style: plain(14, w: FontWeight.w700, c: quiet)),
                   Text(n.found, style: plain(16)),
                 ])),
+                const SizedBox(width: 12),
+                SizedBox(width: 118, child: Text(n.answered, style: plain(15, w: FontWeight.w800, c: n.answered == 'Maya' ? const Color(0xFF3D6170) : quiet))),
               ]),
             ),
           const SizedBox(height: 18),
@@ -607,6 +615,12 @@ class _LanternStoryState extends State<LanternStory> {
           point('Never marked her wrong, never counted, and never asked her to read aloud.'),
           point("On the night she couldn't do it, named the voice instead of fixing her."),
           point('Closed the book every night.'),
+          const SizedBox(height: 6),
+          Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            const GrumbleSketch(name: weekJudgeName, size: 40),
+            const SizedBox(width: 14),
+            Expanded(child: Text(aboutScrawl, style: plain(16))),
+          ]),
           const SizedBox(height: 12),
           Text('What happens tonight', style: plain(17, w: FontWeight.w800)), const SizedBox(height: 8),
           Text('On night eight the book tells a story about Maya. Every line comes from her week: her cat, her spider, her hum, her own words. Scrawl is in it too, and every time he writes, the page shows him wrong.', style: plain(16)),
@@ -645,11 +659,24 @@ class _LanternStoryState extends State<LanternStory> {
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   if (page.text.isNotEmpty) Text(page.text, style: _story(24)),
                   if (page.verse.isNotEmpty) Padding(padding: const EdgeInsets.fromLTRB(24, 14, 0, 0), child: Text(page.verse.join('\n'), style: _story(23).copyWith(fontStyle: FontStyle.italic))),
+                  if (page.namesHim) ...[
+                    const SizedBox(height: 16),
+                    Align(alignment: Alignment.centerRight, child: Column(mainAxisSize: MainAxisSize.min, children: [
+                      const GrumbleSketch(name: weekJudgeName, size: 48),
+                      Text(weekJudgeName, style: GoogleFonts.caveat(fontSize: 22, fontWeight: FontWeight.w700, color: const Color(0xFF24408E))),
+                    ])),
+                  ],
                   if (page.scrawl != null) ...[
                     const SizedBox(height: 22),
                     Align(alignment: Alignment.centerRight, child: SizedBox(width: 245, child: MarginNote(text: page.scrawl!, label: "$weekJudgeName's note", hint: ''))),
                   ],
                   if (page.answer != null) ...[const SizedBox(height: 16), Text(page.answer!, style: _story(24).copyWith(fontWeight: FontWeight.w800))],
+                  if (page.quiet != null) ...[
+                    const SizedBox(height: 26),
+                    Align(alignment: Alignment.centerRight, child: SizedBox(width: 170, child: MarginNote(text: ' ' * 16, label: 'An empty margin note', hint: ''))),
+                    const SizedBox(height: 12),
+                    Text(page.quiet!, style: _story(22).copyWith(fontStyle: FontStyle.italic)),
+                  ],
                   const SizedBox(height: 26),
                   Row(children: [Icon(reading ? Icons.graphic_eq_rounded : Icons.volume_up_rounded, color: const Color(0xFF3D6170)), const SizedBox(width: 8), Flexible(child: Text(reading ? 'Reading to you. Tap to stop.' : 'Tap the page to hear it', style: _small().copyWith(color: const Color(0xFF3D6170), fontWeight: FontWeight.w800)))]),
                 ]),
