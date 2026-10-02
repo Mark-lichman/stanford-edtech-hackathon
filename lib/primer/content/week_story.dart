@@ -89,6 +89,28 @@ const weekNights = <({String day, String book, String found, String answered})>[
   (day: 'Sun', book: 'The Story of Doctor Dolittle', found: '"Slow blink = I like you but I\'m busy."', answered: 'Maya'),
 ];
 
+/// For the grown-ups: how the book knows her home and her words. Her house
+/// comes from onboarding; her words reach the book through her grown-up, in
+/// ink, because Maya never types (Product design: she contributes through
+/// outcomes and choices, never free text).
+const storySources = <({String label, String text})>[
+  (
+    label: 'Her home',
+    text: 'Set up once during onboarding, by Maya or a grown-up: who lives there (Biscuit, an old orange cat) '
+        'and the places she explores at night (the landing radiator, the stairs, the bathroom tap, the kitchen).',
+  ),
+  (
+    label: 'Her words',
+    text: 'Maya does each quest at home, off screen. Her grown-up writes what she found into the book in ink, '
+        'the same way Dad answers Grumble. Maya never types.',
+  ),
+  (
+    label: 'Her choices',
+    text: 'The books she picks and the name she gave Grumble are taps in the app. '
+        'All of it stays in her own book and is never shared with other children.',
+  ),
+];
+
 /// For the grown-ups: what Scrawl is, and why the book never fights him.
 const aboutScrawl = 'Scrawl is how Lantern draws Maya\'s inner critic, the voice that says she is bad at reading. '
     'The book never fights or erases him. It lets her notice him, then answers him with proof from her own week. '

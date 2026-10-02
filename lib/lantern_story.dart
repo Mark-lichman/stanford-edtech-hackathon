@@ -610,6 +610,13 @@ class _LanternStoryState extends State<LanternStory> {
               ]),
             ),
           const SizedBox(height: 18),
+          Text('Where the story comes from', style: plain(17, w: FontWeight.w800)), const SizedBox(height: 8),
+          for (final src in storySources)
+            Padding(padding: const EdgeInsets.only(bottom: 8), child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              SizedBox(width: 110, child: Text(src.label, style: plain(16, w: FontWeight.w700))),
+              Expanded(child: Text(src.text, style: plain(16))),
+            ])),
+          const SizedBox(height: 10),
           Text('What Lantern did', style: plain(17, w: FontWeight.w800)), const SizedBox(height: 8),
           point('Read every chapter to her first, then let her choose how much to read herself: a line or more.'),
           point('Never marked her wrong, never counted, and never asked her to read aloud.'),

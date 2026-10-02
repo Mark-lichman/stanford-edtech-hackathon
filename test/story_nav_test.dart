@@ -221,6 +221,9 @@ void main() {
       expect(find.text(n.found), findsOneWidget, reason: n.day);
     }
     expect(find.text(aboutScrawl), findsOneWidget);
+    for (final src in storySources) {
+      expect(find.text(src.text), findsOneWidget, reason: src.label);
+    }
     expect(find.text('Who answered Grumble'), findsOneWidget);
 
     await tester.ensureVisible(find.text("Show Maya's story"));
