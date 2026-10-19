@@ -37,9 +37,11 @@ We build **the Primer**: a book that reads the child, sends them off the screen,
 and advances a story only when they come back with something real.
 
 The subversion is structural, not decorative: **the app's success condition is
-its own obsolescence.** It gives longer missions, goes dark for longer stretches,
-and eventually tells the child it isn't needed anymore. It optimizes for
-*anti*-engagement. Every other app in the building will be pitching retention;
+time off the screen.** Every night closes itself, it gives longer missions and
+goes dark for longer stretches, and the story only grows while she's away. It
+has no fixed length and no finish date: she keeps building her story for as long
+as she wants, because that is good for her, not because we need her back. It
+optimizes for *anti*-engagement. Every other app in the building will be pitching retention;
 we pitch a graph that goes down on purpose.
 
 The screen is the doorway, not the room.
@@ -145,7 +147,7 @@ trying to fix that. We make it **visible**.
   part," and lets it go.
 - **Noticing is the whole skill.** No reframing, no affirmations, no score, no
   profile, nothing stored, nothing shown to an adult, and always skippable.
-- **He retires.** Grumble appears *less* over the eight weeks, not more. Design
+- **He retires.** Grumble appears *less* over time, not more. Design
   his fade-out from day one — a permanent resident is a permanent fact about
   herself.
 
@@ -272,7 +274,7 @@ So the real job is to find out what we *can* legitimately do, in this order:
    URL shape and the ids stay in `lib/primer/book.dart` as documentation. Only
    `62843717` is confirmed to open; the rest carry `linkConfirmed: false` until
    somebody looks. **If you have five spare minutes, re-check the other Hilda
-   ids** — not because the demo needs them, but because the eight-week walk is a
+   ids** — not because the demo needs them, but because the walk through the series is a
    better story when every door is real.
 2. **Book metadata.** Title, cover image and reading level are hand-entered
    already. If there's a feed, good; if not, we're fine — do not build a
@@ -456,4 +458,4 @@ The journey now runs on a real series, not placeholders:
   creature, and writes one true thing underneath. Paper and a pencil, indoors,
   alone.
 - **The artifact is a page in her own field guide** — which is why it can't be a
-  grid of badges. It's a real object that gets thicker for eight weeks.
+  grid of badges. It's a real object that keeps getting thicker.

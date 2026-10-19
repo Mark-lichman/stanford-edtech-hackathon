@@ -4,8 +4,10 @@ Stanford EdTech Hackathon — 2026-09-12. Sponsor: Epic for Kids.
 
 A storytelling book for kids under 12 that starts from something they already
 love, sends them off the screen to do one small real thing, and closes itself.
-It widens what it offers only as fast as the child's confidence grows, and it
-is designed to end.
+It widens what it offers only as fast as the child's confidence grows. Every
+night ends on purpose; the story doesn't. There is no fixed length: habits form
+through the feeling of success, not elapsed time, and the child keeps building
+her story and field guide for as long as she wants.
 
 Flutter (web + Android). Built on the habit engine from HabitCrafts, so the
 core recipe fields — anchor prompt, tiny behaviour, celebration — port back to
