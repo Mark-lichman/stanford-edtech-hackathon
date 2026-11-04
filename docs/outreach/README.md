@@ -49,9 +49,74 @@ therapists and small structured-literacy centres.
 - Gate: 3 calls, and at least one introduction to a family.
 
 **E4: Parent communities (5).** Decoding Dyslexia chapter leads and similar parent groups.
-- Ask: share a call for parents willing to talk to us.
-- Template: section 4.
-- Gate: one group shares it.
+- Ask (first message): a 20-minute conversation with a group lead about what families try.
+  We don't ask volunteer-run groups to forward anything to their members. If a lead offers
+  to share a call for parents, we accept.
+- Template: section 4, rewritten for the group lead.
+- Gate: one conversation with a lead.
+
+## The message sequence
+
+Three messages per prospect, then stop. The mission and the ask carry the message, not
+the follow-ups. Each follow-up gives the reader something new or makes the ask smaller,
+and the last one lets them off the hook.
+
+- **M1, day 0.** 75 to 125 words, plain text, one personal line about their program,
+  one ask (20 minutes in the next two weeks), an offer to send them our summary, and
+  "reply 'no thanks' and I won't write again". Subject: plain and specific, e.g.
+  "question about [organisation]'s reading tutoring".
+- **M2, 4 to 5 business days later,** as a reply in the same thread:
+
+  > Hi [team], a short follow-up to my note last week. One thing we keep hearing: children
+  > this age often avoid reading aloud because being seen to struggle hurts more than not
+  > knowing. That's why [program] matters to us. If a call is hard to fit in, two lines by
+  > email would help just as much: where do children most often stop? Thanks, Mark
+
+- **M3, 5 to 6 business days after M2,** in the same thread:
+
+  > Hi [team], I'll assume now isn't the right time, and that's completely fine. I'll still
+  > send you our short summary when it's ready, unless you'd rather I didn't. If talking is
+  > ever useful, just reply. Best, Mark
+
+- No fake urgency, no "bumping this up", no open tracking, no guilt in the last message.
+- Send on Tuesday or Thursday mornings in the recipient's time zone. Skip holidays and
+  Thanksgiving week.
+- Replace the M2 finding with something we've actually heard once calls start.
+- **Before wave 2:** add a mailing address to the signature (CAN-SPAM; a P.O. box is fine).
+
+### Why these numbers
+
+Sources were gathered on 2026-11-04. Figures from vendors that sell sending tools are marked,
+since they gain when people send more.
+
+- **Waves of 12.** That is about four calls if a quarter reply, which the team can actually take.
+  It also tests the copy on a third of the list before spending the rest. This is a capacity
+  judgement, not a benchmark.
+- **Three messages.** In one agency's analysis of 1,857 replies, 62% came from the first email,
+  21% from the second, 13% from the third and 5% from anything later
+  ([BusySeed](https://v7.busyseed.com/research/where-cold-email-replies-actually-come-from)).
+  Returns roughly halve with each step, so a fourth message mostly adds annoyance.
+- **Spacing.** Vendors suggest 3 to 7 business days with widening gaps (Instantly, vendor).
+  We use the slow end of that range as a grace period for busy people.
+- **Personal lines.** In a Cochrane review of response-rate trials, personalised requests had
+  1.24 times the odds of a response
+  ([Cochrane](https://cochranelibrary.com/cdsr/doi/10.1002/14651858.MR000008.pub5/information/en)).
+- **Gate.** Generic research-recruitment email gets 2 to 3% replies and B2B cold email
+  3 to 7% (vendor figures). Carefully targeted, mission-aligned asks can reach 15 to 30%
+  ([Lean B2B](https://leanb2bbook.com/blog/b2b-customer-interviews-with-cold-emails/)).
+  Our gate is **15% replies** (2 of 12). **Under 10% means rewrite M1** before the next wave.
+
+## Wave 1 (sent from Mark's Gmail, reviewed before sending)
+
+- 12 prospects: E1 has 8 (4 in arm A, 4 in arm B), E3 has 2 and E4 has 2. E2 waits until
+  its list reaches 10.
+- Bay Area organisations go first, since an observed session needs to be in person.
+- Schedule (M1, then M2, then M3):
+  - Batch 1: Thu Nov 5, Thu Nov 12, Thu Nov 19.
+  - Batch 2: Tue Nov 10, Tue Nov 17, Tue Dec 1.
+  - Batch 3: Thu Nov 12, Thu Nov 19, Thu Dec 3.
+- **Score wave 1 on Thu Dec 10.** Record replies, calls and the A versus B result in
+  `../decisions.md`, then decide whether wave 2 sends as is or rewritten.
 
 ## Logging
 

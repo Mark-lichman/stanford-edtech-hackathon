@@ -15,6 +15,19 @@ Process and decisions are kept in this public repo from here on.
 - The Oct 13 go / reshape / stop scoring isn't recorded here. If it is found, add it
   as its own entry with the date.
 
+## 2026-11-04 — First outreach wave: 12 prospects, three messages, scored Dec 10
+
+- **12 prospects in wave 1, not all 39.** That's as many calls as three people can take, and
+  it tests the copy before using up the list. E2 (kit makers) waits until it has 10 prospects.
+- **Three messages, then stop.** Each follow-up adds something new or makes the ask smaller.
+  The last one closes the loop with no guilt. Replies roughly halve with each step, and
+  being respectful matters more than squeezing out extra replies.
+- **E4 asks a group lead for a conversation, not for a share.** Volunteer-run parent groups
+  shouldn't be asked to forward strangers' emails to their members.
+- **Sent from Mark's Gmail, reviewed before sending.** No open tracking.
+- **Gate: 15% replies.** Under 10% means rewrite the first message before wave 2.
+  Details and sources are in [outreach/README.md](outreach/README.md).
+
 ## 2026-11-04 — Nonprofits are design partners, not funders
 
 Outreach to literacy nonprofits asks for access to children and co-design input, not money.
