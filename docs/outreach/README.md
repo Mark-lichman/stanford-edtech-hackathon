@@ -65,14 +65,16 @@ and the last one lets them off the hook.
   one ask (20 minutes in the next two weeks), an offer to send them our summary, and
   "reply 'no thanks' and I won't write again". Subject: plain and specific, e.g.
   "question about [organisation]'s reading tutoring".
-  - One link line above the opt-out. E1 nonprofits get lanternbook.org/pilot/, the page
-    for schools and nonprofits. Practitioners and parent groups get lanternbook.org.
-  - The signature reads "Lantern · lanternbook.org".
-  - **Links are typed by hand in Gmail.** The Gmail connector rewrites every URL it saves
+  - One line above the opt-out points to the site "linked below". Nonprofits are pointed to
+    the "Design partners" page; practitioners and parent groups to the site itself.
+  - Drafts end at "Best,". The sender adds the saved Gmail signature "Lantern" (logo, name,
+    link to lanternbook.org) with the pen icon in the compose toolbar before sending.
+  - **No URLs in connector-written email.** The Gmail connector rewrites every URL it saves
     or sends into a `google.com/url?q=…` redirect, which reads as phishing. That happens
-    with both explicit links and plain domain text. Drafts carry ⟦PILOT LINK⟧ and
-    ⟦SITE LINK⟧ placeholders, and the sender types the real address in the Gmail compose
-    window before sending. Follow-ups drafted the same way.
+    with explicit links and with plain domain text, and its "include signature" option
+    doesn't attach the saved signature. The only clean link is the one Gmail's own
+    signature inserts. Follow-ups are drafted the same way.
+  - The signature logo is hosted at lanternbook.org/email/lantern-logo.png.
 - **M2, 4 to 5 business days later,** as a reply in the same thread:
 
   > Hi [team], a short follow-up to my note last week. One thing we keep hearing: children
