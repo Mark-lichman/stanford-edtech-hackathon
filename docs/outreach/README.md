@@ -121,11 +121,11 @@ since they gain when people send more.
 - 12 prospects: E1 has 8 (4 in arm A, 4 in arm B), E3 has 2 and E4 has 2. E2 waits until
   its list reaches 10.
 - Bay Area organisations go first, since an observed session needs to be in person.
-- Schedule (M1, then M2, then M3):
-  - Batch 1: Thu Nov 5, Thu Nov 12, Thu Nov 19.
-  - Batch 2: Tue Nov 10, Tue Nov 17, Tue Dec 1.
-  - Batch 3: Thu Nov 12, Thu Nov 19, Thu Dec 3.
-- **Score wave 1 on Thu Dec 10.** Record replies, calls and the A versus B result in
+- The plan was three staggered batches. **In practice all 12 M1s went out together on
+  Wed Nov 4, around 2:52pm PT.** 11 carry the signature; 1 went without it.
+- Follow-ups for all 12: **M2 on Tue Nov 10, M3 on Wed Nov 18.** Nov 11 is skipped for
+  Veterans Day.
+- **Score wave 1 on Tue Dec 1.** Record replies, calls and the A versus B result in
   `../decisions.md`, then decide whether wave 2 sends as is or rewritten.
 
 ## Logging

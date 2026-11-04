@@ -15,6 +15,13 @@ Process and decisions are kept in this public repo from here on.
 - The Oct 13 go / reshape / stop scoring isn't recorded here. If it is found, add it
   as its own entry with the date.
 
+## 2026-11-04 — Wave 1 sent, all at once
+
+All 12 first messages went out on Wed Nov 4 instead of in three staggered batches, so
+every thread runs on one clock: M2 Tue Nov 10, M3 Wed Nov 18, scored Tue Dec 1. Replies
+may now arrive together, so book calls as they come. One email went without the
+signature; its M2 carries the signature.
+
 ## 2026-11-04 — Website matches the outreach: seven years old, early stage
 
 lanternbook.org (repo `Mark-lichman/lantern-site`, deployed by GitHub Pages on push to
