@@ -65,6 +65,9 @@ and the last one lets them off the hook.
   one ask (20 minutes in the next two weeks), an offer to send them our summary, and
   "reply 'no thanks' and I won't write again". Subject: plain and specific, e.g.
   "question about [organisation]'s reading tutoring".
+  - One link line above the opt-out. E1 nonprofits get lanternbook.org/pilot/, the page
+    for schools and nonprofits. Practitioners and parent groups get lanternbook.org.
+  - The signature reads "Lantern · lanternbook.org".
 - **M2, 4 to 5 business days later,** as a reply in the same thread:
 
   > Hi [team], a short follow-up to my note last week. One thing we keep hearing: children
