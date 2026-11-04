@@ -15,6 +15,14 @@ Process and decisions are kept in this public repo from here on.
 - The Oct 13 go / reshape / stop scoring isn't recorded here. If it is found, add it
   as its own entry with the date.
 
+## 2026-11-04 — Website matches the outreach: seven years old, early stage
+
+lanternbook.org (repo `Mark-lichman/lantern-site`, deployed by GitHub Pages on push to
+`main`) now says "kids around seven" instead of "kids under 12", and Maya is seven. The
+design-partner page no longer implies families are already using Lantern: partners help
+shape it first, then try the first version. Outreach emails link to the site, so the two
+have to tell the same story. PLAN.md and the pitch still say nine; that remains open.
+
 ## 2026-11-04 — First outreach wave: 12 prospects, three messages, scored Dec 10
 
 - **12 prospects in wave 1, not all 39.** That's as many calls as three people can take, and
