@@ -68,6 +68,11 @@ and the last one lets them off the hook.
   - One link line above the opt-out. E1 nonprofits get lanternbook.org/pilot/, the page
     for schools and nonprofits. Practitioners and parent groups get lanternbook.org.
   - The signature reads "Lantern · lanternbook.org".
+  - **Links are typed by hand in Gmail.** The Gmail connector rewrites every URL it saves
+    or sends into a `google.com/url?q=…` redirect, which reads as phishing. That happens
+    with both explicit links and plain domain text. Drafts carry ⟦PILOT LINK⟧ and
+    ⟦SITE LINK⟧ placeholders, and the sender types the real address in the Gmail compose
+    window before sending. Follow-ups drafted the same way.
 - **M2, 4 to 5 business days later,** as a reply in the same thread:
 
   > Hi [team], a short follow-up to my note last week. One thing we keep hearing: children
