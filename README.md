@@ -16,6 +16,9 @@ a HabitCrafts branch as a copy.
 ## Where the design lives
 
 - [PLAN.md](PLAN.md) — decisions, scope, build tracks, risks.
+- [docs/decisions.md](docs/decisions.md) — dated decision log since the hackathon.
+- [docs/outreach/](docs/outreach/README.md) — design-partner outreach: persona, the
+  four early experiments and their gates, and how prospects are found.
 - Concept user journey (visual, shareable):
   https://claude.ai/code/artifact/f1fd0a26-a0f7-4f50-a141-15d64ccbe839
 
