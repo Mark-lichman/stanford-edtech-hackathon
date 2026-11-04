@@ -78,4 +78,12 @@ Nimble API, one query set per experiment.
 
 ## Runs
 
-- **2026-11-04**: first run, 21 queries across E1 to E4. Prospects added to the outreach sheet.
+- **2026-11-04**: first run. 21 queries returned 180 results across 127 new domains; most
+  were news stories, listicles or out-of-range organisations.
+  - 39 prospects were read by hand and added to the sheet's "Design Partners (Nov 2026)" tab:
+    - E1: 17 nonprofits (9 in arm A, 8 in arm B) and 4 research partners;
+    - E2: 4 kit makers;
+    - E3: 8 practitioners;
+    - E4: 6 parent groups.
+  - **E2 is under-filled** (target 10). Re-run with narrower kit queries before sending.
+  - E1 has 5 Bay Area organisations. Lead with those, since the observed session needs to be in person.
