@@ -2,6 +2,7 @@
 pip install nimble_python ; set NIMBLE_API_KEY. Run from the repo root.
 python tool/find_partners.py          -> .cache/partners/candidates_raw.csv (pages cached alongside)
 python tool/find_partners.py --test   -> self-check, no API calls
+python tool/find_partners.py --only E2 -> run one experiment's queries
 Raw output holds scraped emails, so it stays in .cache/ (git-ignored). Curated rows go in
 docs/outreach/candidates.csv with no personal contact details.
 """
@@ -31,6 +32,12 @@ QUERIES = {
         'phonics activity kit subscription kids "decodable" hands-on',
         'screen-free literacy activity kit kids small business',
         'story-based activity kit children "book club box" crafts ages 6',
+        'literacy activity box kindergarten first grade "reading" subscription "shop"',
+        '"early reader" activity kit "ages 5-7" OR "ages 6-8" small business',
+        'Etsy-style handmade reading activity kit kids phonics games printable shop',
+        'homeschool reading activity kit "first grade" hands-on games company',
+        'screen-free kids activity subscription "ages 6" "made in USA" small company',
+        'craft kit for kids "story" "ages 5" monthly box founder',
     ],
     "E3 practitioner": [
         'Orton-Gillingham tutoring practice Bay Area dyslexia children',
@@ -121,7 +128,8 @@ def main():
             print("ERR search", q, e)
             return []
 
-    jobs = [(s, q) for s, qs in QUERIES.items() for q in qs]
+    only = sys.argv[sys.argv.index("--only") + 1] if "--only" in sys.argv else ""
+    jobs = [(s, q) for s, qs in QUERIES.items() if s.startswith(only) for q in qs]
     # ponytail: 4 threads so the concurrent HabitCrafts run keeps most of the rate limit
     with ThreadPoolExecutor(4) as ex:
         hits = [h for hs in ex.map(search, jobs) for h in hs]

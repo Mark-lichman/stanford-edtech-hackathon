@@ -123,8 +123,9 @@ since they gain when people send more.
 - Bay Area organisations go first, since an observed session needs to be in person.
 - The plan was three staggered batches. **In practice all 12 M1s went out together on
   Wed Nov 4, around 2:52pm PT.** 11 carry the signature; 1 went without it.
-- Follow-ups for all 12: **M2 on Tue Nov 10, M3 on Wed Nov 18.** Nov 11 is skipped for
-  Veterans Day.
+- Follow-ups for all 12: M2 was planned for Tue Nov 10 but **went out on Thu Nov 5**, one
+  day after M1. To restore the grace period, **M3 stays on Wed Nov 18**, nine business
+  days after M2.
 - **Score wave 1 on Tue Dec 1.** Record replies, calls and the A versus B result in
   `../decisions.md`, then decide whether wave 2 sends as is or rewritten.
 
@@ -161,4 +162,6 @@ Nimble API, one query set per experiment.
     - E3: 8 practitioners;
     - E4: 6 parent groups.
   - **E2 is under-filled** (target 10). Re-run with narrower kit queries before sending.
+- **2026-11-05**: E2 re-run (`--only E2`, 6 narrower kit queries). 47 domains, mostly
+  listicles, large brands and retailers; 6 small kit makers added, bringing E2 to 10.
   - E1 has 5 Bay Area organisations. Lead with those, since the observed session needs to be in person.

@@ -15,6 +15,12 @@ Process and decisions are kept in this public repo from here on.
 - The Oct 13 go / reshape / stop scoring isn't recorded here. If it is found, add it
   as its own entry with the date.
 
+## 2026-11-05 — M2 went out a day after M1; M3 keeps its date
+
+The second message to all 12 went out on Nov 5 instead of Nov 10. M3 stays on Wed Nov 18
+so the last touch still comes after a real grace period. Scoring stays on Tue Dec 1.
+Watch at the gate for whether the quick second message cost replies or "no thanks".
+
 ## 2026-11-04 — Wave 1 sent, all at once
 
 All 12 first messages went out on Wed Nov 4 instead of in three staggered batches, so
